@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALMANAC · Field Instrument 007</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #ffffff;
+  --bg-2:      #f7f7f5;
+  --bg-3:      #ededeb;
+  --ink:       #0a0a0a;
+  --ink-2:     #2a2a2a;
+  --ink-3:     #5a5a5a;
+  --ink-4:     #8a8a8a;
+  --rule:      #0a0a0a;
+  --rule-2:    #c0c0bc;
+  --rule-3:    #e4e4e0;
+  --yellow:    #ffcc00;
+  --yellow-2:  #f5b800;
+  --yellow-t:  #fff4c0;
+  --yellow-p:  #fffaea;
+  --red:       #b41818;
+  --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+  font-feature-settings: "ss01", "cv11";
+}
+
+.catalog {
+  max-width: 1280px;
+  margin: 0 auto;
+  border-left: 1px solid var(--rule-2);
+  border-right: 1px solid var(--rule-2);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   MASTHEAD
+   ========================================================= */
+.masthead {
+  padding: 22px 32px 18px;
+  border-bottom: 4px solid var(--rule);
+  position: relative;
+  background: var(--bg);
+}
+
+.masthead-row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-2);
+  margin-bottom: 14px;
+}
+
+.masthead-row1 .stamp {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--ink);
+  padding: 2px 8px;
+  letter-spacing: 0.12em;
+}
+
+.masthead-title {
+  font-weight: 900;
+  font-size: 64px;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--ink);
+}
+
+.masthead-row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 8px;
+  gap: 24px;
+}
+
+.masthead-sub {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-2);
+  font-style: italic;
+  max-width: 600px;
+}
+
+.masthead-meta {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: right;
+  line-height: 1.7;
+}
+
+.masthead-meta .edition {
+  display: inline-block;
+  border: 1.5px solid var(--ink);
+  padding: 3px 8px;
+  color: var(--ink);
+  margin-top: 4px;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 600px;
+}
+
+/* =========================================================
+   INDEX / SIDEBAR
+   ========================================================= */
+.index {
+  background: var(--bg-2);
+  border-right: 1px solid var(--rule);
+  padding: 0;
+}
+
+.index-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.category {
+  display: flex;
+  align-items: stretch;
+  background: var(--ink);
+  color: #fff;
+  margin-top: 12px;
+}
+
+.category:first-of-type { margin-top: 0; border-top: 2px solid var(--rule); }
+
+.cat-num {
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 900;
+  font-size: 18px;
+  padding: 8px 12px;
+  min-width: 40px;
+  text-align: center;
+  border-right: 1px solid var(--ink);
+}
+
+.cat-name {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.nav-list {
+  list-style: none;
+  background: var(--bg-2);
+}
+
+.nav-list li {
+  border-bottom: 1px solid var(--rule-3);
+}
+
+.nav-list button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  text-align: left;
+  padding: 9px 16px 9px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.1s;
+}
+
+.nav-list button:hover { background: var(--yellow-p); }
+.nav-list button.active { background: var(--yellow); font-weight: 600; }
+
+.nav-list .ref {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 2px 5px;
+  min-width: 28px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.nav-list button.active .ref { background: var(--ink); color: var(--yellow); }
+
+.nav-list .stub {
+  font-size: 11px;
+  color: var(--ink-4);
+  font-style: italic;
+  padding: 10px 16px;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+.content {
+  padding: 0;
+  background: var(--bg);
+}
+
+.page {
+  display: none;
+  padding: 28px 36px 40px;
+}
+.page.active { display: block; }
+
+.page-head {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule-2);
+  position: relative;
+}
+
+.page-head::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 3px;
+  background: var(--ink);
+  width: 80px;
+}
+
+.page-ref {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.page-ref .dot {
+  display: inline-block;
+  width: 4px; height: 4px;
+  background: var(--yellow-2);
+  margin: 0 8px 1px;
+  vertical-align: middle;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.page-desc {
+  font-size: 14px;
+  color: var(--ink-3);
+  max-width: 720px;
+}
+
+/* =========================================================
+   CARDS & GRIDS
+   ========================================================= */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.col { flex: 1 1 320px; min-width: 0; }
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-top: 3px solid var(--ink);
+  padding: 18px 20px 20px;
+  position: relative;
+}
+
+.card-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title .fig {
+  font-family: var(--mono);
+  font-size: 9px;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 2px 5px;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   FORM CONTROLS
+   ========================================================= */
+label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 5px;
+}
+
+select, input[type=text], input[type=number], input[type=search] {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 10px;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%230a0a0a'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+select:focus, input:focus { background: var(--yellow-p); border-bottom-color: var(--yellow-2); }
+
+.field { margin-bottom: 14px; }
+
+/* Format toggle (segmented button) */
+.format-toggle {
+  display: inline-flex;
+  border: 1.5px solid var(--ink);
+  margin-bottom: 16px;
+}
+.format-toggle button {
+  background: var(--bg);
+  border: none;
+  border-right: 1px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.format-toggle button:last-child { border-right: none; }
+.format-toggle button.active { background: var(--ink); color: var(--yellow); }
+.format-toggle button:hover:not(.active) { background: var(--yellow-p); }
+
+/* =========================================================
+   READOUTS
+   ========================================================= */
+.readout {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  border-left: 4px solid var(--yellow);
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+.readout .big {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.05;
+}
+
+.readout .sub {
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.readout .meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.readout .meta span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.calc-output {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  border-top: 3px solid var(--ink);
+  padding: 0;
+  margin-top: 12px;
+}
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule-3);
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-row .lbl {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 700;
+}
+.calc-row .val {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-style: italic;
+  padding: 8px 12px;
+  border-left: 3px solid var(--yellow);
+  background: var(--yellow-p);
+  margin: 12px 0;
+}
+
+.note.warn { border-left-color: var(--red); background: #fdf0f0; color: var(--ink-2); }
+
+/* =========================================================
+   BAND VISUALIZATION (Resistor)
+   ========================================================= */
+.band-viz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 24px;
+  background:
+    linear-gradient(180deg, #f0e3c8 0%, #d8c298 50%, #f0e3c8 100%);
+  border: 1px solid var(--rule-2);
+  border-radius: 30px;
+  margin: 14px 0;
+  min-height: 60px;
+  position: relative;
+}
+.band-viz::before, .band-viz::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 3px;
+  background: #888080;
+  transform: translateY(-50%);
+}
+.band-viz::before { left: -12px; }
+.band-viz::after { right: -12px; }
+.band {
+  width: 14px;
+  height: 38px;
+  margin: 0 6px;
+  border-left: 1px solid rgba(0,0,0,0.15);
+  border-right: 1px solid rgba(0,0,0,0.15);
+}
+
+.band-selectors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 6px;
+  margin-top: 18px;
+  padding: 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--rule-3);
+}
+.legend-title {
+  grid-column: 1 / -1;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--ink);
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+thead tr { background: var(--ink); }
+
+th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  border-right: 1px solid #2a2a2a;
+  position: sticky;
+  top: 0;
+}
+th:last-child { border-right: none; }
+
+td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--rule-3);
+  color: var(--ink-2);
+}
+tbody tr:hover td { background: var(--yellow-p); }
+tbody tr:nth-child(odd) td { background: var(--bg-2); }
+tbody tr:nth-child(odd):hover td { background: var(--yellow-p); }
+
+td.hi { font-weight: 700; color: var(--ink); }
+td.dim { color: var(--ink-3); }
+td.num { font-family: var(--mono); text-align: right; }
+td.num.l { text-align: left; }
+
+.scroll {
+  max-height: 480px;
+  overflow-y: auto;
+  border: 1px solid var(--rule);
+}
+.scroll::-webkit-scrollbar { width: 8px; }
+.scroll::-webkit-scrollbar-track { background: var(--bg-3); }
+.scroll::-webkit-scrollbar-thumb { background: var(--ink); }
+
+.smd-input {
+  font-family: var(--mono);
+  font-size: 28px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  font-weight: 700;
+  padding: 14px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   PINOUTS
+   ========================================================= */
+.pinout-table td.pin {
+  background: var(--ink);
+  color: var(--yellow);
+  font-family: var(--mono);
+  font-weight: 700;
+  text-align: center;
+  width: 44px;
+  font-size: 11px;
+}
+.pinout-table td.name {
+  font-weight: 700;
+  color: var(--ink);
+}
+.pinout-table td.alt { color: var(--ink-3); font-size: 11px; }
+
+.tag {
+  display: inline-block;
+  padding: 1px 6px;
+  margin-right: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  background: var(--bg);
+  color: var(--ink);
+}
+.tag.pwr  { background: #b41818; color: #fff; border-color: #8a1010; }
+.tag.gnd  { background: #2a2a2a; color: #fff; border-color: var(--ink); }
+.tag.adc  { background: #2c7032; color: #fff; border-color: #1a4020; }
+.tag.pwm  { background: var(--yellow); color: var(--ink); border-color: #8a6800; }
+.tag.i2c  { background: #2858a0; color: #fff; border-color: #1a3870; }
+.tag.spi  { background: #6840a4; color: #fff; border-color: #482878; }
+.tag.uart { background: #d96018; color: #fff; border-color: #a04010; }
+
+/* =========================================================
+   NUMBER BASES (Software 3A)
+   ========================================================= */
+.base-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  border: 1px solid var(--rule-2);
+  border-top: 3px solid var(--ink);
+}
+.base-cell {
+  padding: 14px 16px;
+  border-right: 1px solid var(--rule-3);
+}
+.base-cell:last-child { border-right: none; }
+.base-cell .lbl {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.base-cell .val {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.bits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  margin-top: 12px;
+}
+.bit-group { display: flex; gap: 1px; margin-right: 8px; }
+.bit-group:last-child { margin-right: 0; }
+.bit {
+  width: 26px;
+  height: 32px;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.bit:hover { background: var(--yellow-p); }
+.bit.on { background: var(--yellow); color: var(--ink); }
+.bit .idx {
+  position: absolute;
+  bottom: -14px;
+  font-size: 8px;
+  color: var(--ink-4);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.base-aux {
+  display: flex;
+  gap: 24px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-3);
+  font-size: 12px;
+}
+.base-aux .lbl {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: block;
+}
+.base-aux .v { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer {
+  padding: 16px 32px;
+  border-top: 4px solid var(--rule);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: var(--bg-2);
+}
+footer .stamp {
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 2px 8px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  .index { border-right: none; border-bottom: 4px solid var(--rule); }
+  .masthead-title { font-size: 44px; }
+  .masthead-row2 { flex-direction: column; align-items: flex-start; }
+  .masthead-meta { text-align: left; }
+  .page { padding: 22px 18px 30px; }
+  h2 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="catalog">
+
+<header class="masthead">
+  <div class="masthead-row1">
+    <div><span class="stamp">Green Shoe Garage Data Co.</span></div>
+    <div>Mountain Maryland · MMXXVI</div>
+  </div>
+  <div class="masthead-title">ALMANAC</div>
+  <div class="masthead-row2">
+    <div class="masthead-sub">A working catalog of bench reference data, kept by hand at the Mountain Maryland bench.</div>
+    <div class="masthead-meta">
+      Field Instrument 007<br>
+      <span class="edition">Edition I · vol. 1</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="index">
+    <div class="index-title">Index</div>
+
+    <div class="category">
+      <div class="cat-num">1</div>
+      <div class="cat-name">Electrical &amp;<br>Electronics</div>
+    </div>
+    <ul class="nav-list">
+      <li><button data-tab="resistors" class="active"><span class="ref">1A</span><span>Resistor Color Bands</span></button></li>
+      <li><button data-tab="smd"><span class="ref">1B</span><span>SMD Resistor Codes</span></button></li>
+      <li><button data-tab="pinouts"><span class="ref">1C</span><span>Pinouts</span></button></li>
+      <li><button data-tab="wire"><span class="ref">1D</span><span>Wire &amp; Ampacity</span></button></li>
+    </ul>
+
+    <div class="category">
+      <div class="cat-num">2</div>
+      <div class="cat-name">Mechanical</div>
+    </div>
+    <ul class="nav-list">
+      <li><button data-tab="taps"><span class="ref">2A</span><span>Tap &amp; Drill</span></button></li>
+      <li><button data-tab="feeds"><span class="ref">2B</span><span>Feeds &amp; Speeds</span></button></li>
+    </ul>
+
+    <div class="category">
+      <div class="cat-num">3</div>
+      <div class="cat-name">Software</div>
+    </div>
+    <ul class="nav-list">
+      <li><button data-tab="bases"><span class="ref">3A</span><span>Number Bases</span></button></li>
+      <li><div class="stub">more sections forthcoming</div></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+
+  <!-- ============ 1A · RESISTORS ============ -->
+  <section id="resistors" class="page active">
+    <div class="page-head">
+      <div class="page-ref">Section 1A <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Resistor Color Bands</h2>
+      <div class="page-desc">Decode 4, 5, and 6-band axial resistors. Reverse-encode from a target value and tolerance.</div>
+    </div>
+
+    <div class="format-toggle" id="band-toggle">
+      <button data-bands="4" class="active">4 band</button>
+      <button data-bands="5">5 band</button>
+      <button data-bands="6">6 band</button>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Decode · Pick Bands</span><span class="fig">FIG. 1A-1</span></div>
+          <div class="band-selectors" id="band-selectors"></div>
+          <div class="band-viz" id="band-viz"></div>
+          <div class="readout">
+            <div class="big" id="band-result-value">—</div>
+            <div class="sub">Value</div>
+            <div class="meta">
+              <div><span>Tolerance</span><strong id="band-result-tol">—</strong></div>
+              <div><span>Temp coef</span><strong id="band-result-tc">—</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Reverse · Enter Value</span><span class="fig">FIG. 1A-2</span></div>
+          <div class="field">
+            <label>Resistance</label>
+            <input type="text" id="rev-input" placeholder="e.g. 4.7k, 220, 1M, 0R47" autocomplete="off" value="4.7k">
+          </div>
+          <div class="field">
+            <label>Tolerance</label>
+            <select id="rev-tol">
+              <option value="20">±20%</option>
+              <option value="10">±10%</option>
+              <option value="5" selected>±5%</option>
+              <option value="2">±2%</option>
+              <option value="1">±1%</option>
+              <option value="0.5">±0.5%</option>
+            </select>
+          </div>
+          <div class="band-viz" id="rev-viz"></div>
+          <div class="readout">
+            <div class="big" id="rev-result-bands">—</div>
+            <div class="sub">Band Sequence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend" id="color-legend">
+      <div class="legend-title">Color Reference</div>
+    </div>
+  </section>
+
+  <!-- ============ 1B · SMD ============ -->
+  <section id="smd" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1B <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>SMD Resistor Codes</h2>
+      <div class="page-desc">Decode 3-digit, 4-digit precision, R-notation, and EIA-96 surface-mount resistor codes. Format auto-detected.</div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Decoder</span><span class="fig">FIG. 1B-1</span></div>
+          <div class="field">
+            <input type="text" id="smd-input" class="smd-input" placeholder="473" autocomplete="off" maxlength="5" value="473">
+          </div>
+          <div class="readout">
+            <div class="big" id="smd-value">—</div>
+            <div class="sub" id="smd-format">enter a code</div>
+            <div class="meta">
+              <div><span>Multiplier</span><strong id="smd-mult">—</strong></div>
+              <div><span>Tolerance</span><strong id="smd-tol">—</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Supported Formats</span><span class="fig">TAB. 1B-1</span></div>
+          <table>
+            <thead><tr><th>Code</th><th>Format</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">473</td><td>3-digit</td><td class="dim">47 × 10³ = 47 kΩ</td></tr>
+              <tr><td class="hi">4702</td><td>4-digit (1%)</td><td class="dim">470 × 10² = 47 kΩ</td></tr>
+              <tr><td class="hi">4R7</td><td>R-notation</td><td class="dim">4.7 Ω</td></tr>
+              <tr><td class="hi">R47</td><td>R-notation</td><td class="dim">0.47 Ω</td></tr>
+              <tr><td class="hi">01A</td><td>EIA-96</td><td class="dim">100 × 1 = 100 Ω</td></tr>
+              <tr><td class="hi">68C</td><td>EIA-96</td><td class="dim">499 × 100 = 49.9 kΩ</td></tr>
+            </tbody>
+          </table>
+          <div class="note">EIA-96 letter multipliers: Z=0.001, Y/R=0.01, X/S=0.1, A=1, B/H=10, C=100, D=1k, E=10k, F=100k.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title"><span>EIA-96 Lookup Table</span><span class="fig">TAB. 1B-2</span></div>
+      <div class="scroll" style="max-height:340px;">
+        <table id="eia96-table">
+          <thead><tr><th>Code</th><th>Value</th><th>Code</th><th>Value</th><th>Code</th><th>Value</th><th>Code</th><th>Value</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1C · PINOUTS ============ -->
+  <section id="pinouts" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1C <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Pinouts</h2>
+      <div class="page-desc">Microcontrollers, ICs, and connectors. The ones you actually reach for at the bench.</div>
+    </div>
+
+    <div class="field" style="max-width:360px;">
+      <label>Select Device</label>
+      <select id="pinout-select"></select>
+    </div>
+
+    <div id="pinout-display"></div>
+  </section>
+
+  <!-- ============ 1D · WIRE ============ -->
+  <section id="wire" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1D <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Wire &amp; Ampacity</h2>
+      <div class="page-desc">AWG sizing, metric equivalents, current capacity, and DC resistance. With voltage drop calculator.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title"><span>AWG Reference Table</span><span class="fig">TAB. 1D-1</span></div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>AWG</th>
+              <th>mm²</th>
+              <th>⌀ (mm)</th>
+              <th>Chassis (A)</th>
+              <th>Power (A)</th>
+              <th>Ω / 1000 ft</th>
+              <th>Ω / km</th>
+            </tr>
+          </thead>
+          <tbody id="wire-table"></tbody>
+        </table>
+      </div>
+      <div class="note">Chassis wiring assumes free-air, single conductor. Power transmission assumes 700 circular mils per amp, conservative for long runs and bundled conductors. Derate for ambient temperature and bundling.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Voltage Drop Calculator</span><span class="fig">FIG. 1D-1</span></div>
+      <div class="row">
+        <div class="col">
+          <div class="field"><label>AWG</label><select id="vd-awg"></select></div>
+          <div class="field"><label>Current (A)</label><input type="number" id="vd-amps" value="5" min="0" step="0.1"></div>
+        </div>
+        <div class="col">
+          <div class="field"><label>Length one-way (ft)</label><input type="number" id="vd-len" value="10" min="0" step="0.5"></div>
+          <div class="field"><label>Source voltage</label><input type="number" id="vd-volts" value="12" min="0" step="0.1"></div>
+        </div>
+      </div>
+      <div class="calc-output">
+        <div class="calc-row"><span class="lbl">Voltage Drop</span><span class="val" id="vd-drop">—</span></div>
+        <div class="calc-row"><span class="lbl">% of Source</span><span class="val" id="vd-pct">—</span></div>
+        <div class="calc-row"><span class="lbl">Voltage at Load</span><span class="val" id="vd-load">—</span></div>
+        <div class="calc-row"><span class="lbl">Power Dissipated in Wire</span><span class="val" id="vd-loss">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2A · TAP & DRILL ============ -->
+  <section id="taps" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2A <span class="dot"></span> Mechanical</div>
+      <h2>Tap &amp; Drill</h2>
+      <div class="page-desc">Drill sizes for tapping at 75% thread engagement, standard practice. Imperial and metric.</div>
+    </div>
+
+    <div class="row" style="margin-bottom:16px;">
+      <div class="col" style="flex:0 1 280px;">
+        <div class="field">
+          <label>Filter</label>
+          <input type="search" id="tap-filter" placeholder="e.g. 1/4, M6, 10-32" autocomplete="off">
+        </div>
+      </div>
+      <div class="col" style="flex:0 1 280px;">
+        <div class="field">
+          <label>System</label>
+          <select id="tap-system">
+            <option value="all">Imperial &amp; Metric</option>
+            <option value="imp">Imperial only</option>
+            <option value="met">Metric only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0; border-top:3px solid var(--ink);">
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Thread</th>
+              <th>Pitch / TPI</th>
+              <th>Tap Drill</th>
+              <th>Decimal in</th>
+              <th>Metric mm</th>
+              <th>Clearance</th>
+            </tr>
+          </thead>
+          <tbody id="tap-table"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="note">Clearance drill = close fit for screw passage. For free fit, go one step up.</div>
+  </section>
+
+  <!-- ============ 2B · FEEDS & SPEEDS ============ -->
+  <section id="feeds" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2B <span class="dot"></span> Mechanical</div>
+      <h2>Feeds &amp; Speeds</h2>
+      <div class="page-desc">Starting points for milling and drilling. Always verify on scrap before committing to the part.</div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Inputs</span><span class="fig">FIG. 2B-1</span></div>
+          <div class="field">
+            <label>Material</label>
+            <select id="fs-material"></select>
+          </div>
+          <div class="field">
+            <label>Tool Material</label>
+            <select id="fs-tool">
+              <option value="hss">HSS</option>
+              <option value="carbide" selected>Carbide</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Diameter</label>
+            <div style="display:flex;gap:8px;">
+              <input type="number" id="fs-dia" value="0.25" step="0.005" min="0.01" style="flex:2;">
+              <select id="fs-units" style="flex:1;">
+                <option value="in" selected>inch</option>
+                <option value="mm">mm</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Flutes</label>
+            <select id="fs-flutes">
+              <option>1</option>
+              <option>2</option>
+              <option selected>3</option>
+              <option>4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-title"><span>Starting Parameters</span><span class="fig">TAB. 2B-1</span></div>
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">SFM</span><span class="val" id="fs-sfm">—</span></div>
+            <div class="calc-row"><span class="lbl">Spindle Speed</span><span class="val" id="fs-rpm">—</span></div>
+            <div class="calc-row"><span class="lbl">Chip Load / Flute</span><span class="val" id="fs-cl">—</span></div>
+            <div class="calc-row"><span class="lbl">Feed Rate</span><span class="val" id="fs-feed">—</span></div>
+            <div class="calc-row"><span class="lbl">Recommended DOC</span><span class="val" id="fs-doc">—</span></div>
+          </div>
+          <div class="note" id="fs-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title"><span>SFM Reference (Mill / Drill)</span><span class="fig">TAB. 2B-2</span></div>
+      <table>
+        <thead><tr><th>Material</th><th>HSS SFM</th><th>Carbide SFM</th><th>Notes</th></tr></thead>
+        <tbody id="sfm-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 3A · NUMBER BASES ============ -->
+  <section id="bases" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 3A <span class="dot"></span> Software</div>
+      <h2>Number Bases</h2>
+      <div class="page-desc">Convert between decimal, hexadecimal, binary, and octal. Bit-level view with click-to-toggle. ASCII lookup for printable range.</div>
+    </div>
+
+    <div class="row" style="margin-bottom:16px;">
+      <div class="col" style="flex:0 1 260px;">
+        <div class="field">
+          <label>Input</label>
+          <input type="text" id="base-input" placeholder="enter value" autocomplete="off" value="42">
+        </div>
+      </div>
+      <div class="col" style="flex:0 1 200px;">
+        <div class="field">
+          <label>Base</label>
+          <select id="base-from">
+            <option value="dec" selected>Decimal</option>
+            <option value="hex">Hex (0x)</option>
+            <option value="bin">Binary (0b)</option>
+            <option value="oct">Octal (0o)</option>
+          </select>
+        </div>
+      </div>
+      <div class="col" style="flex:0 1 180px;">
+        <div class="field">
+          <label>Bit Width</label>
+          <select id="base-width">
+            <option value="8" selected>8-bit</option>
+            <option value="16">16-bit</option>
+            <option value="32">32-bit</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Conversion</span><span class="fig">TAB. 3A-1</span></div>
+      <div class="base-grid">
+        <div class="base-cell"><div class="lbl">Decimal</div><div class="val" id="b-dec">—</div></div>
+        <div class="base-cell"><div class="lbl">Hex</div><div class="val" id="b-hex">—</div></div>
+        <div class="base-cell"><div class="lbl">Binary</div><div class="val" id="b-bin">—</div></div>
+        <div class="base-cell"><div class="lbl">Octal</div><div class="val" id="b-oct">—</div></div>
+      </div>
+
+      <div style="margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <label style="margin:0;">Bit Map</label>
+          <span style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);font-weight:700;">Click to toggle · MSB on left</span>
+        </div>
+        <div class="bits" id="bits"></div>
+      </div>
+
+      <div class="base-aux">
+        <div>
+          <div class="lbl">ASCII</div>
+          <div class="v" id="b-ascii">—</div>
+        </div>
+        <div>
+          <div class="lbl">Signed (two's comp.)</div>
+          <div class="v" id="b-signed">—</div>
+        </div>
+        <div>
+          <div class="lbl">Set Bits</div>
+          <div class="v" id="b-popcount">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">Accepts unprefixed input matching the selected base. Hex accepts <code>0x</code>, binary accepts <code>0b</code>, octal accepts <code>0o</code> regardless of selection.</div>
+  </section>
+
+  </main>
+
+</div>
+
+<footer>
+  <div><span class="stamp">GSGDC</span> &nbsp; Green Shoe Garage Data Co. · Mountain Maryland · MMXXVI</div>
+  <div>GPL-3.0 · M.B. Parks</div>
+</footer>
+
+</div>
+
+<script>
+'use strict';
+
+// ====================== COLOR DATA ======================
+const COLORS = [
+  {name:'black',  digit:0,    mult:1,     tol:null,  tc:250,  hex:'#1a1a1a'},
+  {name:'brown',  digit:1,    mult:1e1,   tol:1,     tc:100,  hex:'#5a3a1a'},
+  {name:'red',    digit:2,    mult:1e2,   tol:2,     tc:50,   hex:'#a02818'},
+  {name:'orange', digit:3,    mult:1e3,   tol:null,  tc:15,   hex:'#d96018'},
+  {name:'yellow', digit:4,    mult:1e4,   tol:null,  tc:25,   hex:'#e0b428'},
+  {name:'green',  digit:5,    mult:1e5,   tol:0.5,   tc:20,   hex:'#2c7032'},
+  {name:'blue',   digit:6,    mult:1e6,   tol:0.25,  tc:10,   hex:'#2858a0'},
+  {name:'violet', digit:7,    mult:1e7,   tol:0.1,   tc:5,    hex:'#6840a4'},
+  {name:'gray',   digit:8,    mult:1e8,   tol:0.05,  tc:1,    hex:'#787878'},
+  {name:'white',  digit:9,    mult:1e9,   tol:null,  tc:null, hex:'#e8e8e8'},
+  {name:'gold',   digit:null, mult:0.1,   tol:5,     tc:null, hex:'#b08020'},
+  {name:'silver', digit:null, mult:0.01,  tol:10,    tc:null, hex:'#a8a8a8'},
+];
+const byName = n => COLORS.find(c => c.name === n);
+
+function fmtOhms(v) {
+  if (v === null || isNaN(v)) return '—';
+  if (v >= 1e9) return (v/1e9).toPrecision(3).replace(/\.?0+$/,'') + ' GΩ';
+  if (v >= 1e6) return (v/1e6).toPrecision(3).replace(/\.?0+$/,'') + ' MΩ';
+  if (v >= 1e3) return (v/1e3).toPrecision(3).replace(/\.?0+$/,'') + ' kΩ';
+  if (v >= 1)   return v.toPrecision(3).replace(/\.?0+$/,'') + ' Ω';
+  return v.toPrecision(2) + ' Ω';
+}
+
+// ====================== RESISTOR DECODER ======================
+let bandCount = 4;
+
+function digitOptions() { return COLORS.filter(c => c.digit !== null); }
+function multOptions()  { return COLORS.slice(); }
+function tolOptions()   { return COLORS.filter(c => c.tol !== null); }
+function tcOptions()    { return COLORS.filter(c => c.tc !== null); }
+
+function makeSelect(idx, opts, defaultName) {
+  const sel = document.createElement('select');
+  sel.dataset.idx = idx;
+  opts.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name;
+    o.textContent = c.name;
+    if (c.name === defaultName) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', renderBands);
+  return sel;
+}
+
+function renderBandSelectors() {
+  const wrap = document.getElementById('band-selectors');
+  wrap.innerHTML = '';
+  const labels = bandCount === 4
+    ? ['1st digit','2nd digit','multiplier','tolerance']
+    : bandCount === 5
+    ? ['1st digit','2nd digit','3rd digit','multiplier','tolerance']
+    : ['1st digit','2nd digit','3rd digit','multiplier','tolerance','temp coef'];
+
+  const defaults4 = ['yellow','violet','red','gold'];
+  const defaults5 = ['brown','black','black','red','brown'];
+  const defaults6 = ['brown','black','black','red','brown','brown'];
+  const defaults = bandCount === 4 ? defaults4 : bandCount === 5 ? defaults5 : defaults6;
+
+  labels.forEach((lbl, i) => {
+    const cell = document.createElement('div');
+    const lab = document.createElement('label');
+    lab.textContent = lbl;
+    cell.appendChild(lab);
+    let opts;
+    if (lbl.includes('digit')) opts = digitOptions();
+    else if (lbl === 'multiplier') opts = multOptions();
+    else if (lbl === 'tolerance') opts = tolOptions();
+    else opts = tcOptions();
+    cell.appendChild(makeSelect(i, opts, defaults[i]));
+    wrap.appendChild(cell);
+  });
+  renderBands();
+}
+
+function renderBands() {
+  const selects = document.querySelectorAll('#band-selectors select');
+  const picks = Array.from(selects).map(s => byName(s.value));
+  const viz = document.getElementById('band-viz');
+  viz.innerHTML = '';
+  picks.forEach((p, i) => {
+    const b = document.createElement('div');
+    b.className = 'band';
+    b.style.background = p.hex;
+    if (bandCount === 6 && i === 5) b.style.marginLeft = '14px';
+    if (bandCount === 5 && i === 4) b.style.marginLeft = '14px';
+    if (bandCount === 4 && i === 3) b.style.marginLeft = '14px';
+    viz.appendChild(b);
+  });
+  let value, tol, tc = null;
+  if (bandCount === 4) {
+    value = (picks[0].digit * 10 + picks[1].digit) * picks[2].mult;
+    tol = picks[3].tol;
+  } else if (bandCount === 5) {
+    value = (picks[0].digit * 100 + picks[1].digit * 10 + picks[2].digit) * picks[3].mult;
+    tol = picks[4].tol;
+  } else {
+    value = (picks[0].digit * 100 + picks[1].digit * 10 + picks[2].digit) * picks[3].mult;
+    tol = picks[4].tol;
+    tc = picks[5].tc;
+  }
+  document.getElementById('band-result-value').textContent = fmtOhms(value);
+  document.getElementById('band-result-tol').textContent = tol !== null ? '±' + tol + '%' : '—';
+  document.getElementById('band-result-tc').textContent = tc !== null ? tc + ' ppm/°C' : '—';
+}
+
+document.getElementById('band-toggle').addEventListener('click', e => {
+  if (e.target.tagName === 'BUTTON') {
+    document.querySelectorAll('#band-toggle button').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    bandCount = parseInt(e.target.dataset.bands);
+    renderBandSelectors();
+  }
+});
+
+// ====================== REVERSE RESISTOR ======================
+function parseResistance(s) {
+  if (!s) return null;
+  s = s.trim().toLowerCase().replace(/\s/g,'').replace(/ω|ohm|ohms/g,'');
+  const r = s.match(/^(\d*)r(\d*)$/);
+  if (r) { const a = r[1] || '0', b = r[2] || '0'; return parseFloat(a + '.' + b); }
+  const k = s.match(/^(\d*\.?\d+)k$/);  if (k) return parseFloat(k[1]) * 1e3;
+  const m = s.match(/^(\d*\.?\d+)m$/);  if (m) return parseFloat(m[1]) * 1e6;
+  const g = s.match(/^(\d*\.?\d+)g$/);  if (g) return parseFloat(g[1]) * 1e9;
+  const km = s.match(/^(\d*)k(\d+)$/);  if (km) return parseFloat(km[1] + '.' + km[2]) * 1e3;
+  const mm = s.match(/^(\d*)m(\d+)$/);  if (mm) return parseFloat(mm[1] + '.' + mm[2]) * 1e6;
+  const n = parseFloat(s); return isNaN(n) ? null : n;
+}
+
+function valueToBands(v, tolPct) {
+  if (v === null || v <= 0) return null;
+  const exp = Math.floor(Math.log10(v));
+  let mant5 = Math.round(v / Math.pow(10, exp - 2));
+  if (mant5 >= 1000) mant5 = Math.round(mant5/10);
+  const mant4 = Math.round(v / Math.pow(10, exp - 1));
+  let d1, d2, d3, mexp;
+  const use5 = tolPct < 5;
+  if (use5) {
+    d1 = Math.floor(mant5 / 100);
+    d2 = Math.floor((mant5 % 100) / 10);
+    d3 = mant5 % 10;
+    mexp = exp - 2;
+  } else {
+    d1 = Math.floor(mant4 / 10);
+    d2 = mant4 % 10;
+    mexp = exp - 1;
+  }
+  const dcol = d => COLORS.find(c => c.digit === d).name;
+  const mcol = COLORS.find(c => Math.abs(c.mult - Math.pow(10, mexp)) < Math.pow(10, mexp) * 1e-9);
+  if (!mcol) return null;
+  const tcol = COLORS.find(c => c.tol === tolPct);
+  if (!tcol) return null;
+  if (use5) return [dcol(d1), dcol(d2), dcol(d3), mcol.name, tcol.name];
+  return [dcol(d1), dcol(d2), mcol.name, tcol.name];
+}
+
+function updateReverse() {
+  const v = parseResistance(document.getElementById('rev-input').value);
+  const tol = parseFloat(document.getElementById('rev-tol').value);
+  const viz = document.getElementById('rev-viz');
+  const out = document.getElementById('rev-result-bands');
+  viz.innerHTML = '';
+  if (v === null) { out.textContent = '—'; return; }
+  const bands = valueToBands(v, tol);
+  if (!bands) { out.textContent = 'out of range'; return; }
+  bands.forEach((n, i) => {
+    const b = document.createElement('div');
+    b.className = 'band';
+    b.style.background = byName(n).hex;
+    if (i === bands.length - 1) b.style.marginLeft = '14px';
+    viz.appendChild(b);
+  });
+  out.textContent = bands.join(' · ');
+}
+document.getElementById('rev-input').addEventListener('input', updateReverse);
+document.getElementById('rev-tol').addEventListener('change', updateReverse);
+
+function renderLegend() {
+  const wrap = document.getElementById('color-legend');
+  COLORS.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-swatch" style="background:${c.hex}"></div>
+                      <span>${c.name}${c.digit !== null ? ' · ' + c.digit : ''}</span>`;
+    wrap.appendChild(item);
+  });
+}
+
+// ====================== SMD CODES ======================
+const EIA96 = [
+  null,100,102,105,107,110,113,115,118,121,124,127,130,133,137,140,143,147,150,154,158,
+  162,165,169,174,178,182,187,191,196,200,205,210,215,221,226,232,237,243,249,255,
+  261,267,274,280,287,294,301,309,316,324,332,340,348,357,365,374,383,392,402,412,
+  422,432,442,453,464,475,487,499,511,523,536,549,562,576,590,604,619,634,649,665,
+  681,698,715,732,750,768,787,806,825,845,866,887,909,931,953,976
+];
+const EIA96_MULT = { Z:0.001, Y:0.01, R:0.01, X:0.1, S:0.1, A:1, B:10, H:10, C:100, D:1000, E:10000, F:100000 };
+
+function decodeSMD(s) {
+  if (!s) return null;
+  s = s.trim().toUpperCase();
+  if (s.includes('R')) {
+    const parts = s.split('R');
+    const a = parts[0] || '0', b = parts[1] || '0';
+    return { value: parseFloat(a + '.' + b), format: 'R-notation', mult: '—', tol: '±5%' };
+  }
+  if (/^\d{2}[A-Z]$/.test(s)) {
+    const code = parseInt(s.slice(0,2));
+    const letter = s.slice(2);
+    if (code >= 1 && code <= 96 && EIA96_MULT[letter] !== undefined) {
+      const base = EIA96[code];
+      const mult = EIA96_MULT[letter];
+      return { value: base * mult, format: 'EIA-96', mult: `× ${mult}`, tol: '±1%' };
+    }
+  }
+  if (/^\d{4}$/.test(s)) {
+    const d = parseInt(s.slice(0,3));
+    const e = parseInt(s.slice(3));
+    return { value: d * Math.pow(10, e), format: '4-digit (precision)', mult: `× 10^${e}`, tol: '±1%' };
+  }
+  if (/^\d{3}$/.test(s)) {
+    const d = parseInt(s.slice(0,2));
+    const e = parseInt(s.slice(2));
+    return { value: d * Math.pow(10, e), format: '3-digit', mult: `× 10^${e}`, tol: '±5%' };
+  }
+  if (/^\d+$/.test(s)) {
+    return { value: parseInt(s), format: 'literal', mult: '×1', tol: '—' };
+  }
+  return null;
+}
+
+function updateSMD() {
+  const v = document.getElementById('smd-input').value;
+  const r = decodeSMD(v);
+  if (!r) {
+    document.getElementById('smd-value').textContent = v ? '?' : '—';
+    document.getElementById('smd-format').textContent = v ? 'unrecognized format' : 'enter a code';
+    document.getElementById('smd-mult').textContent = '—';
+    document.getElementById('smd-tol').textContent = '—';
+    return;
+  }
+  document.getElementById('smd-value').textContent = fmtOhms(r.value);
+  document.getElementById('smd-format').textContent = r.format;
+  document.getElementById('smd-mult').textContent = r.mult;
+  document.getElementById('smd-tol').textContent = r.tol;
+}
+document.getElementById('smd-input').addEventListener('input', updateSMD);
+
+function renderEIA96Table() {
+  const tbody = document.querySelector('#eia96-table tbody');
+  tbody.innerHTML = '';
+  for (let i = 1; i <= 24; i++) {
+    const tr = document.createElement('tr');
+    for (let col = 0; col < 4; col++) {
+      const code = i + col * 24;
+      const tdCode = document.createElement('td');
+      tdCode.className = 'hi num l';
+      tdCode.textContent = String(code).padStart(2,'0');
+      const tdVal = document.createElement('td');
+      tdVal.className = 'num';
+      tdVal.textContent = EIA96[code];
+      tr.appendChild(tdCode);
+      tr.appendChild(tdVal);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+// ====================== PINOUTS ======================
+const PINOUTS = {
+  'arduino_uno': {
+    label: 'Arduino Uno R3 (ATmega328P)',
+    note: 'Operating voltage 5V. Most pins 5V tolerant on AVR. Use 3.3V via on-board regulator pin for sensors.',
+    pins: [
+      ['D0',  'RX',  ['UART']],
+      ['D1',  'TX',  ['UART']],
+      ['D2',  '—',   ['INT0']],
+      ['D3',  '~',   ['INT1','PWM']],
+      ['D4',  '—',   []],
+      ['D5',  '~',   ['PWM']],
+      ['D6',  '~',   ['PWM']],
+      ['D7',  '—',   []],
+      ['D8',  '—',   []],
+      ['D9',  '~',   ['PWM']],
+      ['D10', '~',   ['PWM','SS','SPI']],
+      ['D11', '~',   ['PWM','MOSI','SPI']],
+      ['D12', '—',   ['MISO','SPI']],
+      ['D13', 'LED', ['SCK','SPI']],
+      ['A0',  '—',   ['ADC']],
+      ['A1',  '—',   ['ADC']],
+      ['A2',  '—',   ['ADC']],
+      ['A3',  '—',   ['ADC']],
+      ['A4',  'SDA', ['ADC','I2C']],
+      ['A5',  'SCL', ['ADC','I2C']],
+      ['5V',  '+5V', ['PWR']],
+      ['3V3', '+3.3V', ['PWR']],
+      ['VIN', '7-12V', ['PWR']],
+      ['GND', '0V',  ['GND']],
+      ['AREF','ref', []],
+      ['RST', 'reset', []]
+    ]
+  },
+  'esp32_devkit': {
+    label: 'ESP32 DevKit V1 (30-pin)',
+    note: 'Operating voltage 3.3V. NOT 5V tolerant on GPIO. Strapping pins (0, 2, 5, 12, 15) affect boot; avoid pulling them at reset. ADC2 (GPIO 0,2,4,12-15,25-27) unusable when Wi-Fi active.',
+    pins: [
+      ['3V3', '+3.3V', ['PWR']],
+      ['EN',  'reset', []],
+      ['VP',  'GPIO36', ['ADC1_0','input only']],
+      ['VN',  'GPIO39', ['ADC1_3','input only']],
+      ['D34', 'GPIO34', ['ADC1_6','input only']],
+      ['D35', 'GPIO35', ['ADC1_7','input only']],
+      ['D32', 'GPIO32', ['ADC1_4','touch']],
+      ['D33', 'GPIO33', ['ADC1_5','touch']],
+      ['D25', 'GPIO25', ['DAC1','ADC2']],
+      ['D26', 'GPIO26', ['DAC2','ADC2']],
+      ['D27', 'GPIO27', ['ADC2','touch']],
+      ['D14', 'GPIO14', ['HSPI_CLK','touch','strap']],
+      ['D12', 'GPIO12', ['HSPI_MISO','touch','strap']],
+      ['D13', 'GPIO13', ['HSPI_MOSI','touch']],
+      ['GND', '0V', ['GND']],
+      ['VIN', '5V', ['PWR']],
+      ['D23', 'GPIO23', ['VSPI_MOSI']],
+      ['D22', 'GPIO22', ['SCL','I2C']],
+      ['TX0', 'GPIO1',  ['UART0_TX']],
+      ['RX0', 'GPIO3',  ['UART0_RX']],
+      ['D21', 'GPIO21', ['SDA','I2C']],
+      ['D19', 'GPIO19', ['VSPI_MISO']],
+      ['D18', 'GPIO18', ['VSPI_CLK']],
+      ['D5',  'GPIO5',  ['VSPI_SS','strap']],
+      ['TX2', 'GPIO17', ['UART2_TX']],
+      ['RX2', 'GPIO16', ['UART2_RX']],
+      ['D4',  'GPIO4',  ['ADC2','touch']],
+      ['D2',  'GPIO2',  ['ADC2','touch','strap','onboard LED']],
+      ['D15', 'GPIO15', ['ADC2','touch','strap']],
+      ['D0',  'GPIO0',  ['ADC2','strap (boot select)']]
+    ]
+  },
+  'rpi_gpio': {
+    label: 'Raspberry Pi 40-pin GPIO',
+    note: '3.3V logic, NOT 5V tolerant. Physical pin numbering shown. BCM numbering in name column.',
+    pins: [
+      ['1',  '3V3',     ['PWR']],
+      ['2',  '5V',      ['PWR']],
+      ['3',  'GPIO2',   ['SDA1','I2C']],
+      ['4',  '5V',      ['PWR']],
+      ['5',  'GPIO3',   ['SCL1','I2C']],
+      ['6',  'GND',     ['GND']],
+      ['7',  'GPIO4',   ['GPCLK0']],
+      ['8',  'GPIO14',  ['TXD','UART']],
+      ['9',  'GND',     ['GND']],
+      ['10', 'GPIO15',  ['RXD','UART']],
+      ['11', 'GPIO17',  []],
+      ['12', 'GPIO18',  ['PWM0','PCM_CLK']],
+      ['13', 'GPIO27',  []],
+      ['14', 'GND',     ['GND']],
+      ['15', 'GPIO22',  []],
+      ['16', 'GPIO23',  []],
+      ['17', '3V3',     ['PWR']],
+      ['18', 'GPIO24',  []],
+      ['19', 'GPIO10',  ['MOSI','SPI0']],
+      ['20', 'GND',     ['GND']],
+      ['21', 'GPIO9',   ['MISO','SPI0']],
+      ['22', 'GPIO25',  []],
+      ['23', 'GPIO11',  ['SCLK','SPI0']],
+      ['24', 'GPIO8',   ['CE0','SPI0']],
+      ['25', 'GND',     ['GND']],
+      ['26', 'GPIO7',   ['CE1','SPI0']],
+      ['27', 'ID_SD',   ['I2C ID EEPROM']],
+      ['28', 'ID_SC',   ['I2C ID EEPROM']],
+      ['29', 'GPIO5',   []],
+      ['30', 'GND',     ['GND']],
+      ['31', 'GPIO6',   []],
+      ['32', 'GPIO12',  ['PWM0']],
+      ['33', 'GPIO13',  ['PWM1']],
+      ['34', 'GND',     ['GND']],
+      ['35', 'GPIO19',  ['PWM1','PCM_FS']],
+      ['36', 'GPIO16',  []],
+      ['37', 'GPIO26',  []],
+      ['38', 'GPIO20',  ['PCM_DIN']],
+      ['39', 'GND',     ['GND']],
+      ['40', 'GPIO21',  ['PCM_DOUT']]
+    ]
+  },
+  '555': {
+    label: 'NE555 Timer (DIP-8)',
+    note: 'Astable: f = 1.44 / ((R1 + 2·R2) · C). Monostable: t = 1.1 · R · C. Supply 4.5-16V (TLC555 from 2V).',
+    pins: [
+      ['1', 'GND',    ['GND']],
+      ['2', 'TRIG',   ['1/3 Vcc threshold, active low']],
+      ['3', 'OUT',    ['200 mA sink/source']],
+      ['4', 'RESET',  ['active low, tie high if unused']],
+      ['5', 'CTRL',   ['2/3 Vcc, bypass with 10nF']],
+      ['6', 'THRES',  ['2/3 Vcc threshold']],
+      ['7', 'DISCH',  ['open-collector to GND']],
+      ['8', 'VCC',    ['+4.5 to +16V']]
+    ]
+  },
+  'lm7805': {
+    label: 'LM7805 / 78xx Regulator (TO-220)',
+    note: 'Dropout typ. 2V, so Vin ≥ 7V for clean 5V out. Bypass: 0.33µF in, 0.1µF out. Heatsink above ~0.5W dissipation.',
+    pins: [
+      ['1', 'INPUT',  ['Vin, 7-25V typ.']],
+      ['2', 'GND',    ['ground / tab']],
+      ['3', 'OUTPUT', ['+5V, 1A max']]
+    ]
+  },
+  'icsp_avr': {
+    label: 'AVR ICSP 6-pin (2x3)',
+    note: 'Standard Atmel ISP header. Pin 1 (MISO) usually marked with a dot.',
+    pins: [
+      ['1', 'MISO', ['SPI']],
+      ['2', 'VCC',  ['target power, often not driven by programmer']],
+      ['3', 'SCK',  ['SPI']],
+      ['4', 'MOSI', ['SPI']],
+      ['5', 'RST',  ['target reset, active low']],
+      ['6', 'GND',  ['GND']]
+    ]
+  },
+  'swd_arm': {
+    label: 'ARM Cortex SWD 10-pin (0.05")',
+    note: 'Cortex Debug Connector. Often called the SWD header for STM32, nRF52, etc. Pin 1 marked.',
+    pins: [
+      ['1',  'VCC',     ['target reference voltage']],
+      ['2',  'SWDIO',   ['data I/O']],
+      ['3',  'GND',     ['GND']],
+      ['4',  'SWCLK',   ['clock']],
+      ['5',  'GND',     ['GND']],
+      ['6',  'SWO',     ['trace out (optional)']],
+      ['7',  'KEY',     ['no connection']],
+      ['8',  'NC',      ['no connection']],
+      ['9',  'GNDDetect',['cable detect']],
+      ['10', 'nRESET',  ['target reset']]
+    ]
+  },
+  'usb_c': {
+    label: 'USB-C Receptacle (24-pin, common signals)',
+    note: 'Reversible. For host-side and 5V devices, tie CC1 and CC2 each to GND through a 5.1 kΩ resistor.',
+    pins: [
+      ['A1/B12', 'GND',  ['GND']],
+      ['A4/B9',  'VBUS', ['+5V default, up to 20V via PD']],
+      ['A5',     'CC1',  ['config / orientation']],
+      ['B5',     'CC2',  ['config / orientation']],
+      ['A6',     'D+',   ['USB 2.0 data']],
+      ['A7',     'D−',   ['USB 2.0 data']],
+      ['A8',     'SBU1', ['sideband (Alt Mode)']],
+      ['B8',     'SBU2', ['sideband (Alt Mode)']],
+      ['A2,A3',  'TX1±', ['SuperSpeed pair 1']],
+      ['B10,B11','RX1±', ['SuperSpeed pair 1']],
+      ['B2,B3',  'TX2±', ['SuperSpeed pair 2']],
+      ['A10,A11','RX2±', ['SuperSpeed pair 2']]
+    ]
+  },
+  'usb_a': {
+    label: 'USB-A (USB 2.0)',
+    note: 'Looking into receptacle: pin 1 on left. Cable color convention: red Vbus, white D−, green D+, black GND.',
+    pins: [
+      ['1', 'VBUS', ['+5V, 500 mA standard']],
+      ['2', 'D−',   ['data']],
+      ['3', 'D+',   ['data']],
+      ['4', 'GND',  ['GND']]
+    ]
+  },
+  'rj45_t568b': {
+    label: 'RJ45 Ethernet (T568B)',
+    note: 'T568B is the most common termination in commercial wiring. Pin 1 with clip facing away, gold contacts up.',
+    pins: [
+      ['1', 'TX+', ['white/orange']],
+      ['2', 'TX−', ['orange']],
+      ['3', 'RX+', ['white/green']],
+      ['4', '—',   ['blue (PoE+ or unused)']],
+      ['5', '—',   ['white/blue']],
+      ['6', 'RX−', ['green']],
+      ['7', '—',   ['white/brown']],
+      ['8', '—',   ['brown']]
+    ]
+  }
+};
+
+function tagClass(label) {
+  const l = label.toLowerCase();
+  if (l === 'pwr' || l.includes('vcc') || l.includes('+')) return 'pwr';
+  if (l === 'gnd' || l === '0v') return 'gnd';
+  if (l.startsWith('adc') || l === 'dac1' || l === 'dac2') return 'adc';
+  if (l.includes('pwm')) return 'pwm';
+  if (l === 'i2c' || l.includes('sda') || l.includes('scl')) return 'i2c';
+  if (l === 'spi' || l.includes('mosi') || l.includes('miso') || l.includes('sck') || l.includes('hspi') || l.includes('vspi')) return 'spi';
+  if (l.includes('uart') || l === 'txd' || l === 'rxd') return 'uart';
+  return '';
+}
+
+function renderPinoutSelect() {
+  const sel = document.getElementById('pinout-select');
+  Object.keys(PINOUTS).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k;
+    o.textContent = PINOUTS[k].label;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', renderPinout);
+  renderPinout();
+}
+
+function renderPinout() {
+  const key = document.getElementById('pinout-select').value;
+  const data = PINOUTS[key];
+  const wrap = document.getElementById('pinout-display');
+  let html = '';
+  if (data.note) html += `<div class="note">${data.note}</div>`;
+  html += '<div class="card" style="padding:0;"><div class="scroll"><table class="pinout-table"><thead><tr><th>Pin</th><th>Name</th><th>Function</th></tr></thead><tbody>';
+  data.pins.forEach((row) => {
+    const [pin, name, alts] = row;
+    const tags = (alts || []).map(a => `<span class="tag ${tagClass(a)}">${a}</span>`).join('');
+    html += `<tr><td class="pin">${pin}</td><td class="name">${name}</td><td class="alt">${tags}</td></tr>`;
+  });
+  html += '</tbody></table></div></div>';
+  wrap.innerHTML = html;
+}
+
+// ====================== TAP & DRILL ======================
+const TAPS = [
+  ['#0-80',   'imp', '80 TPI',  0.0469, 1.19, 0.0635, '3/64"'],
+  ['#1-64',   'imp', '64 TPI',  0.0595, 1.51, 0.0760, '#53'],
+  ['#1-72',   'imp', '72 TPI',  0.0595, 1.51, 0.0760, '#53'],
+  ['#2-56',   'imp', '56 TPI',  0.0700, 1.78, 0.0890, '#50'],
+  ['#2-64',   'imp', '64 TPI',  0.0700, 1.78, 0.0890, '#50'],
+  ['#3-48',   'imp', '48 TPI',  0.0785, 1.99, 0.0995, '#47'],
+  ['#3-56',   'imp', '56 TPI',  0.0820, 2.08, 0.0995, '#45'],
+  ['#4-40',   'imp', '40 TPI',  0.0890, 2.26, 0.1130, '#43'],
+  ['#4-48',   'imp', '48 TPI',  0.0935, 2.37, 0.1130, '#42'],
+  ['#5-40',   'imp', '40 TPI',  0.1015, 2.58, 0.1285, '#38'],
+  ['#5-44',   'imp', '44 TPI',  0.1040, 2.64, 0.1285, '#37'],
+  ['#6-32',   'imp', '32 TPI',  0.1065, 2.71, 0.1440, '#36'],
+  ['#6-40',   'imp', '40 TPI',  0.1130, 2.87, 0.1440, '#33'],
+  ['#8-32',   'imp', '32 TPI',  0.1360, 3.45, 0.1695, '#29'],
+  ['#8-36',   'imp', '36 TPI',  0.1360, 3.45, 0.1695, '#29'],
+  ['#10-24',  'imp', '24 TPI',  0.1495, 3.80, 0.1960, '#25'],
+  ['#10-32',  'imp', '32 TPI',  0.1590, 4.04, 0.1960, '#21'],
+  ['#12-24',  'imp', '24 TPI',  0.1770, 4.50, 0.2210, '#16'],
+  ['#12-28',  'imp', '28 TPI',  0.1820, 4.62, 0.2210, '#14'],
+  ['1/4-20',  'imp', '20 TPI',  0.2010, 5.11, 0.2660, '#7'],
+  ['1/4-28',  'imp', '28 TPI',  0.2130, 5.41, 0.2660, '#3'],
+  ['5/16-18', 'imp', '18 TPI',  0.2570, 6.53, 0.3320, 'F'],
+  ['5/16-24', 'imp', '24 TPI',  0.2720, 6.91, 0.3320, 'I'],
+  ['3/8-16',  'imp', '16 TPI',  0.3125, 7.94, 0.3970, '5/16"'],
+  ['3/8-24',  'imp', '24 TPI',  0.3320, 8.43, 0.3970, 'Q'],
+  ['7/16-14', 'imp', '14 TPI',  0.3680, 9.35, 0.4530, 'U'],
+  ['7/16-20', 'imp', '20 TPI',  0.3906, 9.92, 0.4530, '25/64"'],
+  ['1/2-13',  'imp', '13 TPI',  0.4219, 10.72, 0.5160, '27/64"'],
+  ['1/2-20',  'imp', '20 TPI',  0.4531, 11.51, 0.5160, '29/64"'],
+  ['9/16-12', 'imp', '12 TPI',  0.4844, 12.30, 0.5780, '31/64"'],
+  ['9/16-18', 'imp', '18 TPI',  0.5156, 13.10, 0.5780, '33/64"'],
+  ['5/8-11',  'imp', '11 TPI',  0.5312, 13.49, 0.6406, '17/32"'],
+  ['5/8-18',  'imp', '18 TPI',  0.5781, 14.68, 0.6406, '37/64"'],
+  ['3/4-10',  'imp', '10 TPI',  0.6562, 16.67, 0.7656, '21/32"'],
+  ['3/4-16',  'imp', '16 TPI',  0.6875, 17.46, 0.7656, '11/16"'],
+  ['7/8-9',   'imp', '9 TPI',   0.7656, 19.45, 0.8906, '49/64"'],
+  ['7/8-14',  'imp', '14 TPI',  0.8125, 20.64, 0.8906, '13/16"'],
+  ['1"-8',    'imp', '8 TPI',   0.8750, 22.23, 1.0156, '7/8"'],
+  ['1"-12',   'imp', '12 TPI',  0.9219, 23.42, 1.0156, '59/64"'],
+  ['M2 × 0.4',    'met', '0.40 mm', 0.0630, 1.60, 0.0905, '1.6 mm'],
+  ['M2.5 × 0.45', 'met', '0.45 mm', 0.0807, 2.05, 0.1102, '2.05 mm'],
+  ['M3 × 0.5',    'met', '0.50 mm', 0.0984, 2.50, 0.1339, '2.5 mm'],
+  ['M3.5 × 0.6',  'met', '0.60 mm', 0.1142, 2.90, 0.1535, '2.9 mm'],
+  ['M4 × 0.7',    'met', '0.70 mm', 0.1299, 3.30, 0.1772, '3.3 mm'],
+  ['M5 × 0.8',    'met', '0.80 mm', 0.1654, 4.20, 0.2165, '4.2 mm'],
+  ['M6 × 1.0',    'met', '1.00 mm', 0.1969, 5.00, 0.2598, '5.0 mm'],
+  ['M7 × 1.0',    'met', '1.00 mm', 0.2362, 6.00, 0.2992, '6.0 mm'],
+  ['M8 × 1.25',   'met', '1.25 mm', 0.2638, 6.70, 0.3543, '6.8 mm'],
+  ['M8 × 1.0',    'met', '1.00 mm', 0.2756, 7.00, 0.3543, '7.0 mm (fine)'],
+  ['M10 × 1.5',   'met', '1.50 mm', 0.3346, 8.50, 0.4331, '8.5 mm'],
+  ['M10 × 1.25',  'met', '1.25 mm', 0.3445, 8.75, 0.4331, '8.75 mm (fine)'],
+  ['M12 × 1.75',  'met', '1.75 mm', 0.4016, 10.20, 0.5118, '10.2 mm'],
+  ['M12 × 1.25',  'met', '1.25 mm', 0.4232, 10.75, 0.5118, '10.75 mm (fine)'],
+  ['M14 × 2.0',   'met', '2.00 mm', 0.4724, 12.00, 0.5906, '12.0 mm'],
+  ['M16 × 2.0',   'met', '2.00 mm', 0.5512, 14.00, 0.6693, '14.0 mm'],
+  ['M18 × 2.5',   'met', '2.50 mm', 0.6102, 15.50, 0.7480, '15.5 mm'],
+  ['M20 × 2.5',   'met', '2.50 mm', 0.6890, 17.50, 0.8268, '17.5 mm']
+];
+
+function renderTaps() {
+  const filter = document.getElementById('tap-filter').value.toLowerCase();
+  const sys = document.getElementById('tap-system').value;
+  const tbody = document.getElementById('tap-table');
+  tbody.innerHTML = '';
+  TAPS.forEach(t => {
+    const [label, system, pitch, dIn, dMm, clrIn, drillDisp] = t;
+    if (sys === 'imp' && system !== 'imp') return;
+    if (sys === 'met' && system !== 'met') return;
+    if (filter && !label.toLowerCase().includes(filter)) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="hi">${label}</td>
+                    <td>${pitch}</td>
+                    <td>${drillDisp}</td>
+                    <td class="num">${dIn.toFixed(4)}"</td>
+                    <td class="num">${dMm.toFixed(2)}</td>
+                    <td class="num dim">${clrIn.toFixed(4)}"</td>`;
+    tbody.appendChild(tr);
+  });
+}
+document.getElementById('tap-filter').addEventListener('input', renderTaps);
+document.getElementById('tap-system').addEventListener('change', renderTaps);
+
+// ====================== WIRE ======================
+const WIRE = [
+  [30,  0.0507, 0.86, 0.142,  103.2],
+  [28,  0.0810, 1.4,  0.226,   64.9],
+  [26,  0.129,  2.2,  0.361,   40.8],
+  [24,  0.205,  3.5,  0.577,   25.7],
+  [22,  0.326,  7.0,  0.92,    16.14],
+  [20,  0.518, 11.0,  1.46,    10.15],
+  [18,  0.823, 16.0,  2.3,      6.385],
+  [16,  1.31,  22.0,  3.7,      4.016],
+  [14,  2.08,  32.0,  5.9,      2.525],
+  [12,  3.31,  41.0,  9.3,      1.588],
+  [10,  5.26,  55.0, 15.0,      0.999],
+  [8,   8.37,  73.0, 24.0,      0.628],
+  [6,  13.3,  101.0, 37.0,      0.395],
+  [4,  21.2,  135.0, 60.0,      0.249],
+  [2,  33.6,  181.0, 95.0,      0.156],
+  [1,  42.4,  211.0, 119.0,     0.124],
+  ['1/0', 53.5,  245.0, 150.0,  0.0983],
+  ['2/0', 67.4,  283.0, 190.0,  0.0779],
+  ['3/0', 85.0,  328.0, 239.0,  0.0618],
+  ['4/0', 107.0, 380.0, 302.0,  0.0490]
+];
+
+function wireDiameter(awg) {
+  let n;
+  if (typeof awg === 'string') {
+    const map = { '1/0': 0, '2/0': -1, '3/0': -2, '4/0': -3 };
+    n = map[awg];
+  } else n = awg;
+  return 0.127 * Math.pow(92, (36 - n) / 39);
+}
+function getWireRow(awg) { return WIRE.find(w => String(w[0]) === String(awg)); }
+
+function renderWire() {
+  const tbody = document.getElementById('wire-table');
+  tbody.innerHTML = '';
+  const awgSel = document.getElementById('vd-awg');
+  awgSel.innerHTML = '';
+  WIRE.forEach(w => {
+    const [awg, mm2, chA, pwA, rPerKft] = [w[0], w[1], w[2], w[3], w[4]];
+    const dia = wireDiameter(w[0]);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="hi">${awg}</td>
+                    <td class="num">${mm2.toFixed(3)}</td>
+                    <td class="num">${dia.toFixed(3)}</td>
+                    <td class="num">${chA}</td>
+                    <td class="num">${pwA}</td>
+                    <td class="num">${rPerKft.toFixed(4)}</td>
+                    <td class="num dim">${(rPerKft * 3.281).toFixed(4)}</td>`;
+    tbody.appendChild(tr);
+    const o = document.createElement('option');
+    o.value = String(awg);
+    o.textContent = 'AWG ' + awg;
+    if (awg === 14) o.selected = true;
+    awgSel.appendChild(o);
+  });
+}
+
+function updateVoltDrop() {
+  const awg = document.getElementById('vd-awg').value;
+  const amps = parseFloat(document.getElementById('vd-amps').value) || 0;
+  const len = parseFloat(document.getElementById('vd-len').value) || 0;
+  const v = parseFloat(document.getElementById('vd-volts').value) || 0;
+  const row = getWireRow(awg);
+  if (!row) return;
+  const rPerFt = row[4] / 1000;
+  const totalR = rPerFt * len * 2;
+  const drop = amps * totalR;
+  const pct = v > 0 ? (drop / v) * 100 : 0;
+  const loss = amps * drop;
+  document.getElementById('vd-drop').textContent = drop.toFixed(3) + ' V';
+  document.getElementById('vd-pct').textContent = pct.toFixed(2) + ' %';
+  document.getElementById('vd-load').textContent = (v - drop).toFixed(3) + ' V';
+  document.getElementById('vd-loss').textContent = loss.toFixed(3) + ' W';
+}
+['vd-awg','vd-amps','vd-len','vd-volts'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateVoltDrop);
+  document.getElementById(id).addEventListener('change', updateVoltDrop);
+});
+
+// ====================== FEEDS & SPEEDS ======================
+const MATERIALS = {
+  'aluminum_6061': {
+    label: 'Aluminum 6061-T6',
+    hss: 200, carbide: 600,
+    chipLoad: {0.125: 0.0015, 0.25: 0.003, 0.375: 0.0045, 0.5: 0.006, 0.75: 0.008},
+    doc: 'up to 1× diameter axial, 0.5× radial',
+    note: 'Use single or 2-flute end mills, coolant or air blast. Chip evacuation is everything.'
+  },
+  'aluminum_cast': {
+    label: 'Aluminum, cast (319, A356)',
+    hss: 150, carbide: 500,
+    chipLoad: {0.125: 0.001, 0.25: 0.002, 0.5: 0.004},
+    doc: '0.5-1× diameter axial',
+    note: 'More abrasive than wrought alloys. Carbide preferred.'
+  },
+  'brass': {
+    label: 'Brass (free machining)',
+    hss: 200, carbide: 400,
+    chipLoad: {0.125: 0.001, 0.25: 0.002, 0.5: 0.004},
+    doc: '0.5-1× diameter',
+    note: 'Use neutral or slight negative rake. Watch for grabbing on drilling.'
+  },
+  'copper': {
+    label: 'Copper',
+    hss: 100, carbide: 300,
+    chipLoad: {0.125: 0.001, 0.25: 0.002, 0.5: 0.003},
+    doc: '0.3-0.5× diameter',
+    note: 'Gummy. Sharp tools, generous chip load to prevent rubbing.'
+  },
+  'steel_mild': {
+    label: 'Steel, mild (1018, A36)',
+    hss: 80, carbide: 350,
+    chipLoad: {0.125: 0.0005, 0.25: 0.001, 0.5: 0.003, 0.75: 0.004},
+    doc: '0.3-0.5× diameter',
+    note: 'Coolant recommended. Watch for chip welding with HSS.'
+  },
+  'steel_med': {
+    label: 'Steel, medium carbon (1045)',
+    hss: 70, carbide: 300,
+    chipLoad: {0.125: 0.0005, 0.25: 0.001, 0.5: 0.0025},
+    doc: '0.25-0.5× diameter',
+    note: ''
+  },
+  'stainless_304': {
+    label: 'Stainless 304/316',
+    hss: 40, carbide: 200,
+    chipLoad: {0.125: 0.0005, 0.25: 0.0015, 0.5: 0.0025},
+    doc: '0.2-0.3× diameter',
+    note: 'Work hardens. Keep moving, never dwell. Aggressive feed, conservative speed.'
+  },
+  'cast_iron': {
+    label: 'Cast Iron',
+    hss: 60, carbide: 250,
+    chipLoad: {0.125: 0.001, 0.25: 0.002, 0.5: 0.004},
+    doc: '0.3-0.5× diameter',
+    note: 'Run dry. Dust is abrasive, vacuum aggressively.'
+  },
+  'titanium': {
+    label: 'Titanium (Grade 5)',
+    hss: 30, carbide: 150,
+    chipLoad: {0.125: 0.0005, 0.25: 0.001, 0.5: 0.002},
+    doc: '0.1-0.2× diameter',
+    note: 'High heat, low conductivity. Flood coolant, sharp tools, never dwell.'
+  },
+  'acrylic': {
+    label: 'Acrylic / PMMA',
+    hss: null, carbide: 600,
+    chipLoad: {0.125: 0.003, 0.25: 0.005, 0.5: 0.008},
+    doc: '0.5-1× diameter',
+    note: 'Single-flute O-flute ideal. Chips must clear or material melts and welds.'
+  },
+  'wood_hard': {
+    label: 'Hardwood (oak, maple, walnut)',
+    hss: null, carbide: 1000,
+    chipLoad: {0.125: 0.004, 0.25: 0.008, 0.5: 0.014},
+    doc: '1-2× diameter',
+    note: 'Up-cut for chip clearance, down-cut for clean top edge, compression for both faces.'
+  },
+  'wood_soft': {
+    label: 'Softwood (pine, cedar)',
+    hss: null, carbide: 1200,
+    chipLoad: {0.125: 0.005, 0.25: 0.010, 0.5: 0.018},
+    doc: '1-2× diameter',
+    note: 'Watch for resin buildup. Pause to clean flutes.'
+  },
+  'mdf': {
+    label: 'MDF',
+    hss: null, carbide: 1000,
+    chipLoad: {0.125: 0.004, 0.25: 0.008, 0.5: 0.012},
+    doc: '1× diameter',
+    note: 'Dust is fine and pervasive. Dust collection mandatory.'
+  },
+  'plywood': {
+    label: 'Plywood (birch, baltic)',
+    hss: null, carbide: 1000,
+    chipLoad: {0.125: 0.004, 0.25: 0.008, 0.5: 0.012},
+    doc: '1× diameter',
+    note: 'Glue lines blunt tools faster than solid wood. Compression bit for tear-out-free cuts.'
+  }
+};
+
+function fillMaterialSelect() {
+  const sel = document.getElementById('fs-material');
+  Object.keys(MATERIALS).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k;
+    o.textContent = MATERIALS[k].label;
+    if (k === 'aluminum_6061') o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+function chipLoadFor(material, diaIn) {
+  const table = material.chipLoad;
+  const keys = Object.keys(table).map(Number).sort((a,b) => a - b);
+  if (diaIn <= keys[0]) return table[keys[0]];
+  if (diaIn >= keys[keys.length-1]) return table[keys[keys.length-1]];
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (diaIn >= keys[i] && diaIn <= keys[i+1]) {
+      const t = (diaIn - keys[i]) / (keys[i+1] - keys[i]);
+      return table[keys[i]] + t * (table[keys[i+1]] - table[keys[i]]);
+    }
+  }
+  return table[keys[0]];
+}
+
+function updateFeeds() {
+  const matKey = document.getElementById('fs-material').value;
+  const m = MATERIALS[matKey];
+  const tool = document.getElementById('fs-tool').value;
+  const units = document.getElementById('fs-units').value;
+  let dia = parseFloat(document.getElementById('fs-dia').value) || 0;
+  const flutes = parseInt(document.getElementById('fs-flutes').value) || 1;
+  const diaIn = units === 'mm' ? dia / 25.4 : dia;
+  const sfm = tool === 'hss' ? m.hss : m.carbide;
+
+  if (sfm === null || diaIn <= 0) {
+    document.getElementById('fs-sfm').textContent = tool === 'hss' ? 'use carbide' : '—';
+    document.getElementById('fs-rpm').textContent = '—';
+    document.getElementById('fs-cl').textContent = '—';
+    document.getElementById('fs-feed').textContent = '—';
+    document.getElementById('fs-doc').textContent = m.doc || '—';
+    document.getElementById('fs-note').textContent = m.note || '';
+    return;
+  }
+  const rpm = (sfm * 3.82) / diaIn;
+  const cl = chipLoadFor(m, diaIn);
+  const feedIpm = rpm * flutes * cl;
+  const feedMmm = feedIpm * 25.4;
+  document.getElementById('fs-sfm').textContent = sfm + ' SFM';
+  document.getElementById('fs-rpm').textContent = Math.round(rpm).toLocaleString() + ' RPM';
+  document.getElementById('fs-cl').textContent = cl.toFixed(4) + '" / ' + (cl * 25.4).toFixed(3) + ' mm';
+  document.getElementById('fs-feed').textContent = feedIpm.toFixed(1) + ' IPM · ' + Math.round(feedMmm) + ' mm/min';
+  document.getElementById('fs-doc').textContent = m.doc;
+  document.getElementById('fs-note').textContent = m.note;
+}
+['fs-material','fs-tool','fs-dia','fs-units','fs-flutes'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateFeeds);
+  document.getElementById(id).addEventListener('change', updateFeeds);
+});
+
+function renderSfmTable() {
+  const tbody = document.getElementById('sfm-table');
+  tbody.innerHTML = '';
+  Object.values(MATERIALS).forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="hi">${m.label}</td>
+                    <td class="num">${m.hss !== null ? m.hss : '—'}</td>
+                    <td class="num">${m.carbide}</td>
+                    <td class="dim">${m.note || ''}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ====================== NUMBER BASES (3A) ======================
+let baseValue = 42;
+
+function parseBase(s, base) {
+  if (!s) return NaN;
+  s = s.trim();
+  // Allow explicit prefix in any input
+  if (/^0x/i.test(s)) return parseInt(s.slice(2), 16);
+  if (/^0b/i.test(s)) return parseInt(s.slice(2), 2);
+  if (/^0o/i.test(s)) return parseInt(s.slice(2), 8);
+  if (base === 'dec') return parseInt(s, 10);
+  if (base === 'hex') return parseInt(s, 16);
+  if (base === 'bin') return parseInt(s, 2);
+  if (base === 'oct') return parseInt(s, 8);
+  return NaN;
+}
+
+function updateBases() {
+  const inp = document.getElementById('base-input').value;
+  const base = document.getElementById('base-from').value;
+  const width = parseInt(document.getElementById('base-width').value);
+  let n = parseBase(inp, base);
+  if (isNaN(n) || n < 0) {
+    if (isNaN(n)) {
+      document.getElementById('b-dec').textContent = '—';
+      document.getElementById('b-hex').textContent = '—';
+      document.getElementById('b-bin').textContent = '—';
+      document.getElementById('b-oct').textContent = '—';
+      document.getElementById('b-ascii').textContent = '—';
+      document.getElementById('b-signed').textContent = '—';
+      document.getElementById('b-popcount').textContent = '—';
+      renderBits(0, width);
+      baseValue = 0;
+      return;
+    }
+  }
+  baseValue = n;
+  renderBaseOutputs(n, width);
+}
+
+function renderBaseOutputs(n, width) {
+  const max = width === 32 ? 0xFFFFFFFF : (1 << width) - 1;
+  const masked = (n & max) >>> 0;
+  document.getElementById('b-dec').textContent = masked.toString(10);
+  document.getElementById('b-hex').textContent = '0x' + masked.toString(16).toUpperCase().padStart(Math.ceil(width/4), '0');
+  document.getElementById('b-bin').textContent = '0b' + masked.toString(2).padStart(width, '0');
+  document.getElementById('b-oct').textContent = '0o' + masked.toString(8);
+
+  // ASCII
+  let ascii = '—';
+  if (masked >= 32 && masked <= 126) ascii = "'" + String.fromCharCode(masked) + "'";
+  else if (masked < 32) {
+    const ctrl = ['NUL','SOH','STX','ETX','EOT','ENQ','ACK','BEL','BS','TAB','LF','VT','FF','CR','SO','SI',
+                  'DLE','DC1','DC2','DC3','DC4','NAK','SYN','ETB','CAN','EM','SUB','ESC','FS','GS','RS','US'];
+    ascii = ctrl[masked] + ' (ctrl)';
+  } else if (masked === 127) ascii = 'DEL';
+  document.getElementById('b-ascii').textContent = ascii;
+
+  // Signed two's complement
+  let signed;
+  if (width === 32) {
+    signed = (masked | 0);
+  } else {
+    const bit = 1 << (width - 1);
+    signed = (masked & bit) ? masked - (1 << width) : masked;
+  }
+  document.getElementById('b-signed').textContent = signed.toString(10);
+
+  // Popcount
+  let pc = 0, tmp = masked;
+  while (tmp) { pc += tmp & 1; tmp >>>= 1; }
+  document.getElementById('b-popcount').textContent = pc + ' / ' + width;
+
+  renderBits(masked, width);
+}
+
+function renderBits(value, width) {
+  const wrap = document.getElementById('bits');
+  wrap.innerHTML = '';
+  // Build MSB-first, grouped in nibbles
+  for (let g = 0; g < width / 4; g++) {
+    const grp = document.createElement('div');
+    grp.className = 'bit-group';
+    for (let b = 0; b < 4; b++) {
+      const idx = width - 1 - (g * 4 + b);
+      const bitOn = ((value >>> idx) & 1) === 1;
+      const bit = document.createElement('div');
+      bit.className = 'bit' + (bitOn ? ' on' : '');
+      bit.textContent = bitOn ? '1' : '0';
+      bit.dataset.idx = idx;
+      const lbl = document.createElement('span');
+      lbl.className = 'idx';
+      lbl.textContent = idx;
+      bit.appendChild(lbl);
+      bit.addEventListener('click', () => toggleBit(idx, width));
+      grp.appendChild(bit);
+    }
+    wrap.appendChild(grp);
+  }
+}
+
+function toggleBit(idx, width) {
+  const max = width === 32 ? 0xFFFFFFFF : (1 << width) - 1;
+  baseValue = ((baseValue & max) ^ (1 << idx)) >>> 0;
+  // Update input to reflect new value in current base
+  const base = document.getElementById('base-from').value;
+  let str;
+  if (base === 'dec') str = baseValue.toString(10);
+  else if (base === 'hex') str = baseValue.toString(16).toUpperCase();
+  else if (base === 'bin') str = baseValue.toString(2);
+  else if (base === 'oct') str = baseValue.toString(8);
+  document.getElementById('base-input').value = str;
+  renderBaseOutputs(baseValue, width);
+}
+
+['base-input','base-from','base-width'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateBases);
+  document.getElementById(id).addEventListener('change', updateBases);
+});
+
+// ====================== TAB SWITCHING ======================
+document.querySelectorAll('.nav-list button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!btn.dataset.tab) return;
+    document.querySelectorAll('.nav-list button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ====================== INIT ======================
+renderBandSelectors();
+renderLegend();
+updateSMD();
+renderEIA96Table();
+renderPinoutSelect();
+renderTaps();
+renderWire();
+updateVoltDrop();
+fillMaterialSelect();
+renderSfmTable();
+updateFeeds();
+updateReverse();
+updateBases();
+</script>
+
+</body>
+</html>
