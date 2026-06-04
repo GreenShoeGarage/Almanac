@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAKER CUT LIST · Field Instrument 008</title>
+<style>
+:root {
+  --bg: #fefef9;
+  --bg-2: #f7f5ec;
+  --ink: #1a1814;
+  --ink-2: #3a3631;
+  --ink-3: #6b6862;
+  --ink-4: #9a968e;
+  --yellow: #f2c41a;
+  --yellow-2: #e8b800;
+  --yellow-p: #fdf3c4;
+  --rule: #2a2823;
+  --rule-2: #c8c5bb;
+  --rule-3: #e0ddd4;
+  --red: #b32a2a;
+  --green: #2a6028;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.catalog {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+/* ============ MASTHEAD ============ */
+.masthead {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+}
+.masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+}
+.brand-chip {
+  background: var(--yellow);
+  color: var(--ink);
+  padding: 4px 10px;
+  font-weight: 900;
+}
+.masthead-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+}
+.masthead-title {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+.masthead-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-top: 10px;
+  max-width: 540px;
+  font-style: italic;
+}
+.masthead-side {
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.masthead-side .fi-mark {
+  display: inline-block;
+  margin-top: 8px;
+  border: 1px solid var(--ink);
+  padding: 4px 10px;
+  color: var(--ink);
+}
+
+/* ============ LAYOUT ============ */
+.layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+}
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--rule-2);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.card-title .fig {
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 2px 6px;
+  font-size: 10px;
+  font-family: var(--mono);
+}
+.card-title .reg-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+}
+
+/* ============ FIELDS ============ */
+.field {
+  margin-bottom: 10px;
+}
+.field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--rule-2);
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+}
+.field input:focus, .field select:focus {
+  outline: 2px solid var(--yellow);
+  outline-offset: -2px;
+  border-color: var(--ink);
+}
+.field-row {
+  display: flex;
+  gap: 8px;
+}
+.field-row > .field { flex: 1; margin-bottom: 10px; }
+.field-row > .field.narrow { flex: 0 0 80px; }
+
+.note {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-style: italic;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ============ PRESETS ============ */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.preset-btn {
+  background: var(--bg);
+  border: 1px solid var(--rule-3);
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.preset-btn:hover { background: var(--bg-2); color: var(--ink); border-color: var(--ink-3); }
+
+/* ============ PARTS TABLE ============ */
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.parts-table thead th {
+  text-align: left;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 6px 6px 6px 4px;
+  border-bottom: 1px solid var(--rule-2);
+}
+.parts-table tbody td {
+  padding: 4px 4px;
+  border-bottom: 1px solid var(--rule-3);
+  vertical-align: middle;
+}
+.parts-table input[type="text"], .parts-table input[type="number"] {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 4px 6px;
+  color: var(--ink);
+}
+.parts-table input:hover { background: var(--bg); border-color: var(--rule-3); }
+.parts-table input:focus {
+  outline: 1px solid var(--yellow);
+  outline-offset: -1px;
+  background: var(--bg);
+  border-color: transparent;
+}
+.parts-table .col-name { width: 30%; }
+.parts-table .col-num  { width: 14%; }
+.parts-table .col-rot  { width: 12%; text-align: center; }
+.parts-table .col-act  { width: 10%; text-align: center; }
+.parts-table .row-del {
+  background: none;
+  border: none;
+  color: var(--ink-4);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+}
+.parts-table .row-del:hover { color: var(--red); }
+.parts-table .rot-cell {
+  text-align: center;
+}
+.parts-table .rot-cell input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+  accent-color: var(--ink);
+}
+
+.add-row-btn {
+  margin-top: 10px;
+  background: var(--bg);
+  border: 1px dashed var(--ink-3);
+  color: var(--ink);
+  padding: 8px;
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.add-row-btn:hover { background: var(--bg-2); border-color: var(--ink); }
+
+/* ============ BUTTONS ============ */
+.btn-primary {
+  width: 100%;
+  background: var(--ink);
+  color: var(--yellow);
+  border: none;
+  padding: 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.btn-primary:hover { background: var(--ink-2); }
+.btn-primary:active { background: var(--rule); }
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 8px 14px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn-secondary:hover { background: var(--ink); color: var(--yellow); }
+
+/* ============ RESULTS ============ */
+.results-empty {
+  background: var(--bg-2);
+  border: 1px dashed var(--rule-2);
+  padding: 60px 30px;
+  text-align: center;
+  color: var(--ink-3);
+}
+.results-empty .big {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.results-empty .sub {
+  font-size: 13px;
+  font-style: italic;
+}
+
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--rule-2);
+  border: 1px solid var(--rule-2);
+  margin-bottom: 20px;
+}
+.stat-cell {
+  background: var(--bg-2);
+  padding: 14px;
+}
+.stat-cell .lbl {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.stat-cell .val {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-cell .sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+.stat-cell.warn .val { color: var(--red); }
+.stat-cell.good .val { color: var(--green); }
+
+.unplaced-strip {
+  background: #fdebeb;
+  border: 1px solid var(--red);
+  border-left: 4px solid var(--red);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+.unplaced-strip .title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 4px;
+}
+.unplaced-strip .items {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+}
+
+/* ============ SHEET VISUALIZATION ============ */
+.sheet-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  margin-bottom: 18px;
+  page-break-inside: avoid;
+}
+.sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule-2);
+  background: var(--bg);
+}
+.sheet-head .sheet-name {
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.sheet-head .sheet-stats {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.sheet-viz {
+  padding: 14px;
+}
+.sheet-viz svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #fff;
+  border: 1px solid var(--rule-2);
+}
+.sheet-viz svg .part-rect {
+  stroke: var(--ink);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+.sheet-viz svg .sheet-rect {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.sheet-viz svg .part-label {
+  font-family: var(--mono);
+  font-weight: 700;
+  fill: var(--ink);
+  pointer-events: none;
+}
+.sheet-viz svg .part-dim {
+  font-family: var(--mono);
+  font-weight: 400;
+  fill: var(--ink-3);
+  pointer-events: none;
+}
+.sheet-viz svg .rot-mark {
+  font-family: var(--mono);
+  fill: var(--ink);
+  font-weight: 700;
+}
+
+/* ============ CUT LIST TABLE ============ */
+.cutlist-card {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  padding: 18px;
+  margin-top: 18px;
+}
+.cutlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 12px;
+  margin-top: 8px;
+}
+.cutlist-table th, .cutlist-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule-3);
+}
+.cutlist-table th {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--rule-2);
+}
+.cutlist-table .swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink);
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* ============ FOOTER ACTIONS ============ */
+.actions-bar {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.actions-bar .actions-left {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.actions-bar .colophon {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: #fff; font-size: 11px; }
+  .catalog { max-width: none; padding: 10mm; }
+  .inputs-pane { display: none; }
+  .layout { display: block; }
+  .actions-bar { display: none; }
+  .results-empty { display: none; }
+  .sheet-wrap { page-break-inside: avoid; }
+  .stats-strip { page-break-after: avoid; }
+  .masthead-title { font-size: 36px; }
+  .cutlist-card { page-break-inside: avoid; }
+}
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 10px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.error { background: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="catalog">
+
+  <!-- =================== MASTHEAD =================== -->
+  <header class="masthead">
+    <div class="masthead-top">
+      <span class="brand-chip">GREEN SHOE GARAGE DATA CO.</span>
+      <span>MOUNTAIN MARYLAND &middot; MMXXVI</span>
+    </div>
+    <div class="masthead-main">
+      <div>
+        <div class="masthead-title">MAKER CUT LIST</div>
+        <div class="masthead-desc">A two-dimensional layout planner for sheet goods. Pack parts onto stock with minimal waste, handle multiple sheets, account for blade kerf, and produce a printable cut sheet.</div>
+      </div>
+      <div class="masthead-side">
+        <div>FIELD INSTRUMENT 008</div>
+        <div class="fi-mark">EDITION I &middot; VOL. 1</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =================== LAYOUT =================== -->
+  <div class="layout">
+
+    <!-- ============ INPUTS PANE ============ -->
+    <aside class="inputs-pane">
+
+      <!-- Stock card -->
+      <div class="card">
+        <div class="card-title"><span>Stock</span><span class="fig">FIG. 1</span></div>
+
+        <div class="preset-row" id="stock-presets"></div>
+
+        <div class="field-row">
+          <div class="field"><label>Sheet Width</label>
+            <input type="number" id="stock-w" step="any" value="96">
+          </div>
+          <div class="field"><label>Sheet Height</label>
+            <input type="number" id="stock-h" step="any" value="48">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field narrow"><label>Units</label>
+            <select id="units">
+              <option value="in" selected>in</option>
+              <option value="mm">mm</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+          <div class="field"><label>Kerf (blade thickness)</label>
+            <input type="number" id="kerf" step="any" value="0.125">
+          </div>
+          <div class="field narrow"><label>Available</label>
+            <input type="number" id="stock-qty" step="1" min="1" value="4">
+          </div>
+        </div>
+
+        <div class="note">Standard plywood is 48 &times; 96 inches (4 &times; 8 ft). Kerf is the material removed by the cut; 1/8" (0.125") for a typical table-saw blade, 0.1 mm for a laser. Available is how many sheets you have on hand; the optimizer will use as many as needed up to this number.</div>
+      </div>
+
+      <!-- Parts card -->
+      <div class="card">
+        <div class="card-title"><span>Parts to Cut</span><span class="fig">FIG. 2</span></div>
+
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th class="col-name">Name</th>
+              <th class="col-num">W</th>
+              <th class="col-num">H</th>
+              <th class="col-num">Qty</th>
+              <th class="col-rot">Rotate</th>
+              <th class="col-act"></th>
+            </tr>
+          </thead>
+          <tbody id="parts-tbody"></tbody>
+        </table>
+        <button class="add-row-btn" id="add-row-btn">+ Add Part</button>
+
+        <div class="note">"Rotate" lets the part be placed in either orientation. Turn off if the part has a grain or a directional pattern that must stay aligned with the sheet.</div>
+      </div>
+
+      <!-- Options card -->
+      <div class="card">
+        <div class="card-title"><span>Options</span><span class="fig">FIG. 3</span></div>
+
+        <div class="field">
+          <label>Pack Strategy</label>
+          <select id="strategy">
+            <option value="bl" selected>Best fit (skyline, bottom-left)</option>
+            <option value="shelf">Guillotine shelf (table-saw friendly)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Part Sort</label>
+          <select id="sort-mode">
+            <option value="area" selected>Largest area first</option>
+            <option value="height">Tallest first</option>
+            <option value="width">Widest first</option>
+            <option value="maxside">Longest side first</option>
+            <option value="input">As entered</option>
+          </select>
+        </div>
+
+        <div class="note">"Best fit" places each part where it creates the least new waste. "Guillotine shelf" packs in horizontal rows for easy table-saw cuts. Sort affects which parts are placed first; largest-first usually packs most efficiently.</div>
+      </div>
+
+      <!-- Optimize -->
+      <button class="btn-primary" id="optimize-btn">Optimize Layout &rarr;</button>
+
+    </aside>
+
+    <!-- ============ RESULTS PANE ============ -->
+    <section class="results-pane" id="results-pane">
+      <div class="results-empty">
+        <div class="big">Ready</div>
+        <div class="sub">Add your stock and parts on the left, then press <strong>Optimize Layout</strong>.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- =================== ACTIONS BAR =================== -->
+  <footer class="actions-bar">
+    <div class="actions-left">
+      <button class="btn-secondary" id="export-btn">Export JSON</button>
+      <button class="btn-secondary" id="import-btn">Import JSON</button>
+      <button class="btn-secondary" id="print-btn">Print</button>
+      <button class="btn-secondary" id="reset-btn">New Project</button>
+      <input type="file" id="import-file" accept=".json" style="display:none">
+    </div>
+    <div class="colophon">FIELD INSTRUMENT 008 &middot; MAKER CUT LIST &middot; GREEN SHOE GARAGE</div>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ====================================================================
+// MAKER CUT LIST · Field Instrument 008
+// 2D rectangle packing for sheet goods
+// ====================================================================
+
+// ---------- Stock presets ----------
+const STOCK_PRESETS = {
+  in: [
+    { name: "4×8 ply",      w: 96,  h: 48  },
+    { name: "5×5 Baltic",   w: 60,  h: 60  },
+    { name: "2×4",          w: 48,  h: 24  },
+    { name: "Letter",       w: 11,  h: 8.5 },
+    { name: "Tabloid",      w: 17,  h: 11  }
+  ],
+  mm: [
+    { name: "1219×2438",    w: 2438, h: 1219 },
+    { name: "1525×1525 Baltic", w: 1525, h: 1525 },
+    { name: "A4",           w: 297,  h: 210  },
+    { name: "A3",           w: 420,  h: 297  },
+    { name: "600×400 laser", w: 600, h: 400  }
+  ],
+  cm: [
+    { name: "100×200",      w: 200,  h: 100  },
+    { name: "60×40",        w: 60,   h: 40   },
+    { name: "A4",           w: 29.7, h: 21   }
+  ]
+};
+
+// ---------- Default parts (so opening shows the tool working) ----------
+const DEFAULT_PARTS = [
+  { name: "Side panel",   w: 30, h: 18, qty: 2, rotate: true  },
+  { name: "Shelf",        w: 24, h: 12, qty: 4, rotate: true  },
+  { name: "Top",          w: 32, h: 14, qty: 1, rotate: false },
+  { name: "Bottom",       w: 32, h: 14, qty: 1, rotate: false },
+  { name: "Divider",      w: 16, h: 10, qty: 2, rotate: true  }
+];
+
+// ---------- Color palette for parts (muted McMaster-friendly) ----------
+const PART_COLORS = [
+  '#e6c97a', '#9bb9d4', '#c89b8c', '#a8c2a3', '#d4b0c9',
+  '#b8a584', '#9ca8c4', '#d4a3a0', '#a5c4b8', '#c8a8c8',
+  '#cab582', '#92aac0', '#cc9d8a', '#a0bca9', '#c8a5b8'
+];
+const _colorMap = new Map();
+let _colorIdx = 0;
+function colorForName(name) {
+  if (!_colorMap.has(name)) {
+    _colorMap.set(name, PART_COLORS[_colorIdx % PART_COLORS.length]);
+    _colorIdx++;
+  }
+  return _colorMap.get(name);
+}
+function resetColorMap() { _colorMap.clear(); _colorIdx = 0; }
+
+// ---------- State ----------
+let state = {
+  stock: { w: 96, h: 48, qty: 4, kerf: 0.125, units: 'in' },
+  parts: JSON.parse(JSON.stringify(DEFAULT_PARTS)),
+  options: { strategy: 'bl', sort: 'area' },
+  results: null
+};
+
+// ====================================================================
+// PACKING ALGORITHM
+// Skyline best-fit with optional rotation, multi-sheet.
+// Each sheet maintains a skyline as a list of segments {x, y, w}.
+// For each part we try every possible placement on every sheet (in
+// order) and place it at the position that produces the lowest y,
+// breaking ties by lowest x. Optionally rotated.
+// ====================================================================
+
+function makeSheet(w, h) {
+  return { w, h, parts: [], skyline: [{ x: 0, y: 0, w: w }] };
+}
+
+// Compute max y across skyline segments covering [x, x+w)
+function _maxYInRange(skyline, x, w) {
+  let maxY = -1;
+  let covered = 0;
+  for (const seg of skyline) {
+    const segEnd = seg.x + seg.w;
+    if (segEnd <= x) continue;
+    if (seg.x >= x + w) break;
+    const overlap = Math.min(segEnd, x + w) - Math.max(seg.x, x);
+    if (overlap > 0) {
+      if (seg.y > maxY) maxY = seg.y;
+      covered += overlap;
+    }
+  }
+  // If we don't fully cover the range, treat as invalid (off-edge or gap)
+  if (covered + 1e-9 < w) return null;
+  return maxY;
+}
+
+// Try every skyline position; return best (x,y) for this orientation or null
+function _findBestPosition(sheet, partW, partH) {
+  let best = null;
+  for (const seg of sheet.skyline) {
+    const candidateX = seg.x;
+    if (candidateX + partW > sheet.w + 1e-9) continue;
+    const y = _maxYInRange(sheet.skyline, candidateX, partW);
+    if (y === null) continue;
+    if (y + partH > sheet.h + 1e-9) continue;
+    if (!best || y < best.y - 1e-9 || (Math.abs(y - best.y) < 1e-9 && candidateX < best.x - 1e-9)) {
+      best = { x: candidateX, y: y };
+    }
+  }
+  return best;
+}
+
+// Update skyline after placing a rectangle (x, y, w, h)
+function _addToSkyline(sheet, x, y, w, h) {
+  const newY = y + h;
+  const newSeg = { x, y: newY, w };
+  // Build a new skyline by replacing segments in [x, x+w)
+  const next = [];
+  for (const seg of sheet.skyline) {
+    const segEnd = seg.x + seg.w;
+    // Fully to the left of the new segment: keep as-is
+    if (segEnd <= x + 1e-9) { next.push(seg); continue; }
+    // Fully to the right: keep as-is
+    if (seg.x >= x + w - 1e-9) { next.push(seg); continue; }
+    // Partial overlap on the left side: keep the left portion
+    if (seg.x < x - 1e-9) {
+      next.push({ x: seg.x, y: seg.y, w: x - seg.x });
+    }
+    // Partial overlap on the right side: keep the right portion
+    if (segEnd > x + w + 1e-9) {
+      next.push({ x: x + w, y: seg.y, w: segEnd - (x + w) });
+    }
+    // Middle is replaced by the new segment (added below)
+  }
+  // Insert the new segment in the right position
+  let inserted = false;
+  for (let i = 0; i < next.length; i++) {
+    if (next[i].x > x) {
+      next.splice(i, 0, newSeg);
+      inserted = true;
+      break;
+    }
+  }
+  if (!inserted) next.push(newSeg);
+
+  // Merge adjacent segments with the same y
+  const merged = [next[0]];
+  for (let i = 1; i < next.length; i++) {
+    const last = merged[merged.length - 1];
+    if (Math.abs(last.y - next[i].y) < 1e-9 && Math.abs((last.x + last.w) - next[i].x) < 1e-9) {
+      last.w += next[i].w;
+    } else {
+      merged.push(next[i]);
+    }
+  }
+  sheet.skyline = merged;
+}
+
+// Try to place a part; returns true on success
+function _placePart(sheets, part, partW, partH, allowRotation, maxSheets, stockW, stockH) {
+  // For each sheet in order, find best position
+  let chosenSheet = null;
+  let chosenPos = null;
+  let chosenRot = false;
+
+  for (const sheet of sheets) {
+    const posA = _findBestPosition(sheet, partW, partH);
+    let posB = null;
+    if (allowRotation && partW !== partH) {
+      posB = _findBestPosition(sheet, partH, partW);
+    }
+    // Pick the better of posA/posB on this sheet
+    let pos = null, rot = false;
+    if (posA && (!posB || posA.y <= posB.y)) { pos = posA; rot = false; }
+    else if (posB) { pos = posB; rot = true; }
+    if (pos) {
+      chosenSheet = sheet; chosenPos = pos; chosenRot = rot;
+      break; // first-fit: use earliest sheet that takes the part
+    }
+  }
+
+  if (chosenSheet) {
+    const finalW = chosenRot ? partH : partW;
+    const finalH = chosenRot ? partW : partH;
+    chosenSheet.parts.push({
+      x: chosenPos.x, y: chosenPos.y,
+      w: finalW, h: finalH,
+      name: part.name, rotated: chosenRot
+    });
+    _addToSkyline(chosenSheet, chosenPos.x, chosenPos.y, finalW, finalH);
+    return true;
+  }
+
+  // No sheet fit; open a new one if allowed
+  if (sheets.length < maxSheets) {
+    const ns = makeSheet(stockW, stockH);
+    // Try unrotated first
+    let pos = _findBestPosition(ns, partW, partH);
+    let rot = false;
+    if (!pos && allowRotation && partW !== partH) {
+      pos = _findBestPosition(ns, partH, partW);
+      rot = true;
+    }
+    if (!pos) return false; // doesn't even fit a fresh sheet
+    const finalW = rot ? partH : partW;
+    const finalH = rot ? partW : partH;
+    ns.parts.push({ x: pos.x, y: pos.y, w: finalW, h: finalH, name: part.name, rotated: rot });
+    _addToSkyline(ns, pos.x, pos.y, finalW, finalH);
+    sheets.push(ns);
+    return true;
+  }
+  return false;
+}
+
+// Guillotine shelf packing: simpler, table-saw-friendly
+function _shelfPack(sheets, part, partW, partH, allowRotation, maxSheets, stockW, stockH) {
+  // Try orientation that fits best (shorter dim becomes shelf height)
+  const tryPlace = (pw, ph) => {
+    for (const sheet of sheets) {
+      // Build shelf list from existing parts: each shelf has a y and a height
+      const shelves = [];
+      for (const p of sheet.parts) {
+        let sh = shelves.find(s => Math.abs(s.y - p.y) < 1e-9);
+        if (!sh) {
+          sh = { y: p.y, h: 0, nextX: 0 };
+          shelves.push(sh);
+        }
+        if (p.h > sh.h) sh.h = p.h;
+        if (p.x + p.w > sh.nextX) sh.nextX = p.x + p.w;
+      }
+      shelves.sort((a, b) => a.y - b.y);
+
+      // Try to fit on an existing shelf
+      for (const sh of shelves) {
+        if (sh.nextX + pw <= stockW + 1e-9 && ph <= sh.h + 1e-9) {
+          return { sheet, x: sh.nextX, y: sh.y };
+        }
+      }
+      // Try to open a new shelf above the highest one
+      const topY = shelves.length ? Math.max(...shelves.map(s => s.y + s.h)) : 0;
+      if (topY + ph <= stockH + 1e-9 && pw <= stockW + 1e-9) {
+        return { sheet, x: 0, y: topY };
+      }
+    }
+    return null;
+  };
+
+  let placement = tryPlace(partW, partH);
+  let rot = false;
+  if (!placement && allowRotation && partW !== partH) {
+    placement = tryPlace(partH, partW);
+    if (placement) rot = true;
+  }
+
+  if (placement) {
+    const finalW = rot ? partH : partW;
+    const finalH = rot ? partW : partH;
+    placement.sheet.parts.push({
+      x: placement.x, y: placement.y, w: finalW, h: finalH,
+      name: part.name, rotated: rot
+    });
+    return true;
+  }
+
+  // Open a new sheet if allowed
+  if (sheets.length < maxSheets) {
+    const ns = makeSheet(stockW, stockH);
+    const fits = (pw, ph) => pw <= stockW + 1e-9 && ph <= stockH + 1e-9;
+    let pw = partW, ph = partH, used_rot = false;
+    if (!fits(pw, ph)) {
+      if (allowRotation && fits(partH, partW)) { pw = partH; ph = partW; used_rot = true; }
+      else return false;
+    }
+    ns.parts.push({ x: 0, y: 0, w: pw, h: ph, name: part.name, rotated: used_rot });
+    sheets.push(ns);
+    return true;
+  }
+  return false;
+}
+
+function pack(parts, stock, options) {
+  // Expand quantities into individual instances
+  const instances = [];
+  for (const p of parts) {
+    const qty = Math.max(1, parseInt(p.qty, 10) || 1);
+    for (let i = 0; i < qty; i++) {
+      instances.push({
+        name: p.name || `Part ${instances.length+1}`,
+        w: parseFloat(p.w) || 0,
+        h: parseFloat(p.h) || 0,
+        rotate: !!p.rotate
+      });
+    }
+  }
+  // Drop zero-size
+  const valid = instances.filter(p => p.w > 0 && p.h > 0);
+
+  // Apply kerf: add kerf to each dimension (kerf gives the saw clearance)
+  const kerf = Math.max(0, parseFloat(stock.kerf) || 0);
+  const ks = valid.map(p => ({ ...p, kw: p.w + kerf, kh: p.h + kerf }));
+
+  // Sort
+  const sortMode = options.sort;
+  const sorters = {
+    area:    (a, b) => (b.kw * b.kh) - (a.kw * a.kh),
+    height:  (a, b) => b.kh - a.kh,
+    width:   (a, b) => b.kw - a.kw,
+    maxside: (a, b) => Math.max(b.kw, b.kh) - Math.max(a.kw, a.kh),
+    input:   () => 0
+  };
+  ks.sort(sorters[sortMode] || sorters.area);
+
+  const sheets = [];
+  const unplaced = [];
+  const maxSheets = Math.max(1, parseInt(stock.qty, 10) || 1);
+  const stockW = parseFloat(stock.w);
+  const stockH = parseFloat(stock.h);
+
+  const placeFn = options.strategy === 'shelf' ? _shelfPack : _placePart;
+
+  for (const part of ks) {
+    const ok = placeFn(sheets, part, part.kw, part.kh, part.rotate, maxSheets, stockW, stockH);
+    if (!ok) unplaced.push(part);
+  }
+
+  // Compute stats
+  let totalPartArea = 0;
+  let totalSheetArea = sheets.length * stockW * stockH;
+  for (const sheet of sheets) {
+    for (const p of sheet.parts) {
+      // Subtract kerf for true part area
+      const realW = p.w - kerf;
+      const realH = p.h - kerf;
+      totalPartArea += realW * realH;
+    }
+  }
+  const waste = totalSheetArea > 0 ? 1 - (totalPartArea / totalSheetArea) : 0;
+
+  return {
+    sheets,
+    unplaced,
+    stats: {
+      sheetsUsed: sheets.length,
+      sheetsAvailable: maxSheets,
+      partsPlaced: instances.length - unplaced.length,
+      partsTotal: instances.length,
+      totalPartArea,
+      totalSheetArea,
+      wastePct: waste * 100,
+      kerf,
+      stockW,
+      stockH,
+      units: stock.units
+    }
+  };
+}
+
+// ====================================================================
+// RENDERING
+// ====================================================================
+
+function renderStockPresets() {
+  const units = document.getElementById('units').value;
+  const wrap = document.getElementById('stock-presets');
+  const presets = STOCK_PRESETS[units] || [];
+  wrap.innerHTML = '';
+  presets.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-btn';
+    btn.textContent = p.name;
+    btn.title = `${p.w} × ${p.h} ${units}`;
+    btn.addEventListener('click', () => {
+      document.getElementById('stock-w').value = p.w;
+      document.getElementById('stock-h').value = p.h;
+      readState();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderPartsTable() {
+  const tbody = document.getElementById('parts-tbody');
+  tbody.innerHTML = '';
+  state.parts.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="col-name"><input type="text" data-idx="${i}" data-field="name" value="${escAttr(p.name)}"></td>
+      <td class="col-num"><input type="number" data-idx="${i}" data-field="w" step="any" min="0" value="${p.w}"></td>
+      <td class="col-num"><input type="number" data-idx="${i}" data-field="h" step="any" min="0" value="${p.h}"></td>
+      <td class="col-num"><input type="number" data-idx="${i}" data-field="qty" step="1" min="1" value="${p.qty}"></td>
+      <td class="col-rot rot-cell"><input type="checkbox" data-idx="${i}" data-field="rotate" ${p.rotate ? 'checked' : ''}></td>
+      <td class="col-act"><button class="row-del" data-idx="${i}" title="Delete row">&times;</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Wire up inputs
+  tbody.querySelectorAll('input[data-field]').forEach(el => {
+    const ev = el.type === 'checkbox' ? 'change' : 'input';
+    el.addEventListener(ev, () => {
+      const idx = parseInt(el.dataset.idx, 10);
+      const field = el.dataset.field;
+      const part = state.parts[idx];
+      if (!part) return;
+      if (field === 'rotate') part.rotate = el.checked;
+      else if (field === 'name') part.name = el.value;
+      else part[field] = el.value === '' ? '' : parseFloat(el.value);
+    });
+  });
+  tbody.querySelectorAll('.row-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      state.parts.splice(idx, 1);
+      renderPartsTable();
+    });
+  });
+}
+
+function escAttr(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escHtml(s) { return escAttr(s); }
+
+function readState() {
+  state.stock.w = parseFloat(document.getElementById('stock-w').value) || 0;
+  state.stock.h = parseFloat(document.getElementById('stock-h').value) || 0;
+  state.stock.qty = parseInt(document.getElementById('stock-qty').value, 10) || 1;
+  state.stock.kerf = parseFloat(document.getElementById('kerf').value) || 0;
+  state.stock.units = document.getElementById('units').value;
+  state.options.strategy = document.getElementById('strategy').value;
+  state.options.sort = document.getElementById('sort-mode').value;
+}
+
+function writeState() {
+  document.getElementById('stock-w').value = state.stock.w;
+  document.getElementById('stock-h').value = state.stock.h;
+  document.getElementById('stock-qty').value = state.stock.qty;
+  document.getElementById('kerf').value = state.stock.kerf;
+  document.getElementById('units').value = state.stock.units;
+  document.getElementById('strategy').value = state.options.strategy;
+  document.getElementById('sort-mode').value = state.options.sort;
+  renderPartsTable();
+  renderStockPresets();
+}
+
+function fmt(n, decimals) {
+  const d = decimals == null ? 2 : decimals;
+  return Number(n).toFixed(d).replace(/\.?0+$/, '') || '0';
+}
+
+function renderResults(r) {
+  const pane = document.getElementById('results-pane');
+  if (!r) {
+    pane.innerHTML = `
+      <div class="results-empty">
+        <div class="big">Ready</div>
+        <div class="sub">Add your stock and parts on the left, then press <strong>Optimize Layout</strong>.</div>
+      </div>`;
+    return;
+  }
+
+  const u = r.stats.units;
+  let html = '';
+
+  // Stats strip
+  const wasteCls = r.stats.wastePct > 35 ? 'warn' : (r.stats.wastePct < 15 ? 'good' : '');
+  const placedCls = r.unplaced.length > 0 ? 'warn' : 'good';
+  html += `<div class="stats-strip">
+    <div class="stat-cell ${placedCls}">
+      <div class="lbl">Parts Placed</div>
+      <div class="val">${r.stats.partsPlaced} / ${r.stats.partsTotal}</div>
+      <div class="sub">${r.unplaced.length} unplaced</div>
+    </div>
+    <div class="stat-cell">
+      <div class="lbl">Sheets Used</div>
+      <div class="val">${r.stats.sheetsUsed} / ${r.stats.sheetsAvailable}</div>
+      <div class="sub">${fmt(r.stats.stockW)} &times; ${fmt(r.stats.stockH)} ${u}</div>
+    </div>
+    <div class="stat-cell ${wasteCls}">
+      <div class="lbl">Waste</div>
+      <div class="val">${fmt(r.stats.wastePct, 1)}%</div>
+      <div class="sub">utilization ${fmt(100 - r.stats.wastePct, 1)}%</div>
+    </div>
+    <div class="stat-cell">
+      <div class="lbl">Total Cut Area</div>
+      <div class="val">${fmt(r.stats.totalPartArea, 1)}</div>
+      <div class="sub">sq ${u}</div>
+    </div>
+  </div>`;
+
+  // Unplaced warning
+  if (r.unplaced.length > 0) {
+    const names = {};
+    r.unplaced.forEach(p => {
+      const key = `${p.name} (${fmt(p.w - r.stats.kerf)} &times; ${fmt(p.h - r.stats.kerf)})`;
+      names[key] = (names[key] || 0) + 1;
+    });
+    const items = Object.entries(names).map(([k, v]) => `${k} &times;${v}`).join(', ');
+    html += `<div class="unplaced-strip">
+      <div class="title">${r.unplaced.length} part${r.unplaced.length === 1 ? '' : 's'} could not be placed</div>
+      <div class="items">${items}</div>
+    </div>`;
+  }
+
+  // Sheets
+  r.sheets.forEach((sheet, i) => {
+    html += renderSheet(sheet, i, r.stats);
+  });
+
+  // Cut list (text-form summary, helpful for printing)
+  html += renderCutList(r);
+
+  pane.innerHTML = html;
+}
+
+function renderSheet(sheet, idx, stats) {
+  const u = stats.units;
+  const kerf = stats.kerf;
+  // Compute sheet utilization
+  let sheetPartArea = 0;
+  for (const p of sheet.parts) {
+    sheetPartArea += (p.w - kerf) * (p.h - kerf);
+  }
+  const sheetArea = sheet.w * sheet.h;
+  const sheetWaste = sheetArea > 0 ? 100 * (1 - sheetPartArea / sheetArea) : 0;
+
+  // SVG sizing: aspect-ratio aware
+  const vbW = sheet.w;
+  const vbH = sheet.h;
+
+  let svg = `<svg viewBox="0 0 ${vbW} ${vbH}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect class="sheet-rect" x="0" y="0" width="${vbW}" height="${vbH}"/>`;
+
+  // Compute label font size relative to viewBox
+  const labelSize = Math.min(vbW, vbH) * 0.025;
+
+  for (const p of sheet.parts) {
+    const realW = p.w - kerf;
+    const realH = p.h - kerf;
+    const color = colorForName(p.name);
+    svg += `<rect class="part-rect" x="${p.x}" y="${p.y}" width="${realW}" height="${realH}" fill="${color}" fill-opacity="0.85"/>`;
+
+    // Labels: name at top, dimensions below (only if part is big enough)
+    const cx = p.x + realW / 2;
+    const cy = p.y + realH / 2;
+    if (realW > labelSize * 4 && realH > labelSize * 2.5) {
+      svg += `<text class="part-label" x="${cx}" y="${cy - labelSize * 0.2}" font-size="${labelSize}" text-anchor="middle">${escHtml(p.name)}</text>`;
+      svg += `<text class="part-dim" x="${cx}" y="${cy + labelSize * 1.2}" font-size="${labelSize * 0.8}" text-anchor="middle">${fmt(realW)} &times; ${fmt(realH)}</text>`;
+      if (p.rotated) {
+        svg += `<text class="rot-mark" x="${p.x + realW - labelSize * 1.5}" y="${p.y + labelSize * 1.5}" font-size="${labelSize}" text-anchor="end">&#x21BB;</text>`;
+      }
+    } else if (realW > labelSize * 3 && realH > labelSize) {
+      svg += `<text class="part-label" x="${cx}" y="${cy + labelSize * 0.35}" font-size="${labelSize * 0.8}" text-anchor="middle">${escHtml(p.name)}</text>`;
+    }
+  }
+  svg += `</svg>`;
+
+  return `<div class="sheet-wrap">
+    <div class="sheet-head">
+      <span class="sheet-name">Sheet ${idx + 1}</span>
+      <span class="sheet-stats">${sheet.parts.length} parts &middot; ${fmt(sheetWaste, 1)}% waste</span>
+    </div>
+    <div class="sheet-viz">${svg}</div>
+  </div>`;
+}
+
+function renderCutList(r) {
+  const u = r.stats.units;
+  const kerf = r.stats.kerf;
+  let rows = '';
+  let n = 1;
+  r.sheets.forEach((sheet, si) => {
+    sheet.parts.forEach(p => {
+      const realW = p.w - kerf;
+      const realH = p.h - kerf;
+      const color = colorForName(p.name);
+      rows += `<tr>
+        <td>${n++}</td>
+        <td><span class="swatch" style="background:${color}"></span>${escHtml(p.name)}</td>
+        <td>${fmt(realW)} &times; ${fmt(realH)}</td>
+        <td>${si + 1}</td>
+        <td>${fmt(p.x)}, ${fmt(p.y)}</td>
+        <td>${p.rotated ? 'rotated' : '—'}</td>
+      </tr>`;
+    });
+  });
+  return `<div class="cutlist-card">
+    <div class="card-title"><span>Cut List</span><span class="fig">TAB. 1</span></div>
+    <table class="cutlist-table">
+      <thead><tr><th>#</th><th>Part</th><th>Size (${u})</th><th>Sheet</th><th>Position (x, y)</th><th>Note</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6">No parts placed.</td></tr>'}</tbody>
+    </table>
+  </div>`;
+}
+
+// ====================================================================
+// EVENT WIRING
+// ====================================================================
+
+function optimize() {
+  readState();
+  if (!state.stock.w || !state.stock.h) {
+    toast('Set a stock sheet size first', true);
+    return;
+  }
+  const validParts = state.parts.filter(p => parseFloat(p.w) > 0 && parseFloat(p.h) > 0);
+  if (validParts.length === 0) {
+    toast('Add at least one part with width and height', true);
+    return;
+  }
+  resetColorMap();
+  state.results = pack(validParts, state.stock, state.options);
+  renderResults(state.results);
+}
+
+function addRow() {
+  state.parts.push({ name: `Part ${state.parts.length + 1}`, w: 12, h: 6, qty: 1, rotate: true });
+  renderPartsTable();
+}
+
+function exportJSON() {
+  readState();
+  const data = JSON.stringify({
+    fi: 'MAKER-CUT-LIST-FI008',
+    version: 1,
+    saved: new Date().toISOString(),
+    stock: state.stock,
+    parts: state.parts,
+    options: state.options
+  }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cutlist-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Project exported');
+}
+
+function importJSON(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.stock) state.stock = { ...state.stock, ...data.stock };
+      if (data.parts && Array.isArray(data.parts)) state.parts = data.parts;
+      if (data.options) state.options = { ...state.options, ...data.options };
+      writeState();
+      state.results = null;
+      renderResults(null);
+      toast('Project loaded');
+    } catch (err) {
+      toast('Could not read file: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetProject() {
+  if (!confirm('Start a new project? This clears all parts.')) return;
+  state = {
+    stock: { w: 96, h: 48, qty: 4, kerf: 0.125, units: 'in' },
+    parts: JSON.parse(JSON.stringify(DEFAULT_PARTS)),
+    options: { strategy: 'bl', sort: 'area' },
+    results: null
+  };
+  writeState();
+  renderResults(null);
+}
+
+let _toastTimer = null;
+function toast(msg, isError) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (isError ? ' error' : '');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.className = 'toast'; }, 2200);
+}
+
+// ---------- Wire up ----------
+document.getElementById('optimize-btn').addEventListener('click', optimize);
+document.getElementById('add-row-btn').addEventListener('click', addRow);
+document.getElementById('export-btn').addEventListener('click', exportJSON);
+document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file').click());
+document.getElementById('import-file').addEventListener('change', e => {
+  if (e.target.files[0]) importJSON(e.target.files[0]);
+  e.target.value = '';
+});
+document.getElementById('print-btn').addEventListener('click', () => window.print());
+document.getElementById('reset-btn').addEventListener('click', resetProject);
+document.getElementById('units').addEventListener('change', renderStockPresets);
+
+// Enter key in any input triggers optimize
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    optimize();
+  }
+});
+
+// Initial render
+renderPartsTable();
+renderStockPresets();
+
+// Debug / testing hook: expose internals to window for external validation.
+// Has no UI effect; safe to leave in production.
+window.__cl__ = { pack, get state() { return state; } };
+
+</script>
+</body>
+</html>
