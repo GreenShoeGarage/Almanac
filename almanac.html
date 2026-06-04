@@ -2083,6 +2083,73 @@ code {
 .assess-line.good  { background: #2a6028; color: var(--yellow); }
 
 /* =========================================================
+   COMPANION SERIES STRIP
+   ========================================================= */
+.series-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 8px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--rule-3);
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+.series-label {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.series-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+}
+.series-link:hover { border-bottom-color: var(--ink); }
+.series-fi {
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 1px 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.series-name { letter-spacing: 0.02em; }
+.series-arrow { color: var(--ink-3); font-size: 10px; }
+
+.see-also-card {
+  margin-top: 16px;
+  background: #fdf3c4;
+  border-left: 4px solid var(--yellow);
+  padding: 12px 16px;
+}
+.see-also-card .label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.see-also-card .body {
+  font-size: 13px;
+  color: var(--ink);
+}
+.see-also-card a {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 1px solid var(--ink);
+  text-decoration: none;
+}
+
+/* =========================================================
    VENDOR / PARTS SOURCING
    ========================================================= */
 .vendor-grid {
@@ -2201,6 +2268,15 @@ code {
   </div>
 </header>
 
+<div class="series-strip">
+  <span class="series-label">Companion Field Instruments:</span>
+  <a class="series-link" href="https://mbparks.com/cutlist" target="_blank" rel="noopener">
+    <span class="series-fi">FI 008</span>
+    <span class="series-name">Cut List</span>
+    <span class="series-arrow">↗</span>
+  </a>
+</div>
+
 <div class="layout">
 
   <aside class="index">
@@ -2224,6 +2300,7 @@ code {
       <li><button data-tab="transistor"><span class="ref">1K</span><span>MOSFET / BJT Selection</span></button></li>
       <li><button data-tab="pcb"><span class="ref">1L</span><span>PCB Trace Calculator</span></button></li>
       <li><button data-tab="filter"><span class="ref">1M</span><span>Filter Designer</span></button></li>
+      <li><button data-tab="battery"><span class="ref">1N</span><span>Battery Reference</span></button></li>
     </ul>
 
     <div class="category">
@@ -2289,6 +2366,17 @@ code {
       <li><button data-tab="videography"><span class="ref">4F</span><span>Project Videography</span></button></li>
       <li><button data-tab="audio"><span class="ref">4G</span><span>Audio Recording</span></button></li>
       <li><button data-tab="parts"><span class="ref">4H</span><span>Parts Sourcing</span></button></li>
+      <li><button data-tab="optics"><span class="ref">4I</span><span>Optics</span></button></li>
+    </ul>
+
+    <div class="category">
+      <div class="cat-num">5</div>
+      <div class="cat-name">Power &amp;<br>Motion</div>
+    </div>
+    <ul class="nav-list">
+      <li><button data-tab="motor"><span class="ref">5A</span><span>Motor Sizing</span></button></li>
+      <li><button data-tab="pneuhyd"><span class="ref">5B</span><span>Pneumatics &amp; Hydraulics</span></button></li>
+      <li><button data-tab="bearings"><span class="ref">5C</span><span>Bearings</span></button></li>
     </ul>
   </aside>
 
@@ -4075,6 +4163,102 @@ code {
     </div>
   </section>
 
+  <!-- ============ 1N · BATTERY REFERENCE ============ -->
+  <section id="battery" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1N <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Battery Reference</h2>
+      <div class="page-desc">A reference for common rechargeable and primary chemistries (Li-ion, LiPo, LiFePO4, NiMH, NiCd, alkaline, lead-acid) covering nominal voltage, energy density, cycle life, self-discharge, and safe operating range. Includes capacity math (mAh to Wh, series and parallel pack design), runtime estimation, C-rate, and charging fundamentals. For battery management circuits and protection, see 1E Electrical Formulas and 1H Thermal Calculator.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Chemistry Comparison</span><span class="fig">FIG. 1N-1</span></div>
+      <div class="material-grid" id="battery-chem-grid"></div>
+      <div class="note">Nominal V is the working voltage; full charge and end-of-discharge differ. Energy density is per kilogram (Wh/kg) for comparative sizing. Cycle life is to 80% original capacity at 1C discharge. Self-discharge is per month at room temperature. Operating range matters most for outdoor and unconditioned-space applications.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Capacity Calculator</span><span class="fig">TOOL 1N-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Cell Capacity (mAh)</label><input type="number" id="bat-mah" step="any" value="3500"></div>
+          <div class="field"><label>Cell Nominal Voltage (V)</label><input type="number" id="bat-vnom" step="any" value="3.7"></div>
+          <div class="field"><label>Cells in Series (S)</label><input type="number" id="bat-s" step="1" min="1" value="3"></div>
+          <div class="field"><label>Cells in Parallel (P)</label><input type="number" id="bat-p" step="1" min="1" value="2"></div>
+          <div class="field"><label>Continuous Load (A)</label><input type="number" id="bat-load" step="any" value="2"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Cell Energy</span><span class="val" id="bat-cell-wh">—</span></div>
+            <div class="calc-row"><span class="lbl">Pack Configuration</span><span class="val" id="bat-pack-config">—</span></div>
+            <div class="calc-row"><span class="lbl">Pack Nominal Voltage</span><span class="val" id="bat-pack-v">—</span></div>
+            <div class="calc-row"><span class="lbl">Pack Capacity</span><span class="val" id="bat-pack-mah">—</span></div>
+            <div class="calc-row"><span class="lbl">Pack Energy</span><span class="val" id="bat-pack-wh">—</span></div>
+            <div class="calc-row"><span class="lbl">Estimated Runtime</span><span class="val" id="bat-runtime-pack">—</span></div>
+            <div class="calc-row"><span class="lbl">Discharge Rate (C)</span><span class="val" id="bat-crate">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Series adds voltage (S×V), parallel adds capacity (P×mAh). Real-world runtime is 80-90% of theoretical due to internal resistance and load profile. Cells in parallel must be matched (same chemistry, capacity, age, voltage) or they will fight each other and one will overcharge.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>C-Rate Reference</span><span class="fig">TAB. 1N-1</span></div>
+      <table>
+        <thead><tr><th>C-Rate</th><th>Time to Full Discharge</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">0.1C</td><td>10 hours</td><td>Long-duration loads (DC backup, low-power sensors)</td></tr>
+          <tr><td class="hi">0.2C</td><td>5 hours</td><td>Standard charging rate for many chemistries</td></tr>
+          <tr><td class="hi">0.5C</td><td>2 hours</td><td>Moderate; typical for portable electronics</td></tr>
+          <tr><td class="hi">1C</td><td>1 hour</td><td>Specification benchmark; capacity ratings use 1C</td></tr>
+          <tr><td class="hi">2C</td><td>30 minutes</td><td>Tools, vapes, e-bikes (cells must support it)</td></tr>
+          <tr><td class="hi">5C</td><td>12 minutes</td><td>RC vehicles, drones; high-discharge cells only</td></tr>
+          <tr><td class="hi">10C+</td><td>6 minutes or less</td><td>Racing drones, motor starts; specialty cells</td></tr>
+        </tbody>
+      </table>
+      <div class="note">A 3500 mAh cell at 1C delivers 3.5 A for one hour. At 2C it delivers 7 A for 30 minutes. Manufacturers spec maximum continuous and burst C-rates separately; exceeding continuous voids life and causes heating. For Li-ion, sustained discharge above 1-2C significantly reduces cycle life.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Cell Sizes</span><span class="fig">TAB. 1N-2</span></div>
+      <table>
+        <thead><tr><th>Cell</th><th>Diameter × Length (mm)</th><th>Typical Capacity</th><th>Chemistry</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">18650</td><td class="num">18 × 65</td><td class="num">2500-3500 mAh</td><td>Li-ion</td><td>Laptops, tools, flashlights, e-bikes, Tesla Model S</td></tr>
+          <tr><td class="hi">21700</td><td class="num">21 × 70</td><td class="num">4000-5000 mAh</td><td>Li-ion</td><td>Tools, e-bikes, Tesla Model 3</td></tr>
+          <tr><td class="hi">26650</td><td class="num">26 × 65</td><td class="num">5000-6000 mAh</td><td>Li-ion / LiFePO4</td><td>Flashlights, energy storage</td></tr>
+          <tr><td class="hi">14500</td><td class="num">14 × 50</td><td class="num">700-900 mAh</td><td>Li-ion</td><td>AA-sized; 3.7V; not interchangeable with alkaline</td></tr>
+          <tr><td class="hi">10440</td><td class="num">10 × 44</td><td class="num">300-400 mAh</td><td>Li-ion</td><td>AAA-sized; 3.7V; not interchangeable with alkaline</td></tr>
+          <tr><td class="hi">AA</td><td class="num">14.5 × 50.5</td><td class="num">2000-3000 mAh</td><td>Alkaline / NiMH</td><td>Ubiquitous; 1.5V (alkaline) or 1.2V (NiMH)</td></tr>
+          <tr><td class="hi">AAA</td><td class="num">10.5 × 44.5</td><td class="num">800-1200 mAh</td><td>Alkaline / NiMH</td><td>Small electronics; same V as AA</td></tr>
+          <tr><td class="hi">C</td><td class="num">26 × 50</td><td class="num">6000-8000 mAh</td><td>Alkaline / NiMH</td><td>Larger devices, lanterns</td></tr>
+          <tr><td class="hi">D</td><td class="num">34 × 61.5</td><td class="num">10000-12000 mAh</td><td>Alkaline / NiMH</td><td>Long-runtime devices</td></tr>
+          <tr><td class="hi">9V (PP3)</td><td class="num">26 × 17 × 48</td><td class="num">500-600 mAh</td><td>Alkaline / NiMH</td><td>Smoke alarms, multimeters, guitar pedals</td></tr>
+          <tr><td class="hi">CR2032</td><td class="num">20 × 3.2</td><td class="num">220 mAh</td><td>Li-MnO2 (primary)</td><td>Coin cell; RTCs, key fobs, motherboards</td></tr>
+          <tr><td class="hi">CR123A</td><td class="num">17 × 34.5</td><td class="num">1500 mAh</td><td>Li-MnO2 (primary)</td><td>Cameras, flashlights, smoke alarms</td></tr>
+          <tr><td class="hi">LiPo pouch</td><td>varies (flat)</td><td class="num">100-10000+ mAh</td><td>LiPo</td><td>Phones, drones, custom packs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Charging Fundamentals</span><span class="fig">TAB. 1N-3</span></div>
+      <table>
+        <thead><tr><th>Chemistry</th><th>Charge Profile</th><th>Charge Voltage</th><th>Float / End</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Li-ion / LiPo</td><td>CC then CV</td><td class="num">4.20 V/cell</td><td>terminate at 0.05C</td><td>0.5C standard, 1C max for most cells. Never overcharge.</td></tr>
+          <tr><td class="hi">LiFePO4</td><td>CC then CV</td><td class="num">3.65 V/cell</td><td>terminate at 0.05C</td><td>Inherently safer than Li-ion; longer cycle life.</td></tr>
+          <tr><td class="hi">NiMH</td><td>CC, delta-V cutoff</td><td>varies</td><td>-dV or temperature</td><td>1.4-1.5 V at top; smart chargers detect -dV.</td></tr>
+          <tr><td class="hi">NiCd</td><td>CC, delta-V cutoff</td><td>varies</td><td>-dV or temperature</td><td>Memory effect; full discharge before recharge.</td></tr>
+          <tr><td class="hi">Lead-acid (flooded)</td><td>3-stage: bulk / abs / float</td><td class="num">14.4 V (12V batt)</td><td>13.2-13.8 V float</td><td>Float can be maintained continuously.</td></tr>
+          <tr><td class="hi">Lead-acid (AGM)</td><td>3-stage</td><td class="num">14.4-14.7 V</td><td>13.5-13.8 V float</td><td>Lower self-discharge than flooded; spill-proof.</td></tr>
+          <tr><td class="hi">Alkaline (primary)</td><td>do not charge</td><td>—</td><td>—</td><td>Some "rechargeable alkalines" exist but cycle life is poor.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">CC = constant current, CV = constant voltage. Li-ion charges to a voltage limit then holds until current tapers; this is the universal safe profile. Lead-acid has three stages: high current bulk, taper to absorption, then maintenance float. NiMH and NiCd use delta-V detection (the voltage briefly dips at full charge); good chargers also use temperature cutoff as a safety backup.</div>
+    </div>
+  </section>
+
   <!-- ============ 2F · FASTENER TORQUE ============ -->
   <section id="torque" class="page">
     <div class="page-head">
@@ -4293,6 +4477,11 @@ code {
       <div class="page-ref">Section 2J <span class="dot"></span> Mechanical</div>
       <h2>Sheet Metal Bending</h2>
       <div class="page-desc">K-factor lookup, bend allowance and deduction calculator, minimum bend radius reference, and standard hem dimensions. Bend allowance assumes air bending or 90-degree die forming; press-brake numbers may differ slightly.</div>
+    </div>
+
+    <div class="see-also-card">
+      <div class="label">See also</div>
+      <div class="body">For planning blank layouts on stock sheet, use the companion tool <a href="https://mbparks.com/cutlist" target="_blank" rel="noopener">Cut List (FI 008) ↗</a>. Bend allowance from this section determines blank size; Cut List packs the blanks onto your stock sheet with minimum waste.</div>
     </div>
 
     <div class="card">
@@ -7253,6 +7442,496 @@ code {
       <div class="card-title"><span>Generalist Fallback</span><span class="fig">TAB. 4H-4</span></div>
       <div class="vendor-grid" id="vendors-general"></div>
       <div class="note">When you cannot find it elsewhere, or need it tomorrow. Caveat emptor on counterfeits for branded electronic parts; verify by datasheet against package markings on arrival.</div>
+    </div>
+  </section>
+
+  <!-- ============ 4I · OPTICS ============ -->
+  <section id="optics" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 4I <span class="dot"></span> Shop &amp; Studio</div>
+      <h2>Optics</h2>
+      <div class="page-desc">A working reference for focal length, sensor size, field of view, and projection math. Useful next to 4E Photography (which holds the depth-of-field calculator and exposure tools) for camera setup, and on its own for projector throw distance, machine vision lens selection, and macro work. Covers full-frame, APS-C, Micro Four Thirds, 1-inch, smartphone, and Raspberry Pi sensors.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Lens &amp; Optics Fundamentals</span><span class="fig">TAB. 4I-1</span></div>
+      <table>
+        <thead><tr><th>Concept</th><th>Formula / Definition</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Focal length (f)</td><td>distance from lens to sensor when focused at infinity</td><td>Determines field of view and magnification</td></tr>
+          <tr><td class="hi">F-number (f/N)</td><td>N = f / aperture diameter</td><td>f/2.8 is wide (more light); f/16 is narrow (more DOF)</td></tr>
+          <tr><td class="hi">Field of view (FOV)</td><td>2 × atan(sensor / 2f)</td><td>Diagonal, horizontal, or vertical depending on which sensor dimension</td></tr>
+          <tr><td class="hi">Crop factor</td><td>43.27 / sensor diagonal (mm)</td><td>Relative to 35mm full-frame; smaller sensor = larger crop</td></tr>
+          <tr><td class="hi">Effective focal length</td><td>actual f × crop factor</td><td>50mm lens on APS-C "looks like" 75-80mm on full-frame</td></tr>
+          <tr><td class="hi">Depth of field (DOF)</td><td>region of acceptable sharpness</td><td>Increases with smaller aperture, shorter f, farther subject</td></tr>
+          <tr><td class="hi">Hyperfocal distance</td><td>H = f² / (N × c)</td><td>Focus here for max DOF; c = circle of confusion</td></tr>
+          <tr><td class="hi">Magnification (m)</td><td>image size / object size</td><td>1:1 macro means subject same size on sensor as in real life</td></tr>
+          <tr><td class="hi">Thin lens equation</td><td>1/f = 1/do + 1/di</td><td>Relates focal length to object and image distance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Sensor Sizes</span><span class="fig">TAB. 4I-2</span></div>
+      <table>
+        <thead><tr><th>Sensor</th><th>Dimensions (mm)</th><th>Diagonal (mm)</th><th>Crop Factor</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Full-frame (135 / 35mm)</td><td class="num">36 × 24</td><td class="num">43.27</td><td class="num">1.00×</td></tr>
+          <tr><td class="hi">APS-H (Canon)</td><td class="num">28.7 × 19</td><td class="num">34.5</td><td class="num">1.25×</td></tr>
+          <tr><td class="hi">APS-C (Nikon, Sony, Fuji)</td><td class="num">23.6 × 15.6</td><td class="num">28.3</td><td class="num">1.53×</td></tr>
+          <tr><td class="hi">APS-C (Canon)</td><td class="num">22.3 × 14.9</td><td class="num">26.8</td><td class="num">1.61×</td></tr>
+          <tr><td class="hi">Micro Four Thirds</td><td class="num">17.3 × 13</td><td class="num">21.6</td><td class="num">2.00×</td></tr>
+          <tr><td class="hi">1-inch (Sony RX, P&amp;S)</td><td class="num">13.2 × 8.8</td><td class="num">15.9</td><td class="num">2.72×</td></tr>
+          <tr><td class="hi">2/3-inch</td><td class="num">8.8 × 6.6</td><td class="num">11.0</td><td class="num">3.93×</td></tr>
+          <tr><td class="hi">1/1.7-inch (high-end phone)</td><td class="num">7.6 × 5.7</td><td class="num">9.5</td><td class="num">4.55×</td></tr>
+          <tr><td class="hi">1/2.3-inch (compact / drone)</td><td class="num">6.17 × 4.55</td><td class="num">7.66</td><td class="num">5.64×</td></tr>
+          <tr><td class="hi">1/3-inch (RPi HQ Camera)</td><td class="num">6.29 × 4.71</td><td class="num">7.85</td><td class="num">5.51×</td></tr>
+          <tr><td class="hi">1/4-inch (RPi v2 / IMX219)</td><td class="num">3.68 × 2.76</td><td class="num">4.60</td><td class="num">9.40×</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Crop factor lets you compare lens behavior across sensor sizes. A 25mm lens on Micro Four Thirds frames the same scene as a 50mm lens on full-frame. Smaller sensors give more DOF at any given aperture, which is why phones can fake "portrait mode" with software but real bokeh comes from large sensors.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Field of View Calculator</span><span class="fig">TOOL 4I-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Focal Length (mm)</label><input type="number" id="opt-f" step="any" value="50"></div>
+          <div class="field">
+            <label>Sensor</label>
+            <select id="opt-sensor">
+              <option value="36,24" selected>Full-frame (36 × 24)</option>
+              <option value="23.6,15.6">APS-C Nikon/Sony (23.6 × 15.6)</option>
+              <option value="22.3,14.9">APS-C Canon (22.3 × 14.9)</option>
+              <option value="17.3,13">Micro Four Thirds (17.3 × 13)</option>
+              <option value="13.2,8.8">1-inch (13.2 × 8.8)</option>
+              <option value="6.17,4.55">1/2.3-inch (6.17 × 4.55)</option>
+              <option value="6.29,4.71">RPi HQ (6.29 × 4.71)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="field-row" id="opt-custom-row" style="display:none;">
+            <div class="field"><label>Sensor W (mm)</label><input type="number" id="opt-sw" step="any" value="36"></div>
+            <div class="field"><label>Sensor H (mm)</label><input type="number" id="opt-sh" step="any" value="24"></div>
+          </div>
+          <div class="field"><label>Subject Distance (m)</label><input type="number" id="opt-dist" step="any" value="3"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Horizontal FOV</span><span class="val" id="opt-hfov">—</span></div>
+            <div class="calc-row"><span class="lbl">Vertical FOV</span><span class="val" id="opt-vfov">—</span></div>
+            <div class="calc-row"><span class="lbl">Diagonal FOV</span><span class="val" id="opt-dfov">—</span></div>
+            <div class="calc-row"><span class="lbl">Frame Width @ distance</span><span class="val" id="opt-fwidth">—</span></div>
+            <div class="calc-row"><span class="lbl">Frame Height @ distance</span><span class="val" id="opt-fheight">—</span></div>
+            <div class="calc-row"><span class="lbl">Effective Focal Length</span><span class="val" id="opt-eff">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">FOV = 2 × atan(sensor / 2f). For a 50mm lens on full-frame, horizontal FOV is about 40°. The "frame width at distance" is what you'd actually capture at that subject distance, useful for sizing a backdrop, framing a product shot, or setting up a copy stand.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Projection &amp; Magnification</span><span class="fig">TOOL 4I-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Object Size (mm)</label><input type="number" id="proj-obj" step="any" value="100"></div>
+          <div class="field"><label>Object Distance (m)</label><input type="number" id="proj-do" step="any" value="2"></div>
+          <div class="field"><label>Focal Length (mm)</label><input type="number" id="proj-f" step="any" value="50"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Image Distance</span><span class="val" id="proj-di">—</span></div>
+            <div class="calc-row"><span class="lbl">Magnification</span><span class="val" id="proj-m">—</span></div>
+            <div class="calc-row"><span class="lbl">Image Size on Sensor</span><span class="val" id="proj-img">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Thin lens equation: 1/f = 1/do + 1/di. For everyday photography (objects at meters, focal lengths in millimeters) the image distance is approximately equal to the focal length. For projection or macro work where object distance approaches focal length, the math becomes important.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Lens Categories</span><span class="fig">TAB. 4I-3</span></div>
+      <table>
+        <thead><tr><th>Category</th><th>Focal Range (full-frame eq.)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Ultra-wide / fisheye</td><td class="num">8-20 mm</td><td>Real estate interiors, landscape, astrophotography, action cams</td></tr>
+          <tr><td class="hi">Wide</td><td class="num">24-35 mm</td><td>Landscape, environmental portrait, walk-around, video B-roll</td></tr>
+          <tr><td class="hi">Normal</td><td class="num">40-58 mm</td><td>Documentary, street, "natural" perspective; 50mm is the classic</td></tr>
+          <tr><td class="hi">Short telephoto / portrait</td><td class="num">70-135 mm</td><td>Portrait (flattering compression), product, headshots</td></tr>
+          <tr><td class="hi">Telephoto</td><td class="num">150-300 mm</td><td>Sports, wildlife, tight isolated subjects</td></tr>
+          <tr><td class="hi">Super-telephoto</td><td class="num">300-800 mm+</td><td>Distant wildlife, aviation, astrophotography</td></tr>
+          <tr><td class="hi">Macro</td><td class="num">50-200 mm (1:1 capable)</td><td>Small object detail, product, scientific work</td></tr>
+          <tr><td class="hi">Tilt-shift</td><td class="num">17-90 mm</td><td>Architecture (perspective correction), product, miniature-look</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Focal range is reported in full-frame equivalent. For shop photography of small projects and parts, a 50-100mm prime or short macro on whatever sensor you have hits the sweet spot for working distance and detail.</div>
+    </div>
+  </section>
+
+  <!-- ============ 5A · MOTOR SIZING ============ -->
+  <section id="motor" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 5A <span class="dot"></span> Power &amp; Motion</div>
+      <h2>Motor Sizing</h2>
+      <div class="page-desc">A working reference for selecting motors for shop projects and small machinery: DC brushed, BLDC, stepper, servo, and AC induction. Covers torque calculation, NEMA flange dimensions for stepper mounting, lead screw selection for linear motion, gear ratio math, and stepper microstepping. For pulley and belt drive math see 2O Pulleys, Belts, Gears.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Motor Type Comparison</span><span class="fig">FIG. 5A-1</span></div>
+      <div class="material-grid" id="motor-type-grid"></div>
+      <div class="note">DC brushed is the simplest and cheapest but the brushes wear. BLDC trades a more complex driver for long life and high efficiency. Steppers give precise position without feedback at the cost of low speed and possible missed steps. Servos add closed-loop feedback for precision under load. AC induction dominates above a few hundred watts where line power is available.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>NEMA Flange Dimensions</span><span class="fig">TAB. 5A-1</span></div>
+      <table>
+        <thead><tr><th>NEMA Size</th><th>Flange (mm)</th><th>Bolt Circle</th><th>Shaft Ø (mm)</th><th>Typical Holding Torque</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">NEMA 8</td><td class="num">20.4 × 20.4</td><td class="num">16.0 mm</td><td class="num">4</td><td class="num">2-3 N·cm</td><td>Tiny mechanisms, miniature actuators</td></tr>
+          <tr><td class="hi">NEMA 11</td><td class="num">28 × 28</td><td class="num">23.0 mm</td><td class="num">5</td><td class="num">5-10 N·cm</td><td>Small camera sliders, lab automation</td></tr>
+          <tr><td class="hi">NEMA 14</td><td class="num">35 × 35</td><td class="num">26.0 mm</td><td class="num">5</td><td class="num">10-20 N·cm</td><td>Light 3D printers (Delta), small CNC</td></tr>
+          <tr><td class="hi">NEMA 17</td><td class="num">42.3 × 42.3</td><td class="num">31.0 mm</td><td class="num">5</td><td class="num">20-65 N·cm</td><td>Workhorse: 3D printers, small CNC, robotics</td></tr>
+          <tr><td class="hi">NEMA 23</td><td class="num">56.4 × 56.4</td><td class="num">47.1 mm</td><td class="num">6.35 / 8</td><td class="num">100-300 N·cm</td><td>Mid CNC, lathes, hobby mills</td></tr>
+          <tr><td class="hi">NEMA 24</td><td class="num">60 × 60</td><td class="num">50.0 mm</td><td class="num">10</td><td class="num">150-400 N·cm</td><td>Mid-large CNC, industrial automation</td></tr>
+          <tr><td class="hi">NEMA 34</td><td class="num">86 × 86</td><td class="num">69.6 mm</td><td class="num">14</td><td class="num">400-1500 N·cm</td><td>Industrial CNC, large gantry systems</td></tr>
+          <tr><td class="hi">NEMA 42</td><td class="num">110 × 110</td><td class="num">89.0 mm</td><td class="num">19</td><td class="num">2000+ N·cm</td><td>Large industrial; rarely seen in hobby work</td></tr>
+        </tbody>
+      </table>
+      <div class="note">NEMA frame size refers to the square flange dimension in tenths of an inch (NEMA 17 = 1.7 in = 42.3 mm). Mounting holes are at the bolt circle diameter. Shaft diameters are nominal; verify exact dimensions per manufacturer datasheet. Torque ratings vary widely with motor length and current; always check the datasheet for the specific part.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Torque Calculator</span><span class="fig">TOOL 5A-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Load (kg)</label><input type="number" id="tq-load" step="any" value="5"></div>
+          <div class="field"><label>Moment Arm / Radius (mm)</label><input type="number" id="tq-arm" step="any" value="50"></div>
+          <div class="field"><label>Safety Factor</label><input type="number" id="tq-sf" step="any" value="1.5"></div>
+          <div class="field"><label>Mechanical Advantage</label><input type="number" id="tq-ma" step="any" value="1"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Static Torque</span><span class="val" id="tq-static">—</span></div>
+            <div class="calc-row"><span class="lbl">With Safety Factor</span><span class="val" id="tq-sf-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Required Motor Torque</span><span class="val" id="tq-motor">—</span></div>
+            <div class="calc-row"><span class="lbl">In oz·in</span><span class="val" id="tq-ozin">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Torque = force × moment arm. For a 5 kg load on a 50 mm arm: F = 49 N, torque = 2.45 N·m. Apply a safety factor (1.5-2× for steady loads, 2-3× for shock loads). Mechanical advantage (pulleys, levers, gears) reduces motor torque proportionally but reduces output speed by the same ratio.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Lead Screw Calculator</span><span class="fig">TOOL 5A-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Lead (mm/rev)</label><input type="number" id="ls-lead" step="any" value="8"></div>
+          <div class="field"><label>Linear Load (N)</label><input type="number" id="ls-load" step="any" value="100"></div>
+          <div class="field"><label>Target Linear Speed (mm/s)</label><input type="number" id="ls-speed" step="any" value="20"></div>
+          <div class="field"><label>Efficiency (%)</label><input type="number" id="ls-eff" step="any" value="35"></div>
+          <div class="field"><label>Friction Coefficient</label><input type="number" id="ls-mu" step="any" value="0.1"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Required Motor RPM</span><span class="val" id="ls-rpm">—</span></div>
+            <div class="calc-row"><span class="lbl">Required Motor Torque</span><span class="val" id="ls-torque">—</span></div>
+            <div class="calc-row"><span class="lbl">Mechanical Power</span><span class="val" id="ls-power">—</span></div>
+            <div class="calc-row"><span class="lbl">Note</span><span class="val" id="ls-note">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Common lead screws: T8×2 (2mm/rev, slow precise), T8×8 (8mm/rev, faster). Acme threads run 30-40% efficient; ball screws 85-95%. For an 8mm lead at 20 mm/s, motor must spin 150 RPM. Backdrive resistance increases as lead decreases; below about 4mm lead per revolution, leadscrews self-lock under static load.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Gear Ratio Calculator</span><span class="fig">TOOL 5A-3</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Input Speed (RPM)</label><input type="number" id="mgr-rpm" step="any" value="1000"></div>
+          <div class="field"><label>Input Torque (N·m)</label><input type="number" id="mgr-tq" step="any" value="0.5"></div>
+          <div class="field"><label>Gear Ratio (X : 1)</label><input type="number" id="mgr-ratio" step="any" value="10"></div>
+          <div class="field"><label>Stage Efficiency (%)</label><input type="number" id="mgr-eff" step="any" value="90"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Output Speed</span><span class="val" id="mgr-out-rpm">—</span></div>
+            <div class="calc-row"><span class="lbl">Output Torque</span><span class="val" id="mgr-out-tq">—</span></div>
+            <div class="calc-row"><span class="lbl">Input Power</span><span class="val" id="mgr-in-p">—</span></div>
+            <div class="calc-row"><span class="lbl">Output Power</span><span class="val" id="mgr-out-p">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Ratio &gt; 1 reduces speed and multiplies torque (reduction gear). Ratio = 10:1 means 10 input revolutions per 1 output revolution. Torque scales by ratio × efficiency. Spur gears: 95-98% per stage. Worm gears: 50-90% (high reduction in one stage, often self-locking). Planetary: 90-95% per stage.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Stepper Microstepping Reference</span><span class="fig">TAB. 5A-2</span></div>
+      <table>
+        <thead><tr><th>Microstep</th><th>Steps / Rev (1.8° motor)</th><th>Resolution</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Full step</td><td class="num">200</td><td class="num">1.800°</td><td>Maximum torque, most audible noise</td></tr>
+          <tr><td class="hi">Half step</td><td class="num">400</td><td class="num">0.900°</td><td>~70% holding torque, quieter</td></tr>
+          <tr><td class="hi">1/4 step</td><td class="num">800</td><td class="num">0.450°</td><td>Smoother, less torque ripple</td></tr>
+          <tr><td class="hi">1/8 step</td><td class="num">1600</td><td class="num">0.225°</td><td>Standard for 3D printer X/Y</td></tr>
+          <tr><td class="hi">1/16 step</td><td class="num">3200</td><td class="num">0.1125°</td><td>Common on Trinamic drivers</td></tr>
+          <tr><td class="hi">1/32 step</td><td class="num">6400</td><td class="num">0.0563°</td><td>Very smooth; diminishing returns past this</td></tr>
+          <tr><td class="hi">1/64 - 1/256 step</td><td class="num">12800-51200</td><td class="num">&lt;0.03°</td><td>Trinamic StealthChop; mostly for noise reduction</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Standard stepper is 1.8° per full step (200 steps/rev). 0.9° motors exist (400 steps/rev) for finer resolution. Microstepping interpolates between full steps electrically; effective accuracy improvement maxes out around 1/8 to 1/16 because the rotor cogs into discrete detent positions regardless of driver subdivision. Above that, you're getting smoother motion and quieter operation, not more resolution.</div>
+    </div>
+  </section>
+
+  <!-- ============ 5B · PNEUMATICS & HYDRAULICS ============ -->
+  <section id="pneuhyd" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 5B <span class="dot"></span> Power &amp; Motion</div>
+      <h2>Pneumatics &amp; Hydraulics</h2>
+      <div class="page-desc">Fitting standards, thread comparison, hose ratings, air consumption math, and pneumatic vs hydraulic system selection. For cylinder force and hoop stress math see 2Q Pressure &amp; Pneumatic; this section focuses on fittings, flow, and fluid power system design.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Pressure Unit Conversion</span><span class="fig">TOOL 5B-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Pressure Value</label><input type="number" id="pc-val" step="any" value="100"></div>
+          <div class="field">
+            <label>Input Unit</label>
+            <select id="pc-unit">
+              <option value="psi" selected>psi (pounds per square inch)</option>
+              <option value="bar">bar</option>
+              <option value="kpa">kPa (kilopascal)</option>
+              <option value="mpa">MPa (megapascal)</option>
+              <option value="atm">atm (atmosphere)</option>
+              <option value="inhg">inHg (inches mercury)</option>
+              <option value="mmhg">mmHg (millimeters mercury)</option>
+              <option value="kgcm2">kgf/cm²</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">psi</span><span class="val" id="pc-psi">—</span></div>
+            <div class="calc-row"><span class="lbl">bar</span><span class="val" id="pc-bar">—</span></div>
+            <div class="calc-row"><span class="lbl">kPa</span><span class="val" id="pc-kpa">—</span></div>
+            <div class="calc-row"><span class="lbl">MPa</span><span class="val" id="pc-mpa">—</span></div>
+            <div class="calc-row"><span class="lbl">atm</span><span class="val" id="pc-atm">—</span></div>
+            <div class="calc-row"><span class="lbl">inHg / mmHg</span><span class="val" id="pc-hg">—</span></div>
+            <div class="calc-row"><span class="lbl">kgf/cm²</span><span class="val" id="pc-kgcm">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Shop air systems run 90-120 psi (6-8 bar). Hydraulic systems typically run 1000-3000 psi (70-200 bar). 1 atm = 14.7 psi = 1.013 bar. Gauge pressure (psig, barg) is what the gauge reads; absolute pressure (psia) adds atmospheric. Most shop work uses gauge.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>NPT vs BSP Thread Comparison</span><span class="fig">TAB. 5B-1</span></div>
+      <table>
+        <thead><tr><th>Standard</th><th>Region</th><th>Thread Angle</th><th>Form</th><th>Seal</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">NPT</td><td>USA, Canada</td><td class="num">60°</td><td>Tapered</td><td>Thread interference + sealant</td><td>National Pipe Taper; needs tape or pipe dope</td></tr>
+          <tr><td class="hi">NPTF</td><td>USA</td><td class="num">60°</td><td>Tapered (dry)</td><td>Thread interference only</td><td>Designed to seal without tape; "dryseal"</td></tr>
+          <tr><td class="hi">BSPT (R)</td><td>UK, EU, Asia</td><td class="num">55°</td><td>Tapered</td><td>Thread interference + sealant</td><td>British Standard Pipe Taper; not interchangeable with NPT</td></tr>
+          <tr><td class="hi">BSPP (G)</td><td>UK, EU, Asia</td><td class="num">55°</td><td>Parallel</td><td>O-ring or bonded washer</td><td>British Standard Pipe Parallel; thread does not seal</td></tr>
+          <tr><td class="hi">JIC 37°</td><td>USA hydraulics</td><td class="num">60°</td><td>Parallel + flare</td><td>Metal-to-metal flare</td><td>Common in hydraulics; reusable, vibration-resistant</td></tr>
+          <tr><td class="hi">ORFS (O-ring Face Seal)</td><td>USA hydraulics</td><td class="num">60°</td><td>Parallel</td><td>O-ring face</td><td>High-pressure hydraulics; very reliable</td></tr>
+          <tr><td class="hi">Metric (ISO 9974)</td><td>Global</td><td class="num">60°</td><td>Parallel</td><td>O-ring or bonded washer</td><td>European hydraulics; M10×1, M14×1.5, etc.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">NPT and BSPT look similar but the thread angles (60° vs 55°) and pitches do not match; mixing them strips threads. The most common mistake: trying to mate a BSP fitting from a European cylinder into a US NPT manifold. Buy NPT-BSP adapters or commit to one standard for the whole system.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Pipe &amp; Fitting Sizes</span><span class="fig">TAB. 5B-2</span></div>
+      <table>
+        <thead><tr><th>Nominal Size</th><th>NPT Threads/in</th><th>OD (in)</th><th>OD (mm)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1/8"</td><td class="num">27</td><td class="num">0.405</td><td class="num">10.3</td><td>Small instrumentation, gauges</td></tr>
+          <tr><td class="hi">1/4"</td><td class="num">18</td><td class="num">0.540</td><td class="num">13.7</td><td>Small shop air, pneumatic cylinders</td></tr>
+          <tr><td class="hi">3/8"</td><td class="num">18</td><td class="num">0.675</td><td class="num">17.1</td><td>Mid shop air, larger cylinders</td></tr>
+          <tr><td class="hi">1/2"</td><td class="num">14</td><td class="num">0.840</td><td class="num">21.3</td><td>Main shop air line, larger hydraulics</td></tr>
+          <tr><td class="hi">3/4"</td><td class="num">14</td><td class="num">1.050</td><td class="num">26.7</td><td>Large shop air drops, water</td></tr>
+          <tr><td class="hi">1"</td><td class="num">11.5</td><td class="num">1.315</td><td class="num">33.4</td><td>Compressor mains, industrial</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Air Consumption Calculator</span><span class="fig">TOOL 5B-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Cylinder Bore (mm)</label><input type="number" id="ac-bore" step="any" value="40"></div>
+          <div class="field"><label>Stroke (mm)</label><input type="number" id="ac-stroke" step="any" value="100"></div>
+          <div class="field"><label>Working Pressure (bar)</label><input type="number" id="ac-pressure" step="any" value="6"></div>
+          <div class="field"><label>Cycles per Minute</label><input type="number" id="ac-cpm" step="any" value="20"></div>
+          <div class="field">
+            <label>Action</label>
+            <select id="ac-action">
+              <option value="single">Single-acting (extend only)</option>
+              <option value="double" selected>Double-acting (extend &amp; retract)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Cylinder Volume / Stroke</span><span class="val" id="ac-vol">—</span></div>
+            <div class="calc-row"><span class="lbl">Free Air per Cycle</span><span class="val" id="ac-fac">—</span></div>
+            <div class="calc-row"><span class="lbl">Consumption (SCFM)</span><span class="val" id="ac-scfm">—</span></div>
+            <div class="calc-row"><span class="lbl">Consumption (L/min)</span><span class="val" id="ac-lpm">—</span></div>
+            <div class="calc-row"><span class="lbl">Compressor sizing tip</span><span class="val" id="ac-tip">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Free air is the air at atmospheric pressure that you must compress to fill the cylinder. Working pressure × volume ÷ atmospheric pressure = free air consumed per stroke. Size a compressor for at least 1.5× peak demand and add 20-30% for tools that run continuously. A typical 1/4 hp pancake compressor delivers about 1-2 SCFM continuously.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Pneumatic vs Hydraulic Selection</span><span class="fig">TAB. 5B-3</span></div>
+      <table>
+        <thead><tr><th>Factor</th><th>Pneumatic</th><th>Hydraulic</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Working pressure</td><td class="num">6-10 bar (90-150 psi)</td><td class="num">70-350 bar (1000-5000 psi)</td></tr>
+          <tr><td class="hi">Force at given cylinder size</td><td>Low (compressed air, low P)</td><td>High (incompressible fluid, high P)</td></tr>
+          <tr><td class="hi">Speed control</td><td>Fast, but bouncy (compressible)</td><td>Slow but precise (incompressible)</td></tr>
+          <tr><td class="hi">Cleanliness</td><td>Clean exhaust (air)</td><td>Risk of oil leaks; environmental concern</td></tr>
+          <tr><td class="hi">Temperature tolerance</td><td>Wide (cold air just feels nice)</td><td>Limited by fluid viscosity range</td></tr>
+          <tr><td class="hi">Cost</td><td>Low; commodity components</td><td>High; precision components</td></tr>
+          <tr><td class="hi">Maintenance</td><td>Filter, lubricator, dryer for moisture</td><td>Fluid changes, seal replacement, filtration</td></tr>
+          <tr><td class="hi">Best for</td><td>Light fast cycling, clean environments</td><td>Heavy force, slow precise positioning</td></tr>
+          <tr><td class="hi">Typical use</td><td>Assembly fixturing, ejection, light press</td><td>Machine tools, lifts, forming presses</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Fitting Type Reference</span><span class="fig">TAB. 5B-4</span></div>
+      <table>
+        <thead><tr><th>Fitting</th><th>Connection</th><th>Pressure Range</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Push-to-connect (push-in)</td><td>Push tubing in; collet grips</td><td class="num">to 10 bar (pneumatic)</td><td>Festo, SMC; shop air, fast assembly</td></tr>
+          <tr><td class="hi">Compression</td><td>Ferrule compresses on tubing</td><td class="num">to 350 bar</td><td>Hydraulic, gas, instrumentation</td></tr>
+          <tr><td class="hi">Barb + clamp</td><td>Tubing pushed over barb, clamped</td><td class="num">to 10 bar</td><td>Low-pressure water, vacuum, low-pressure pneumatic</td></tr>
+          <tr><td class="hi">Quick-disconnect (industrial)</td><td>Push-and-twist coupler</td><td class="num">to 12 bar</td><td>Shop air tools; many incompatible profiles (Industrial, Auto, ARO)</td></tr>
+          <tr><td class="hi">Flare (JIC, SAE)</td><td>Conical flare, metal-to-metal</td><td class="num">to 700 bar</td><td>Hydraulic systems, brake lines</td></tr>
+          <tr><td class="hi">O-ring face seal (ORFS)</td><td>O-ring on flat face</td><td class="num">to 420 bar</td><td>High-pressure hydraulics</td></tr>
+          <tr><td class="hi">Camlock / cam-and-groove</td><td>Cam levers, gasket seal</td><td class="num">to 10 bar</td><td>Tankers, large hoses, agricultural</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Quick-disconnect couplers have multiple incompatible profiles even at the same nominal size; the Industrial (M-style), Automotive (T-style), and ARO profiles all look similar but do not mate. Pick one standard for your whole shop and stick to it.</div>
+    </div>
+  </section>
+
+  <!-- ============ 5C · BEARINGS ============ -->
+  <section id="bearings" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 5C <span class="dot"></span> Power &amp; Motion</div>
+      <h2>Bearings</h2>
+      <div class="page-desc">A reference for bearing type selection, common bore sizes (metric and inch), load rating fundamentals (dynamic C, static C0, L10 life), and designation systems. For shaft and bore tolerance classes for press and slip fits, see 2H Bearing &amp; Shaft Fits. For shop hardware sizing in general, see 2F Fastener Torque.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Bearing Type Comparison</span><span class="fig">FIG. 5C-1</span></div>
+      <div class="material-grid" id="bearing-type-grid"></div>
+      <div class="note">Deep groove ball bearings are the universal default: cheap, handle radial and modest axial load, fit most general-purpose rotation. Tapered roller bearings handle high combined loads and dominate automotive wheel hubs. Needle bearings give very high radial load capacity in a thin envelope. Thrust bearings handle axial-only loads. Plain bushings (sleeve bearings) handle slow rotation and high loads with no rolling elements at all.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Bore Sizes (Metric)</span><span class="fig">TAB. 5C-1</span></div>
+      <table>
+        <thead><tr><th>Designation</th><th>Bore (mm)</th><th>OD (mm)</th><th>Width (mm)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">605</td><td class="num">5</td><td class="num">14</td><td class="num">5</td><td>Small motors, 3D printer idlers</td></tr>
+          <tr><td class="hi">606</td><td class="num">6</td><td class="num">17</td><td class="num">6</td><td>Small CNC, 6mm shaft</td></tr>
+          <tr><td class="hi">608</td><td class="num">8</td><td class="num">22</td><td class="num">7</td><td>The universal hobby bearing: skateboards, 3D printers, fidget spinners</td></tr>
+          <tr><td class="hi">609</td><td class="num">9</td><td class="num">24</td><td class="num">7</td><td>Less common; specialty</td></tr>
+          <tr><td class="hi">6000</td><td class="num">10</td><td class="num">26</td><td class="num">8</td><td>Light-duty; small electric motors</td></tr>
+          <tr><td class="hi">6200</td><td class="num">10</td><td class="num">30</td><td class="num">9</td><td>Medium-duty; more capacity than 6000 at same bore</td></tr>
+          <tr><td class="hi">6300</td><td class="num">10</td><td class="num">35</td><td class="num">11</td><td>Heavy-duty; same bore, larger envelope</td></tr>
+          <tr><td class="hi">6001</td><td class="num">12</td><td class="num">28</td><td class="num">8</td><td>Light-duty next-size-up</td></tr>
+          <tr><td class="hi">6002</td><td class="num">15</td><td class="num">32</td><td class="num">9</td><td>15mm shaft; common stepper output</td></tr>
+          <tr><td class="hi">6003</td><td class="num">17</td><td class="num">35</td><td class="num">10</td><td>17mm shaft</td></tr>
+          <tr><td class="hi">6004</td><td class="num">20</td><td class="num">42</td><td class="num">12</td><td>20mm shaft; small machinery</td></tr>
+          <tr><td class="hi">6005</td><td class="num">25</td><td class="num">47</td><td class="num">12</td><td>25mm shaft; medium machinery</td></tr>
+          <tr><td class="hi">6006</td><td class="num">30</td><td class="num">55</td><td class="num">13</td><td>30mm shaft</td></tr>
+          <tr><td class="hi">6008</td><td class="num">40</td><td class="num">68</td><td class="num">15</td><td>40mm shaft; mid-industrial</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Designation system for deep groove ball bearings: the first digit indicates series (6 = single row), the second indicates duty (0 = light, 2 = medium, 3 = heavy), and the last two indicate bore. For 6004: bore = 04 × 5 = 20mm (the rule starts at 04 = 20mm; below that, 00 = 10mm, 01 = 12mm, 02 = 15mm, 03 = 17mm, then each step adds 5mm). Suffix codes: ZZ = double metal shield, 2RS = double rubber seal, C3 = looser internal clearance.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Bore Sizes (Inch)</span><span class="fig">TAB. 5C-2</span></div>
+      <table>
+        <thead><tr><th>Designation</th><th>Bore (in)</th><th>OD (in)</th><th>Width (in)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">R4</td><td class="num">1/4 (.250)</td><td class="num">5/8 (.625)</td><td class="num">.196</td><td>R-series: inch dimensions; light duty</td></tr>
+          <tr><td class="hi">R6</td><td class="num">3/8 (.375)</td><td class="num">7/8 (.875)</td><td class="num">.218</td><td>Common 3/8" shaft</td></tr>
+          <tr><td class="hi">R8</td><td class="num">1/2 (.500)</td><td class="num">1-1/8 (1.125)</td><td class="num">.250</td><td>Very common; 1/2" shafts</td></tr>
+          <tr><td class="hi">R10</td><td class="num">5/8 (.625)</td><td class="num">1-3/8 (1.375)</td><td class="num">.281</td><td>5/8" shaft</td></tr>
+          <tr><td class="hi">R12</td><td class="num">3/4 (.750)</td><td class="num">1-5/8 (1.625)</td><td class="num">.312</td><td>3/4" shaft</td></tr>
+          <tr><td class="hi">R16</td><td class="num">1 (1.000)</td><td class="num">2 (2.000)</td><td class="num">.375</td><td>1" shaft</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>L10 Bearing Life Calculator</span><span class="fig">TOOL 5C-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Dynamic Load Rating C (N)</label><input type="number" id="brl-c" step="any" value="5000"></div>
+          <div class="field"><label>Applied Load P (N)</label><input type="number" id="brl-p" step="any" value="500"></div>
+          <div class="field"><label>Speed (RPM)</label><input type="number" id="brl-rpm" step="any" value="1500"></div>
+          <div class="field">
+            <label>Bearing Type</label>
+            <select id="brl-type">
+              <option value="3" selected>Ball bearing (exponent = 3)</option>
+              <option value="3.333">Roller bearing (exponent = 10/3)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Load Ratio (C / P)</span><span class="val" id="brl-ratio">—</span></div>
+            <div class="calc-row"><span class="lbl">L10 Life (million revs)</span><span class="val" id="brl-mr">—</span></div>
+            <div class="calc-row"><span class="lbl">L10 Life (hours)</span><span class="val" id="brl-hours">—</span></div>
+            <div class="calc-row"><span class="lbl">L10 Life (years @ 8hr/day)</span><span class="val" id="brl-years">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="brl-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">L10 is the life that 90% of identical bearings will exceed under given load and speed. Formula: L10 = (C/P)^p × 10⁶ revolutions, where p = 3 for ball bearings and 10/3 for roller. C is from the bearing datasheet (dynamic load rating). Doubling the load drops life by a factor of 8 for ball bearings. A C/P ratio above 6 generally gives "infinite" practical life.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Bearing Seal &amp; Suffix Codes</span><span class="fig">TAB. 5C-3</span></div>
+      <table>
+        <thead><tr><th>Suffix</th><th>Meaning</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Open</td><td>no shield or seal</td><td>Requires external sealing; oil-bath applications</td></tr>
+          <tr><td class="hi">Z / ZZ</td><td>single / double metal shield</td><td>Excludes dust; allows oil mist lubrication</td></tr>
+          <tr><td class="hi">RS / 2RS</td><td>single / double rubber contact seal</td><td>Pre-greased, sealed for life; most hobby use</td></tr>
+          <tr><td class="hi">RZ / 2RZ</td><td>single / double rubber non-contact seal</td><td>Better dust exclusion than Z, less friction than RS</td></tr>
+          <tr><td class="hi">C3</td><td>looser internal clearance</td><td>For applications with thermal expansion or interference fit</td></tr>
+          <tr><td class="hi">C2</td><td>tighter internal clearance</td><td>Precision applications, less radial play</td></tr>
+          <tr><td class="hi">P5, P4, P2</td><td>ABEC tolerance classes (precision)</td><td>Higher number = looser; ABEC 7+ for precision spindles</td></tr>
+        </tbody>
+      </table>
+      <div class="note">For most shop builds, 2RS sealed bearings are the right default: greased for life, dust-proof, and run cool at moderate speeds. ZZ shielded bearings handle higher speeds because the shields don't contact the inner race (so no friction or heat from the seal). For high-RPM applications, open or ZZ with proper external sealing and forced lubrication outperforms 2RS.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Mounting &amp; Fit Guidance</span><span class="fig">TAB. 5C-4</span></div>
+      <table>
+        <thead><tr><th>Condition</th><th>Inner Race (Shaft)</th><th>Outer Race (Housing)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Inner rotating, light load</td><td>k5, k6 (light interference)</td><td>H7 (loose)</td></tr>
+          <tr><td class="hi">Inner rotating, normal load</td><td>m5, m6 (medium interference)</td><td>H7</td></tr>
+          <tr><td class="hi">Inner rotating, heavy/shock</td><td>n6, p6 (heavy interference)</td><td>K7</td></tr>
+          <tr><td class="hi">Outer rotating</td><td>g6, h6 (loose)</td><td>n6, p6 (interference)</td></tr>
+          <tr><td class="hi">Easy assembly, low load</td><td>j6 (transition)</td><td>J7 (transition)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Rule of thumb: the rotating race gets the tighter fit. For a shaft that rotates in a stationary housing (the common case), the shaft is press-fit and the housing is slip-fit. This prevents the rotating race from spinning on its mating surface, which would gall and destroy both parts. See section 2H for the actual ISO 286 tolerance values for each class.</div>
     </div>
   </section>
 
@@ -14752,6 +15431,408 @@ calcResinQty();
 // 4H Parts Sourcing
 renderAllVendorGrids();
 wireQuickQueries();
+
+// ====================== 1N · BATTERY REFERENCE ======================
+const BATTERY_CHEMISTRIES = [
+  { name: 'Li-ion (NMC)',     cat: 'liion', vnom: '3.7 V', density: '150-250 Wh/kg', cycles: '500-1000', sd: '2-5%/mo', temp: '-20 to 60°C', note: 'Default for laptops, tools, drones, phones; high energy density.' },
+  { name: 'LiPo (pouch)',     cat: 'liion', vnom: '3.7 V', density: '150-250 Wh/kg', cycles: '300-500',  sd: '2-5%/mo', temp: '0 to 60°C',   note: 'Flat pouch, custom shapes; RC, drones, phones; needs balance charging.' },
+  { name: 'LiFePO4',          cat: 'liion', vnom: '3.2 V', density: '90-160 Wh/kg',  cycles: '2000-5000', sd: '2-3%/mo', temp: '-20 to 60°C', note: 'Safer, longer life than NMC; lower energy density. Solar, EV, ESS.' },
+  { name: 'Li-Titanate (LTO)',cat: 'liion', vnom: '2.4 V', density: '50-80 Wh/kg',   cycles: '7000-20000', sd: '2-10%/mo', temp: '-30 to 70°C', note: 'Extreme cycle life; tolerates cold; low energy density.' },
+  { name: 'NiMH',             cat: 'nickel',vnom: '1.2 V', density: '60-120 Wh/kg', cycles: '500-1000', sd: '15-30%/mo (LSD: 3-5%/mo)', temp: '-20 to 50°C', note: 'AA/AAA rechargeables; tolerant of abuse; LSD types hold charge longer.' },
+  { name: 'NiCd',             cat: 'nickel',vnom: '1.2 V', density: '40-60 Wh/kg',  cycles: '1000-2000', sd: '10-20%/mo', temp: '-40 to 60°C', note: 'Legacy; memory effect; cadmium toxicity; cold-weather tools.' },
+  { name: 'Alkaline',         cat: 'primary', vnom: '1.5 V', density: '80-130 Wh/kg', cycles: '1 (primary)', sd: '2%/year', temp: '-20 to 55°C', note: 'Single-use; remotes, smoke alarms; long shelf life.' },
+  { name: 'Li-MnO2 (CR123/CR2032)', cat: 'primary', vnom: '3.0 V', density: '250 Wh/kg', cycles: '1 (primary)', sd: '1%/year', temp: '-40 to 85°C', note: 'Coin cells, cameras; very long shelf life; high voltage.' },
+  { name: 'Lead-Acid (flooded)', cat: 'lead', vnom: '2.0 V/cell', density: '30-40 Wh/kg', cycles: '200-500', sd: '5-15%/mo', temp: '-20 to 50°C', note: 'Cars, deep-cycle marine; cheap; heavy; requires upright orientation.' },
+  { name: 'Lead-Acid (AGM)',  cat: 'lead', vnom: '2.0 V/cell', density: '30-50 Wh/kg', cycles: '400-800', sd: '3-5%/mo', temp: '-20 to 60°C', note: 'Sealed, spill-proof; UPS, motorcycles, deep cycle.' },
+  { name: 'Lead-Acid (gel)',  cat: 'lead', vnom: '2.0 V/cell', density: '30-40 Wh/kg', cycles: '500-1000', sd: '3-5%/mo', temp: '-20 to 60°C', note: 'Deep cycle, low self-discharge; slower charge than AGM.' }
+];
+function renderBatteryChemistries() {
+  const grid = document.getElementById('battery-chem-grid');
+  if (!grid) return;
+  const colorMap = { liion: 'titanium', nickel: 'aluminum', primary: 'plastic', lead: 'steel' };
+  grid.innerHTML = BATTERY_CHEMISTRIES.map(b =>
+    '<div class="material-card ' + (colorMap[b.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(b.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(b.cat) + '</div>' +
+      '<div class="mat-specs">' +
+        '<span class="l">Nominal</span><span class="v">' + escHtml(b.vnom) + '</span>' +
+        '<span class="l">Density</span><span class="v">' + escHtml(b.density) + '</span>' +
+        '<span class="l">Cycles</span><span class="v">' + escHtml(b.cycles) + '</span>' +
+        '<span class="l">Self-disch.</span><span class="v">' + escHtml(b.sd) + '</span>' +
+        '<span class="l">Op. temp</span><span class="v">' + escHtml(b.temp) + '</span>' +
+      '</div>' +
+      '<div class="mat-note">' + escHtml(b.note) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function calcBattery() {
+  const mah = parseFloat(document.getElementById('bat-mah').value);
+  const vnom = parseFloat(document.getElementById('bat-vnom').value);
+  const s = parseInt(document.getElementById('bat-s').value, 10);
+  const p = parseInt(document.getElementById('bat-p').value, 10);
+  const load = parseFloat(document.getElementById('bat-load').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(mah) || !isFinite(vnom) || !isFinite(s) || !isFinite(p) || mah <= 0 || vnom <= 0 || s < 1 || p < 1) {
+    ['bat-cell-wh','bat-pack-config','bat-pack-v','bat-pack-mah','bat-pack-wh','bat-runtime-pack','bat-crate'].forEach(id => set(id, '—'));
+    return;
+  }
+  const cellWh = (mah / 1000) * vnom;
+  const packV = s * vnom;
+  const packMah = p * mah;
+  const packWh = cellWh * s * p;
+  set('bat-cell-wh', cellWh.toFixed(2) + ' Wh');
+  set('bat-pack-config', s + 'S' + p + 'P (' + (s * p) + ' cells)');
+  set('bat-pack-v', packV.toFixed(2) + ' V');
+  set('bat-pack-mah', packMah.toFixed(0) + ' mAh (' + (packMah / 1000).toFixed(2) + ' Ah)');
+  set('bat-pack-wh', packWh.toFixed(2) + ' Wh');
+  if (isFinite(load) && load > 0) {
+    const runtimeHr = (packMah / 1000) / load;
+    let rtStr;
+    if (runtimeHr >= 1) rtStr = runtimeHr.toFixed(2) + ' hr';
+    else rtStr = (runtimeHr * 60).toFixed(1) + ' min';
+    set('bat-runtime-pack', rtStr + ' (theoretical)');
+    const crate = load / ((packMah / 1000));
+    set('bat-crate', crate.toFixed(2) + 'C');
+  } else {
+    set('bat-runtime-pack', '—');
+    set('bat-crate', '—');
+  }
+}
+['bat-mah','bat-vnom','bat-s','bat-p','bat-load'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcBattery);
+});
+
+
+// ====================== 4I · OPTICS ======================
+function calcFOV() {
+  const f = parseFloat(document.getElementById('opt-f').value);
+  const sensorVal = document.getElementById('opt-sensor').value;
+  const dist = parseFloat(document.getElementById('opt-dist').value);
+  const customRow = document.getElementById('opt-custom-row');
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  let sw, sh;
+  if (sensorVal === 'custom') {
+    customRow.style.display = 'flex';
+    sw = parseFloat(document.getElementById('opt-sw').value);
+    sh = parseFloat(document.getElementById('opt-sh').value);
+  } else {
+    customRow.style.display = 'none';
+    const parts = sensorVal.split(',').map(parseFloat);
+    sw = parts[0]; sh = parts[1];
+  }
+  if (!isFinite(f) || !isFinite(sw) || !isFinite(sh) || f <= 0 || sw <= 0 || sh <= 0) {
+    ['opt-hfov','opt-vfov','opt-dfov','opt-fwidth','opt-fheight','opt-eff'].forEach(id => set(id, '—'));
+    return;
+  }
+  const hfov = 2 * Math.atan(sw / (2 * f)) * 180 / Math.PI;
+  const vfov = 2 * Math.atan(sh / (2 * f)) * 180 / Math.PI;
+  const diag = Math.hypot(sw, sh);
+  const dfov = 2 * Math.atan(diag / (2 * f)) * 180 / Math.PI;
+  set('opt-hfov', hfov.toFixed(2) + '°');
+  set('opt-vfov', vfov.toFixed(2) + '°');
+  set('opt-dfov', dfov.toFixed(2) + '°');
+  if (isFinite(dist) && dist > 0) {
+    const fw = 2 * dist * Math.tan((hfov / 2) * Math.PI / 180);
+    const fh = 2 * dist * Math.tan((vfov / 2) * Math.PI / 180);
+    set('opt-fwidth', fw.toFixed(2) + ' m');
+    set('opt-fheight', fh.toFixed(2) + ' m');
+  } else {
+    set('opt-fwidth', '—');
+    set('opt-fheight', '—');
+  }
+  // Effective focal length (vs full frame)
+  const ff_diag = Math.hypot(36, 24);
+  const cropFactor = ff_diag / diag;
+  set('opt-eff', (f * cropFactor).toFixed(1) + ' mm (FF eq.)');
+}
+['opt-f','opt-sensor','opt-sw','opt-sh','opt-dist'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcFOV); el.addEventListener('change', calcFOV); }
+});
+
+function calcProjection() {
+  const obj = parseFloat(document.getElementById('proj-obj').value);
+  const do_ = parseFloat(document.getElementById('proj-do').value);
+  const f = parseFloat(document.getElementById('proj-f').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(obj) || !isFinite(do_) || !isFinite(f) || obj <= 0 || do_ <= 0 || f <= 0) {
+    ['proj-di','proj-m','proj-img'].forEach(id => set(id, '—'));
+    return;
+  }
+  // 1/f = 1/do + 1/di  => di = (f*do) / (do - f); f in mm, do in m → convert
+  const do_mm = do_ * 1000;
+  const di = (f * do_mm) / (do_mm - f);
+  const m = di / do_mm;
+  const img = obj * m;
+  set('proj-di', di.toFixed(2) + ' mm');
+  set('proj-m', m.toFixed(4) + ' (' + (m < 1 ? '1:' + (1/m).toFixed(1) : m.toFixed(1) + ':1') + ')');
+  set('proj-img', img.toFixed(3) + ' mm');
+}
+['proj-obj','proj-do','proj-f'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcProjection);
+});
+
+
+// ====================== 5A · MOTOR SIZING ======================
+const MOTOR_TYPES = [
+  { name: 'DC Brushed',       cat: 'dc',      v: '6-48 V', tq: 'low-mid', speed: 'high', ctrl: 'simple', note: 'Cheap, simple H-bridge. Brushes wear; sparks; EMI noise.' },
+  { name: 'BLDC',             cat: 'dc',      v: '12-72 V', tq: 'mid-high', speed: 'high', ctrl: 'ESC required', note: 'Long life, high efficiency. RC cars, drones, e-bikes.' },
+  { name: 'Stepper (1.8°)',   cat: 'stepper', v: '12-48 V', tq: 'mid', speed: 'low-mid', ctrl: 'driver + step/dir', note: '3D printers, CNC. Precise without feedback; missed steps possible.' },
+  { name: 'Stepper (0.9°)',   cat: 'stepper', v: '12-48 V', tq: 'mid', speed: 'low-mid', ctrl: 'driver + step/dir', note: 'Twice the resolution of 1.8° steppers. Higher precision needs.' },
+  { name: 'RC Servo',         cat: 'servo',   v: '4-7.4 V', tq: 'low-mid', speed: 'low', ctrl: 'PWM (50 Hz)', note: 'Robotics, RC; integrated controller; absolute position; ±60° to continuous.' },
+  { name: 'Industrial Servo', cat: 'servo',   v: '24-400 V', tq: 'high', speed: 'high', ctrl: 'servo drive', note: 'Closed-loop, high precision. CNC, robotics, factory automation.' },
+  { name: 'AC Induction',     cat: 'ac',      v: '120/240/480 V', tq: 'high', speed: 'fixed (line freq)', ctrl: 'contactor or VFD', note: 'Workhorse for fans, pumps, machine tools. Cheap, durable.' },
+  { name: 'Linear Actuator',  cat: 'linear',  v: '12-48 V', tq: 'n/a (force)', speed: 'low', ctrl: 'simple H-bridge', note: 'Recliners, lifts, automation. Position via limit switches or potentiometer.' }
+];
+function renderMotorTypes() {
+  const grid = document.getElementById('motor-type-grid');
+  if (!grid) return;
+  const colorMap = { dc: 'titanium', stepper: 'steel', servo: 'aluminum', ac: 'copper', linear: 'plastic' };
+  grid.innerHTML = MOTOR_TYPES.map(m =>
+    '<div class="material-card ' + (colorMap[m.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(m.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(m.cat) + '</div>' +
+      '<div class="mat-specs">' +
+        '<span class="l">Voltage</span><span class="v">' + escHtml(m.v) + '</span>' +
+        '<span class="l">Torque</span><span class="v">' + escHtml(m.tq) + '</span>' +
+        '<span class="l">Speed</span><span class="v">' + escHtml(m.speed) + '</span>' +
+        '<span class="l">Control</span><span class="v">' + escHtml(m.ctrl) + '</span>' +
+      '</div>' +
+      '<div class="mat-note">' + escHtml(m.note) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function calcTorque() {
+  const load = parseFloat(document.getElementById('tq-load').value);
+  const arm = parseFloat(document.getElementById('tq-arm').value);
+  const sf = parseFloat(document.getElementById('tq-sf').value);
+  const ma = parseFloat(document.getElementById('tq-ma').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(load) || !isFinite(arm) || load <= 0 || arm <= 0) {
+    ['tq-static','tq-sf-out','tq-motor','tq-ozin'].forEach(id => set(id, '—'));
+    return;
+  }
+  const force = load * 9.81; // N
+  const tqN = force * (arm / 1000); // N·m
+  const tqSF = tqN * (isFinite(sf) ? sf : 1);
+  const tqMotor = tqSF / (isFinite(ma) && ma > 0 ? ma : 1);
+  set('tq-static', tqN.toFixed(3) + ' N·m');
+  set('tq-sf-out', tqSF.toFixed(3) + ' N·m');
+  set('tq-motor', tqMotor.toFixed(3) + ' N·m (' + (tqMotor * 100).toFixed(1) + ' N·cm)');
+  set('tq-ozin', (tqMotor * 141.612).toFixed(2) + ' oz·in');
+}
+['tq-load','tq-arm','tq-sf','tq-ma'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcTorque);
+});
+
+function calcLeadScrew() {
+  const lead = parseFloat(document.getElementById('ls-lead').value);
+  const load = parseFloat(document.getElementById('ls-load').value);
+  const speed = parseFloat(document.getElementById('ls-speed').value);
+  const effPct = parseFloat(document.getElementById('ls-eff').value);
+  const mu = parseFloat(document.getElementById('ls-mu').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(lead) || !isFinite(load) || !isFinite(speed) || lead <= 0 || load <= 0 || speed <= 0) {
+    ['ls-rpm','ls-torque','ls-power','ls-note'].forEach(id => set(id, '—'));
+    return;
+  }
+  const eff = (effPct || 35) / 100;
+  // RPM from linear speed: rpm = speed (mm/s) * 60 / lead (mm/rev)
+  const rpm = (speed * 60) / lead;
+  // Torque from load: T = F * lead / (2π * eff); F in N, lead in m
+  const lead_m = lead / 1000;
+  const tq = (load * lead_m) / (2 * Math.PI * eff);
+  const power = load * (speed / 1000); // watts (linear)
+  set('ls-rpm', rpm.toFixed(1) + ' RPM');
+  set('ls-torque', tq.toFixed(3) + ' N·m (' + (tq * 100).toFixed(1) + ' N·cm)');
+  set('ls-power', power.toFixed(2) + ' W (mechanical out)');
+  let note;
+  if (lead < 4) note = 'Self-locking (no backdrive)';
+  else if (eff < 0.5) note = 'Acme thread typical';
+  else note = 'Ball screw range';
+  set('ls-note', note);
+}
+['ls-lead','ls-load','ls-speed','ls-eff','ls-mu'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcLeadScrew);
+});
+
+function calcGearRatio() {
+  const rpmIn = parseFloat(document.getElementById('mgr-rpm').value);
+  const tqIn = parseFloat(document.getElementById('mgr-tq').value);
+  const ratio = parseFloat(document.getElementById('mgr-ratio').value);
+  const effPct = parseFloat(document.getElementById('mgr-eff').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(rpmIn) || !isFinite(tqIn) || !isFinite(ratio) || rpmIn <= 0 || tqIn <= 0 || ratio <= 0) {
+    ['mgr-out-rpm','mgr-out-tq','mgr-in-p','mgr-out-p'].forEach(id => set(id, '—'));
+    return;
+  }
+  const eff = (effPct || 90) / 100;
+  const rpmOut = rpmIn / ratio;
+  const tqOut = tqIn * ratio * eff;
+  const wIn = rpmIn * 2 * Math.PI / 60;   // rad/s
+  const wOut = rpmOut * 2 * Math.PI / 60;
+  const powIn = tqIn * wIn;   // W
+  const powOut = tqOut * wOut;
+  set('mgr-out-rpm', rpmOut.toFixed(1) + ' RPM');
+  set('mgr-out-tq', tqOut.toFixed(3) + ' N·m');
+  set('mgr-in-p', powIn.toFixed(2) + ' W');
+  set('mgr-out-p', powOut.toFixed(2) + ' W (' + ((powOut / powIn) * 100).toFixed(0) + '% efficient)');
+}
+['mgr-rpm','mgr-tq','mgr-ratio','mgr-eff'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcGearRatio);
+});
+
+
+// ====================== 5B · PNEUMATICS & HYDRAULICS ======================
+const PRESSURE_CONV_TO_PSI = {
+  psi: 1, bar: 14.5038, kpa: 0.145038, mpa: 145.038,
+  atm: 14.6959, inhg: 0.491154, mmhg: 0.0193368, kgcm2: 14.2233
+};
+function calcPressure() {
+  const val = parseFloat(document.getElementById('pc-val').value);
+  const unit = document.getElementById('pc-unit').value;
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(val)) {
+    ['pc-psi','pc-bar','pc-kpa','pc-mpa','pc-atm','pc-hg','pc-kgcm'].forEach(id => set(id, '—'));
+    return;
+  }
+  const psi = val * PRESSURE_CONV_TO_PSI[unit];
+  set('pc-psi', psi.toFixed(3));
+  set('pc-bar', (psi / 14.5038).toFixed(4));
+  set('pc-kpa', (psi / 0.145038).toFixed(2));
+  set('pc-mpa', (psi / 145.038).toFixed(5));
+  set('pc-atm', (psi / 14.6959).toFixed(4));
+  set('pc-hg', (psi / 0.491154).toFixed(2) + ' inHg / ' + (psi / 0.0193368).toFixed(1) + ' mmHg');
+  set('pc-kgcm', (psi / 14.2233).toFixed(4));
+}
+['pc-val','pc-unit'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcPressure); el.addEventListener('change', calcPressure); }
+});
+
+function calcAirConsumption() {
+  const bore = parseFloat(document.getElementById('ac-bore').value);
+  const stroke = parseFloat(document.getElementById('ac-stroke').value);
+  const pressure = parseFloat(document.getElementById('ac-pressure').value);
+  const cpm = parseFloat(document.getElementById('ac-cpm').value);
+  const action = document.getElementById('ac-action').value;
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(bore) || !isFinite(stroke) || !isFinite(pressure) || !isFinite(cpm) ||
+      bore <= 0 || stroke <= 0 || pressure <= 0 || cpm < 0) {
+    ['ac-vol','ac-fac','ac-scfm','ac-lpm','ac-tip'].forEach(id => set(id, '—'));
+    return;
+  }
+  const r = bore / 2;
+  const vol_mm3 = Math.PI * r * r * stroke;
+  const vol_L = vol_mm3 / 1e6;
+  // Free air: working pressure (gauge) + 1 atm absolute = compression ratio
+  const compRatio = (pressure + 1.013) / 1.013;
+  const strokesPerCycle = action === 'double' ? 2 : 1;
+  const freeAirPerCycle_L = vol_L * compRatio * strokesPerCycle;
+  const freeAirPerMin_L = freeAirPerCycle_L * cpm;
+  const scfm = freeAirPerMin_L / 28.3168;
+  set('ac-vol', vol_L.toFixed(4) + ' L (' + vol_mm3.toFixed(0) + ' mm³)');
+  set('ac-fac', freeAirPerCycle_L.toFixed(4) + ' L');
+  set('ac-scfm', scfm.toFixed(3) + ' SCFM');
+  set('ac-lpm', freeAirPerMin_L.toFixed(2) + ' L/min');
+  let tip;
+  if (scfm < 1) tip = 'Small pancake compressor (≥2 SCFM @ 90 psi) sufficient';
+  else if (scfm < 5) tip = 'Hot-dog or small twin tank compressor';
+  else if (scfm < 15) tip = 'Mid-size shop compressor (2-3 hp)';
+  else tip = 'Industrial compressor (5+ hp) or duty-cycle the cylinder';
+  set('ac-tip', tip);
+}
+['ac-bore','ac-stroke','ac-pressure','ac-cpm','ac-action'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcAirConsumption); el.addEventListener('change', calcAirConsumption); }
+});
+
+
+// ====================== 5C · BEARINGS ======================
+const BEARING_TYPES = [
+  { name: 'Deep Groove Ball',  cat: 'ball',    rad: 'high', ax: 'low-mid',  speed: 'high', note: 'Universal default; cheap; handles radial and modest axial.' },
+  { name: 'Angular Contact',   cat: 'ball',    rad: 'high', ax: 'high',     speed: 'high', note: 'Pre-loaded pairs; spindle bearings; axial in one direction.' },
+  { name: 'Self-Aligning Ball',cat: 'ball',    rad: 'mid',  ax: 'low',      speed: 'high', note: 'Tolerates shaft misalignment; long shafts, agricultural.' },
+  { name: 'Cylindrical Roller',cat: 'roller',  rad: 'very high', ax: 'none', speed: 'high', note: 'High radial capacity; allows axial shaft movement; gearboxes.' },
+  { name: 'Tapered Roller',    cat: 'roller',  rad: 'high', ax: 'high',     speed: 'mid',  note: 'Combined radial and axial; automotive wheel hubs; preloaded pairs.' },
+  { name: 'Spherical Roller',  cat: 'roller',  rad: 'very high', ax: 'mid', speed: 'mid',  note: 'Heavy duty; tolerates misalignment; industrial machinery.' },
+  { name: 'Needle',            cat: 'roller',  rad: 'very high', ax: 'none', speed: 'low-mid', note: 'High radial in thin envelope; trans, motorcycles, gear sets.' },
+  { name: 'Thrust Ball',       cat: 'thrust',  rad: 'none', ax: 'high',     speed: 'mid',  note: 'Axial only; lazy Susans, swivel mounts.' },
+  { name: 'Thrust Roller',     cat: 'thrust',  rad: 'none', ax: 'very high', speed: 'low',  note: 'Heavy axial loads; presses, hydraulic cylinder ends.' },
+  { name: 'Plain / Sleeve',    cat: 'plain',   rad: 'high', ax: 'varies',   speed: 'low-mid', note: 'No rolling elements; bronze, plastic; cheap, quiet, oil-lubricated.' },
+  { name: 'Linear Ball Bushing', cat: 'linear', rad: 'mid', ax: 'n/a',      speed: 'mid',  note: 'Linear motion on hardened shaft; 3D printers, machine tools.' }
+];
+function renderBearingTypes() {
+  const grid = document.getElementById('bearing-type-grid');
+  if (!grid) return;
+  const colorMap = { ball: 'steel', roller: 'titanium', thrust: 'aluminum', plain: 'copper', linear: 'plastic' };
+  grid.innerHTML = BEARING_TYPES.map(b =>
+    '<div class="material-card ' + (colorMap[b.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(b.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(b.cat) + '</div>' +
+      '<div class="mat-specs">' +
+        '<span class="l">Radial</span><span class="v">' + escHtml(b.rad) + '</span>' +
+        '<span class="l">Axial</span><span class="v">' + escHtml(b.ax) + '</span>' +
+        '<span class="l">Speed</span><span class="v">' + escHtml(b.speed) + '</span>' +
+      '</div>' +
+      '<div class="mat-note">' + escHtml(b.note) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function calcBearingLife() {
+  const C = parseFloat(document.getElementById('brl-c').value);
+  const P = parseFloat(document.getElementById('brl-p').value);
+  const rpm = parseFloat(document.getElementById('brl-rpm').value);
+  const expnt = parseFloat(document.getElementById('brl-type').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(C) || !isFinite(P) || !isFinite(rpm) || C <= 0 || P <= 0 || rpm <= 0) {
+    ['brl-ratio','brl-mr','brl-hours','brl-years','brl-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  const ratio = C / P;
+  const L10_Mrev = Math.pow(ratio, expnt);
+  const L10_revs = L10_Mrev * 1e6;
+  const L10_hours = L10_revs / (rpm * 60);
+  const L10_years = L10_hours / (8 * 365);
+  set('brl-ratio', ratio.toFixed(2));
+  set('brl-mr', L10_Mrev.toFixed(2) + ' × 10⁶ revs');
+  set('brl-hours', L10_hours.toFixed(0) + ' hr');
+  set('brl-years', L10_years.toFixed(2) + ' yr');
+  let assess;
+  if (ratio < 4)       assess = 'Marginal - life will be short';
+  else if (ratio < 6)  assess = 'Acceptable for periodic-use machinery';
+  else if (ratio < 10) assess = 'Good - typical industrial selection';
+  else                 assess = 'Excellent - effectively infinite life';
+  set('brl-assess', assess);
+}
+['brl-c','brl-p','brl-rpm','brl-type'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcBearingLife); el.addEventListener('change', calcBearingLife); }
+});
+
+
+// Init all new sections
+renderBatteryChemistries();
+calcBattery();
+calcFOV();
+calcProjection();
+renderMotorTypes();
+calcTorque();
+calcLeadScrew();
+calcGearRatio();
+calcPressure();
+calcAirConsumption();
+renderBearingTypes();
+calcBearingLife();
+
 buildSearchIndex();
 </script>
 
