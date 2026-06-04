@@ -2156,6 +2156,9 @@ code {
       <li><button data-tab="sewing"><span class="ref">2U</span><span>Sewing &amp; Patternmaking</span></button></li>
       <li><button data-tab="bookbinding"><span class="ref">2V</span><span>Bookbinding</span></button></li>
       <li><button data-tab="paper"><span class="ref">2W</span><span>Paper &amp; Printmaking</span></button></li>
+      <li><button data-tab="adhesives"><span class="ref">2X</span><span>Adhesives</span></button></li>
+      <li><button data-tab="finishes"><span class="ref">2Y</span><span>Finishes</span></button></li>
+      <li><button data-tab="composites"><span class="ref">2Z</span><span>Composites</span></button></li>
     </ul>
 
     <div class="category">
@@ -5786,6 +5789,526 @@ code {
         </tbody>
       </table>
       <div class="note">Mesh count is threads per inch. Higher count = finer detail but less ink deposit. For textile work on dark fabrics, lower count (110-156) gives the opacity you need. For paper graphics, higher count (200-305) gives the detail.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2X · ADHESIVES ====================== -->
+  <section id="adhesives" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2X <span class="dot"></span> Mechanical</div>
+      <h2>Adhesives</h2>
+      <div class="page-desc">A unified reference for adhesives across materials, pulling together the wood, leather, bookbinding, and metal-bonding notes scattered elsewhere. Covers selection, substrate compatibility, working times, and surface preparation. Includes epoxy, PVA wood glue, cyanoacrylate (CA) super glue, polyurethane (Gorilla Glue), contact cement, silicone, construction adhesive, hot melt, methacrylate (MMA), and anaerobic threadlockers (Loctite). For two-part products, includes a mixing ratio calculator.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Adhesive Family Overview</span><span class="fig">FIG. 2X-1</span></div>
+      <div class="material-grid" id="adhesive-family-grid"></div>
+      <div class="note">Adhesives are characterized by their chemistry (which determines cure mechanism), open time (working window before tack), clamp time (until handling strength), and full cure (until full strength). Match the adhesive to the substrate, the joint geometry, the service environment, and the assembly cadence.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Substrate Compatibility Matrix</span><span class="fig">TAB. 2X-1</span></div>
+      <table>
+        <thead><tr><th>Adhesive</th><th>Wood</th><th>Metal</th><th>Plastic</th><th>Glass</th><th>Rubber</th><th>Fabric</th><th>Leather</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">PVA (wood glue)</td><td>★★★</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★</td><td>★</td></tr>
+          <tr><td class="hi">CA (super glue)</td><td>★★</td><td>★★</td><td>★★</td><td>★</td><td>★</td><td>★</td><td>★★</td></tr>
+          <tr><td class="hi">Epoxy (general)</td><td>★★★</td><td>★★★</td><td>★★</td><td>★★★</td><td>★</td><td>★</td><td>★★</td></tr>
+          <tr><td class="hi">Polyurethane (Gorilla)</td><td>★★★</td><td>★★</td><td>★★</td><td>★★</td><td>★★</td><td>★★</td><td>★★</td></tr>
+          <tr><td class="hi">Contact cement</td><td>★★★</td><td>★★</td><td>★★★</td><td>—</td><td>★★★</td><td>★★</td><td>★★★</td></tr>
+          <tr><td class="hi">Silicone (RTV)</td><td>★</td><td>★★</td><td>★★</td><td>★★★</td><td>★★★</td><td>★</td><td>★</td></tr>
+          <tr><td class="hi">Construction (PL Premium)</td><td>★★★</td><td>★★</td><td>★★</td><td>★</td><td>★</td><td>—</td><td>—</td></tr>
+          <tr><td class="hi">Hot melt (EVA)</td><td>★★</td><td>★</td><td>★★</td><td>—</td><td>★</td><td>★★</td><td>★★</td></tr>
+          <tr><td class="hi">Methacrylate (MMA)</td><td>★★</td><td>★★★</td><td>★★★</td><td>★★</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="hi">Anaerobic (Loctite)</td><td>—</td><td>★★★</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="hi">Spray adhesive (3M 77)</td><td>★</td><td>★</td><td>★★</td><td>—</td><td>★</td><td>★★</td><td>★★</td></tr>
+          <tr><td class="hi">Wheat paste / MC</td><td>★</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★★</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="note">★★★ excellent, ★★ good, ★ acceptable, — not recommended. Plastics vary widely: polyethylene (PE), polypropylene (PP), and PTFE resist most adhesives without surface treatment (flame, corona, or specific primers). When in doubt, test on scrap of the actual material.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Two-Part Mixing Calculator</span><span class="fig">TOOL 2X-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field">
+            <label>Mix ratio (A : B)</label>
+            <select id="mix-ratio">
+              <option value="1:1" selected>1 : 1 (5-min epoxy, MMA)</option>
+              <option value="2:1">2 : 1 (System 3, slow epoxy)</option>
+              <option value="3:1">3 : 1 (West System 105/206)</option>
+              <option value="4:1">4 : 1 (West System 105/207)</option>
+              <option value="5:1">5 : 1 (West System 105/205)</option>
+              <option value="10:1">10 : 1 (some structural epoxies)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="field"><label>Custom ratio A</label><input type="number" id="mix-a" step="any" value="2"></div>
+          <div class="field"><label>Custom ratio B</label><input type="number" id="mix-b" step="any" value="1"></div>
+          <div class="field"><label>Total amount needed (g or mL)</label><input type="number" id="mix-total" step="any" value="100"></div>
+          <div class="field">
+            <label>Ratio basis</label>
+            <select id="mix-basis">
+              <option value="weight" selected>By weight (most accurate)</option>
+              <option value="volume">By volume</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Effective ratio</span><span class="val" id="mix-ratio-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Part A</span><span class="val" id="mix-a-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Part B</span><span class="val" id="mix-b-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Mix waste (10%)</span><span class="val" id="mix-waste">—</span></div>
+            <div class="calc-row"><span class="lbl">Mix with waste</span><span class="val" id="mix-with-waste">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Always confirm the manufacturer's published ratio; epoxies in particular use different ratios across product lines and resin/hardener combinations. By weight is more reliable than by volume because the two parts can have different densities. Mix slightly more than needed; under-mixed corners cure soft.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Working Time &amp; Cure Reference</span><span class="fig">TAB. 2X-2</span></div>
+      <table>
+        <thead><tr><th>Adhesive</th><th>Open Time</th><th>Clamp Time</th><th>Full Cure</th><th>Temp Range</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">PVA Type I (interior)</td><td class="num">5-10 min</td><td class="num">30-60 min</td><td class="num">24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">PVA Type II (water-res)</td><td class="num">5 min</td><td class="num">30-60 min</td><td class="num">24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">PVA Type III (waterproof, Titebond III)</td><td class="num">8-10 min</td><td class="num">30-60 min</td><td class="num">24 hr</td><td class="num">10-30°C</td></tr>
+          <tr><td class="hi">Hide glue (hot)</td><td class="num">~60 sec</td><td class="num">2-4 hr</td><td class="num">overnight</td><td class="num">60-65°C apply</td></tr>
+          <tr><td class="hi">Liquid hide glue</td><td class="num">10 min</td><td class="num">overnight</td><td class="num">24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">CA thin</td><td class="num">5-10 sec</td><td class="num">30 sec</td><td class="num">24 hr</td><td class="num">10-30°C</td></tr>
+          <tr><td class="hi">CA gel</td><td class="num">20-60 sec</td><td class="num">2-5 min</td><td class="num">24 hr</td><td class="num">10-30°C</td></tr>
+          <tr><td class="hi">Epoxy (5-min)</td><td class="num">3-4 min</td><td class="num">15-20 min</td><td class="num">1-3 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">Epoxy (30-min)</td><td class="num">20-25 min</td><td class="num">1-2 hr</td><td class="num">8-24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">Epoxy (slow / structural)</td><td class="num">2-4 hr</td><td class="num">8-12 hr</td><td class="num">24-72 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">Polyurethane (Gorilla)</td><td class="num">15-20 min</td><td class="num">1-2 hr</td><td class="num">24 hr</td><td class="num">10-30°C</td></tr>
+          <tr><td class="hi">Contact cement</td><td>flash 10-15 min</td><td class="num">instant (after flash)</td><td class="num">24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">Silicone RTV</td><td>skins in 5-10 min</td><td>n/a</td><td class="num">24 hr / 3 mm</td><td class="num">5-40°C</td></tr>
+          <tr><td class="hi">Construction (PL)</td><td class="num">15-30 min</td><td class="num">24 hr</td><td class="num">7 days</td><td class="num">5-40°C</td></tr>
+          <tr><td class="hi">Hot melt</td><td class="num">5-30 sec</td><td class="num">30-60 sec</td><td class="num">5 min</td><td class="num">apply 150-200°C</td></tr>
+          <tr><td class="hi">Methacrylate (MMA)</td><td class="num">4-30 min</td><td class="num">15 min - 2 hr</td><td class="num">24 hr</td><td class="num">15-30°C</td></tr>
+          <tr><td class="hi">Anaerobic (Loctite 242)</td><td class="num">10 min handling</td><td class="num">6 hr</td><td class="num">24 hr</td><td class="num">cure on metal only</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Open time is how long after application the adhesive remains workable. Clamp time is how long to apply pressure before the joint can be handled. Full cure is when the joint reaches design strength. Cold rooms double cure times; heated assembly is the fastest way to recover schedule.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>CA (Cyanoacrylate) Reference</span><span class="fig">TAB. 2X-3</span></div>
+      <table>
+        <thead><tr><th>Viscosity</th><th>Gap</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Thin (water-like)</td><td class="num">≤0.05 mm</td><td>Wicks into tight joints; instant grab. Tacking and assembly.</td></tr>
+          <tr><td class="hi">Medium</td><td class="num">0.05-0.15 mm</td><td>General purpose; slightly more open time, fills minor gaps.</td></tr>
+          <tr><td class="hi">Thick</td><td class="num">0.15-0.5 mm</td><td>Vertical surfaces, larger gaps, more positioning time.</td></tr>
+          <tr><td class="hi">Gel</td><td class="num">up to 1 mm</td><td>Won't drip; positions before cure. Good on vertical and overhead.</td></tr>
+          <tr><td class="hi">Foam-safe / odorless</td><td>varies</td><td>EPS / EPP foam, photos, fabrics. Reduced solvent emission.</td></tr>
+          <tr><td class="hi">Black / toughened</td><td>varies</td><td>Carbon-filled or rubber-toughened; better shock resistance.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">CA cures with moisture. Accelerator (kicker) cures it instantly but reduces ultimate strength by ~30%; reserve for tacking and use sparingly. Debond with acetone (or commercial CA debonder). Skin contact: leave it, peel naturally; force separation tears skin. Eye contact is an emergency, irrigate and seek care.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Surface Preparation</span><span class="fig">TAB. 2X-4</span></div>
+      <table>
+        <thead><tr><th>Substrate</th><th>Clean</th><th>Abrade</th><th>Prime / Note</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Wood (most)</td><td>Vacuum, dry</td><td>Fresh-sawn or 80-120 grit</td><td>Avoid oily woods (teak, ipe) — wipe with acetone just before glue.</td></tr>
+          <tr><td class="hi">Wood (oily / dense)</td><td>Acetone wipe</td><td>Fresh surface within 15 min</td><td>Teak, rosewood, cocobolo: epoxy is more forgiving than PVA.</td></tr>
+          <tr><td class="hi">Aluminum</td><td>Acetone, then alkaline cleaner</td><td>Sand or abrade with 80-120 grit</td><td>Bonds within hours of preparation; oxide reforms quickly.</td></tr>
+          <tr><td class="hi">Steel</td><td>Degrease (acetone, IPA)</td><td>Sand or wire brush; remove mill scale</td><td>For epoxy: bond within hours. Phosphate primer extends window.</td></tr>
+          <tr><td class="hi">Stainless</td><td>Degrease + alkaline etch</td><td>Sand 120 grit</td><td>Passivation layer resists adhesion; mechanical key + epoxy.</td></tr>
+          <tr><td class="hi">Polyethylene / Polypropylene</td><td>Wipe IPA</td><td>—</td><td>Flame, corona, or plasma treat. Or use 3M DP-8005 / Loctite 401 with PE primer.</td></tr>
+          <tr><td class="hi">PTFE</td><td>—</td><td>—</td><td>Etch with sodium-naphthalene before any adhesive bond.</td></tr>
+          <tr><td class="hi">Acrylic / Polycarbonate</td><td>IPA wipe</td><td>—</td><td>Solvent welding (MEK, methylene chloride) for acrylic-to-acrylic. Cyanoacrylate also works.</td></tr>
+          <tr><td class="hi">Glass</td><td>Solvent clean, then water rinse</td><td>—</td><td>Silane primer for epoxy or silicone on permanent bonds.</td></tr>
+          <tr><td class="hi">Rubber (EPDM, neoprene)</td><td>Cleaning solvent</td><td>Light abrasion</td><td>Use rubber-specific contact cement or methacrylate.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Clean removes contaminants; abrade increases surface area and removes weak boundary layers. The 30-minute rule: most bonds are strongest within 30 minutes of surface preparation. Wear gloves after preparation to avoid skin oils.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Joint Geometry &amp; Strength</span><span class="fig">TAB. 2X-5</span></div>
+      <table>
+        <thead><tr><th>Joint</th><th>Strength</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Lap (overlapped)</td><td>★★★</td><td>Bond area scales linearly with overlap. Most efficient simple joint.</td></tr>
+          <tr><td class="hi">Scarf (angled overlap)</td><td>★★★</td><td>Smooth load transfer; 8:1 to 12:1 scarf for structural wood/composite.</td></tr>
+          <tr><td class="hi">Finger / box joint</td><td>★★★</td><td>Mechanically interlocked; very high bond area in wood.</td></tr>
+          <tr><td class="hi">Tongue and groove</td><td>★★</td><td>Glue area in shear; good for panel edges.</td></tr>
+          <tr><td class="hi">Butt (end-grain)</td><td>★</td><td>Weakest joint in wood; end grain wicks glue and starves bond.</td></tr>
+          <tr><td class="hi">Butt (long-grain)</td><td>★★★</td><td>Standard panel glue-up; well-clamped butts approach wood strength.</td></tr>
+          <tr><td class="hi">Mortise and tenon</td><td>★★★</td><td>Long-grain shoulders; mechanical strength plus large glue area.</td></tr>
+          <tr><td class="hi">Dovetail</td><td>★★★</td><td>Mechanically locked one direction; very strong with glue.</td></tr>
+          <tr><td class="hi">Beveled / chamfered butt</td><td>★★</td><td>Increases bond area without complex joinery.</td></tr>
+          <tr><td class="hi">Peel (load perpendicular)</td><td>★</td><td>Weakest loading direction for any adhesive; design lap or shear instead.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Adhesive joints are strongest in shear, then tension, then peel. Design joint geometry so service loads put the bond in shear. A 25 mm lap joint can be stronger than the parent material in many cases; a butt joint loaded in peel is the weakest possible configuration.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Threadlocker (Anaerobic) Reference</span><span class="fig">TAB. 2X-6</span></div>
+      <table>
+        <thead><tr><th>Grade</th><th>Color</th><th>Strength</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Loctite 222</td><td>purple</td><td>low (~6 Nm)</td><td>Small screws (≤6 mm) that may need adjustment. Set screws.</td></tr>
+          <tr><td class="hi">Loctite 242</td><td>blue</td><td>medium (~10 Nm)</td><td>The shop default. Hand-tools remove; reusable assemblies.</td></tr>
+          <tr><td class="hi">Loctite 243</td><td>blue</td><td>medium (~10 Nm)</td><td>Oil-tolerant version of 242. Most automotive.</td></tr>
+          <tr><td class="hi">Loctite 263</td><td>red</td><td>high (~30 Nm)</td><td>Heavy-duty; permanent unless heated to 250°C+ for removal.</td></tr>
+          <tr><td class="hi">Loctite 271 / 277</td><td>red</td><td>high (~30 Nm)</td><td>Permanent; structural studs, bearings, large bolts.</td></tr>
+          <tr><td class="hi">Loctite 290</td><td>green</td><td>wicking high</td><td>Penetrating; secures pre-assembled fasteners.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Anaerobic adhesives cure only in the absence of air AND in contact with metal ions (iron, copper, brass). Stainless and aluminum are "inactive surfaces" needing a primer (Loctite 7649). Threadlocker is a fastener treatment, not a structural adhesive — apply 1-2 drops on the male thread only.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2Y · FINISHES ====================== -->
+  <section id="finishes" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2Y <span class="dot"></span> Mechanical</div>
+      <h2>Finishes</h2>
+      <div class="page-desc">A unified reference for paints, varnishes, oils, dyes, stains, and waxes across wood, metal, leather, and craft surfaces. Pulls together the wood-finish notes from 2M, the leather-edge finishes from 2R, and the ceramic glaze reference from 2S into a single selection guide. Covers tung oil, linseed oil (BLO), hard wax oil (Osmo, Rubio), shellac, nitrocellulose lacquer, polyurethane, spar varnish, conversion varnish, latex and alkyd paint, milk paint, paste wax, plus metal finishes including powder coat, anodizing, bluing, parkerizing, black oxide, and patinas. Includes a coverage calculator.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Finish Family Overview</span><span class="fig">FIG. 2Y-1</span></div>
+      <div class="material-grid" id="finish-family-grid"></div>
+      <div class="note">Finishes are characterized by their chemistry (which determines the cure mechanism and removability), the build (penetrating vs film-forming), the appearance (sheen, color, clarity), and the service environment (UV, water, abrasion, food contact). Match to use case before chemistry.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Wood Finish Selection Guide</span><span class="fig">TAB. 2Y-1</span></div>
+      <table>
+        <thead><tr><th>Finish</th><th>Type</th><th>Look</th><th>Durability</th><th>Reversible</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Pure tung oil</td><td>penetrating</td><td>natural, slight darken</td><td>medium</td><td>recoat any time</td><td>Outdoor furniture, fine touch, food contact when fully cured.</td></tr>
+          <tr><td class="hi">Pure linseed oil (BLO)</td><td>penetrating</td><td>warm amber</td><td>low</td><td>recoat any time</td><td>Tool handles, traditional furniture; slow cure, multiple coats.</td></tr>
+          <tr><td class="hi">Danish / Watco oil</td><td>oil + varnish wipe-on</td><td>natural, low sheen</td><td>medium</td><td>partially</td><td>Furniture; easy application, simple repair.</td></tr>
+          <tr><td class="hi">Hard wax oil (Osmo, Rubio Monocoat)</td><td>oil + wax film</td><td>natural to satin</td><td>high</td><td>spot repair</td><td>Floors, dining tables, kitchen surfaces.</td></tr>
+          <tr><td class="hi">Shellac</td><td>film (alcohol)</td><td>warm amber to blonde</td><td>medium</td><td>denatured alcohol</td><td>Interior furniture, sealing coat, French polish.</td></tr>
+          <tr><td class="hi">Nitrocellulose lacquer</td><td>film (solvent)</td><td>clear to amber</td><td>medium</td><td>lacquer thinner</td><td>Production furniture, instruments, guitars.</td></tr>
+          <tr><td class="hi">Pre-cat / post-cat lacquer</td><td>film (solvent + catalyst)</td><td>clear to amber</td><td>high</td><td>not easily</td><td>Commercial furniture, kitchen cabinets.</td></tr>
+          <tr><td class="hi">Oil-based polyurethane</td><td>film (alkyd)</td><td>amber, builds film</td><td>very high</td><td>strip required</td><td>Floors, tabletops, exterior trim.</td></tr>
+          <tr><td class="hi">Water-based polyurethane</td><td>film (acrylic)</td><td>clear, less amber</td><td>high</td><td>strip required</td><td>Floors, light woods where amber is unwanted.</td></tr>
+          <tr><td class="hi">Spar varnish</td><td>film (long-oil alkyd)</td><td>amber</td><td>high outdoor</td><td>strip</td><td>Outdoor furniture, boats; flexes with moisture.</td></tr>
+          <tr><td class="hi">Conversion varnish</td><td>film (catalyzed)</td><td>clear</td><td>very high</td><td>no</td><td>Commercial cabinetry; durable, requires HVLP.</td></tr>
+          <tr><td class="hi">Paste wax</td><td>topcoat or standalone</td><td>satin, soft glow</td><td>low</td><td>solvent</td><td>Patina maintenance, antique repair, light protection.</td></tr>
+          <tr><td class="hi">Milk paint</td><td>film (casein)</td><td>matte, vintage</td><td>medium</td><td>solvent</td><td>Traditional country furniture, period reproduction.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">"Food safe" applies to most finishes once fully cured. Pure oils (tung, linseed, walnut) are commonly cited as food-safe; commercial film finishes also become inert at full cure. Cure (chemical completion) takes 14-30 days even when the surface feels dry in hours.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Stains, Dyes, and Color</span><span class="fig">TAB. 2Y-2</span></div>
+      <table>
+        <thead><tr><th>Colorant</th><th>Vehicle</th><th>Penetration</th><th>Lightfast</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Pigment stain (oil-based)</td><td>oil + pigment + binder</td><td>shallow</td><td>good</td><td>Lodges in pores, accents grain. Forgiving to apply.</td></tr>
+          <tr><td class="hi">Pigment stain (water-based)</td><td>water + pigment + binder</td><td>shallow</td><td>good</td><td>Raises grain; sand off raised fibers between coats.</td></tr>
+          <tr><td class="hi">Dye (water-based)</td><td>water + dye</td><td>deep</td><td>fair-good</td><td>Aniline or modern; bright, clear colors. Raises grain.</td></tr>
+          <tr><td class="hi">Dye (alcohol-based)</td><td>denatured alcohol</td><td>deep</td><td>fair-good</td><td>Fast-drying; spray or wipe. Compatible with shellac.</td></tr>
+          <tr><td class="hi">Dye (oil-based)</td><td>mineral spirits</td><td>deep</td><td>fair-good</td><td>Slower dry; compatible with oil finishes.</td></tr>
+          <tr><td class="hi">Gel stain</td><td>thick pigment + alkyd</td><td>very shallow</td><td>good</td><td>Won't drip; even color on splotchy woods (pine, cherry).</td></tr>
+          <tr><td class="hi">Chemical stain</td><td>chemical reaction</td><td>deep</td><td>permanent</td><td>Iron acetate, ammonia fume, lye. Reacts with wood tannins; very lightfast.</td></tr>
+          <tr><td class="hi">Toner (sprayed)</td><td>finish + colorant</td><td>surface</td><td>good</td><td>Colors the finish coat, not the wood. Layered grading.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Dye penetrates and colors the fiber; pigment lodges in pores and on the surface. Dyes give clear, intense color but fade; pigments give muted color but resist fading. Combination is common: dye for color, pigment for grain accent. Test on scrap before committing.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Coverage Calculator</span><span class="fig">TOOL 2Y-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field">
+            <label>Finish type</label>
+            <select id="cov-type">
+              <option value="oil" selected>Pure oil / penetrating (300-500 sq ft/gal)</option>
+              <option value="wipe">Wipe-on oil/varnish (400-500 sq ft/gal)</option>
+              <option value="wax">Paste wax (300-400 sq ft/gal)</option>
+              <option value="shellac">Shellac (300 sq ft/gal at 1-lb cut)</option>
+              <option value="poly">Polyurethane (350-450 sq ft/gal)</option>
+              <option value="lacquer">Lacquer / spray (200-300 sq ft/gal)</option>
+              <option value="paint">Paint (250-400 sq ft/gal)</option>
+              <option value="leather-edge">Leather edge paint (varies)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="field"><label>Custom coverage (sq ft/gal)</label><input type="number" id="cov-rate" step="any" value="400"></div>
+          <div class="field"><label>Surface area</label><input type="number" id="cov-area" step="any" value="40"></div>
+          <div class="field">
+            <label>Area units</label>
+            <select id="cov-area-unit">
+              <option value="sqft" selected>sq ft</option>
+              <option value="sqm">sq m</option>
+              <option value="sqyd">sq yd</option>
+            </select>
+          </div>
+          <div class="field"><label>Coats</label><input type="number" id="cov-coats" step="1" value="3"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Coverage rate</span><span class="val" id="cov-rate-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Area (sq ft)</span><span class="val" id="cov-area-out">—</span></div>
+            <div class="calc-row"><span class="lbl">Per coat</span><span class="val" id="cov-percoat">—</span></div>
+            <div class="calc-row"><span class="lbl">Total (gallons)</span><span class="val" id="cov-gal">—</span></div>
+            <div class="calc-row"><span class="lbl">Total (liters)</span><span class="val" id="cov-lit">—</span></div>
+            <div class="calc-row"><span class="lbl">With 15% waste</span><span class="val" id="cov-waste">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">First coat on raw, porous wood absorbs more (figure 70-80% of nominal coverage). Subsequent coats sit closer to the rated coverage. Wipe-on and spray coverage varies widely with technique; brush gives most predictable application.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Sheen Reference</span><span class="fig">TAB. 2Y-3</span></div>
+      <table>
+        <thead><tr><th>Sheen</th><th>Gloss @ 60°</th><th>Look</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Flat / matte</td><td class="num">0-10</td><td>No reflection, dead surface</td><td>Walls (hides texture), photography backdrops, art frames.</td></tr>
+          <tr><td class="hi">Eggshell</td><td class="num">10-25</td><td>Soft sheen, hint of reflection</td><td>Living-room walls, traditional furniture.</td></tr>
+          <tr><td class="hi">Satin</td><td class="num">25-40</td><td>Soft glow, even reflection</td><td>Furniture, cabinets, trim, doors.</td></tr>
+          <tr><td class="hi">Semi-gloss</td><td class="num">40-70</td><td>Clear reflection</td><td>Doors, trim, bathroom, kitchen cabinets.</td></tr>
+          <tr><td class="hi">Gloss</td><td class="num">70-85</td><td>Sharp reflection</td><td>High-touch surfaces, period pieces, instruments.</td></tr>
+          <tr><td class="hi">High gloss</td><td class="num">85+</td><td>Mirror-like</td><td>Pianos, fine cars, French polish at peak.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Final sheen depends on the topcoat only; underlying coats don't matter for appearance once buried. Higher sheen amplifies any surface imperfection; flat hides minor flaws. Sand between coats with the same grit you'd use for the next surface flatness, typically 320-400 on satin work.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Metal Finishes</span><span class="fig">TAB. 2Y-4</span></div>
+      <table>
+        <thead><tr><th>Finish</th><th>Process</th><th>Color / Look</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Bare polish</td><td>mechanical grit progression</td><td>bright metallic</td><td>Show pieces; needs ongoing wax or clear coat.</td></tr>
+          <tr><td class="hi">Brushed / satin</td><td>uniform mechanical scratch</td><td>satin metallic</td><td>Architectural, appliance, kitchen.</td></tr>
+          <tr><td class="hi">Powder coat</td><td>electrostatic + bake</td><td>any RAL color</td><td>Tough, durable, broad palette. Production standard.</td></tr>
+          <tr><td class="hi">Anodize (Type II)</td><td>electrochemical oxide</td><td>clear or dyed, decorative</td><td>Aluminum; common consumer / electronics. Thin (5-25 µm).</td></tr>
+          <tr><td class="hi">Anodize (Type III, hardcoat)</td><td>thicker oxide, denser</td><td>gray to black natural</td><td>Aluminum; wear surfaces, firearms. Thick (25-100 µm).</td></tr>
+          <tr><td class="hi">Bluing (cold)</td><td>selenium acid</td><td>blue-black</td><td>Steel touch-up, repairs.</td></tr>
+          <tr><td class="hi">Bluing (hot caustic)</td><td>boiling caustic salts</td><td>deep blue-black</td><td>Firearm steel; durable, traditional.</td></tr>
+          <tr><td class="hi">Parkerizing</td><td>phosphate conversion</td><td>matte gray</td><td>Military, firearms. Holds oil.</td></tr>
+          <tr><td class="hi">Black oxide</td><td>chemical conversion</td><td>black</td><td>Tools, fasteners; dimensional accuracy preserved.</td></tr>
+          <tr><td class="hi">Zinc plate (clear / yellow)</td><td>electroplating</td><td>silver / gold tint</td><td>Corrosion protection; common fastener finish.</td></tr>
+          <tr><td class="hi">Nickel plate</td><td>electroplating</td><td>warm silver</td><td>Decorative + corrosion; matte or bright.</td></tr>
+          <tr><td class="hi">Chrome plate</td><td>electroplating (over nickel)</td><td>blue-white</td><td>Automotive, plumbing, decorative.</td></tr>
+          <tr><td class="hi">Brass patina (liver of sulfur)</td><td>chemical</td><td>brown to black</td><td>Antique reproduction, jewelry. Seal with wax.</td></tr>
+          <tr><td class="hi">Copper patina (ammonia, salt)</td><td>chemical / weathering</td><td>green / blue-green</td><td>Architectural, art, traditional roof.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Finishing Schedule (typical wood)</span><span class="fig">TAB. 2Y-5</span></div>
+      <table>
+        <thead><tr><th>Step</th><th>Grit / Material</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Rough sand</td><td class="num">80-120 grit</td><td>Remove mill marks, planer ripples, plane to flat.</td></tr>
+          <tr><td class="hi">Intermediate sand</td><td class="num">150-180 grit</td><td>Remove 100-grit scratches, smooth surface.</td></tr>
+          <tr><td class="hi">Final pre-finish sand</td><td class="num">180-220 grit</td><td>Standard stopping point for most film finishes.</td></tr>
+          <tr><td class="hi">Final for oil / wax</td><td class="num">220-320 grit</td><td>Penetrating finishes show scratches; finer sand.</td></tr>
+          <tr><td class="hi">Wet-sand grain raise (water-based)</td><td>damp rag, then 220</td><td>Raises fibers; sand off before final finish.</td></tr>
+          <tr><td class="hi">Apply stain / dye</td><td>brush, wipe, spray</td><td>Test on scrap. Allow full dry per product.</td></tr>
+          <tr><td class="hi">Seal coat</td><td>shellac (1-lb) or sanding sealer</td><td>Locks color, eases sanding of topcoat.</td></tr>
+          <tr><td class="hi">First topcoat</td><td>per manufacturer</td><td>Thin coat to wet the surface evenly.</td></tr>
+          <tr><td class="hi">Sand between coats</td><td class="num">320-400 grit</td><td>De-nib only; not to flatten further.</td></tr>
+          <tr><td class="hi">Topcoats (2-4)</td><td>per manufacturer</td><td>Each coat thin; build comes from coat count, not coat thickness.</td></tr>
+          <tr><td class="hi">Final rub (optional)</td><td class="num">600-2000 grit + wax</td><td>For glossy finishes; rub to consistent sheen.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Most finishing problems trace to dust, contamination, or insufficient dry time between coats. Vacuum and tack-rag between every stage. Apply finishes in a dust-controlled space; an enclosed corner of the shop is sufficient.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2Z · COMPOSITES ====================== -->
+  <section id="composites" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2Z <span class="dot"></span> Mechanical</div>
+      <h2>Composites</h2>
+      <div class="page-desc">Fiber-reinforced polymer reference for hand-layup and small-shop work. Covers fiberglass (E-glass, S-glass), carbon fiber, Kevlar / aramid, basalt, and natural-fiber reinforcements with epoxy, polyester, and vinyl ester resins. Reference for layup processes including hand layup, vacuum bag, vacuum infusion, prepreg, and resin transfer molding. Core materials including balsa, PVC foam, SAN foam, PMI (Rohacell), Nomex honeycomb. Includes a layup ply calculator and resin estimator.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Reinforcement Materials</span><span class="fig">FIG. 2Z-1</span></div>
+      <div class="material-grid" id="composite-fiber-grid"></div>
+      <div class="note">Reinforcement carries the load; matrix transfers load between fibers and protects them. Fiber properties are dominant in tension along the fiber direction. Off-axis loading drops strength dramatically; balance fiber orientations to load direction.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Weave &amp; Form Reference</span><span class="fig">TAB. 2Z-1</span></div>
+      <table>
+        <thead><tr><th>Form</th><th>Drape</th><th>Strength</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Plain weave</td><td>poor (resists curves)</td><td>balanced</td><td>Flat panels, simple curves. Most-used budget reinforcement.</td></tr>
+          <tr><td class="hi">Twill weave (2×2)</td><td>good</td><td>balanced</td><td>Compound curves; classic carbon-fiber look.</td></tr>
+          <tr><td class="hi">Satin weave (4HS, 8HS)</td><td>very good</td><td>balanced</td><td>Tight curves, complex shapes, aerospace.</td></tr>
+          <tr><td class="hi">Unidirectional (UD)</td><td>poor</td><td>maximum along fiber</td><td>Spars, masts, stiffeners. Tape form (50-300 mm wide).</td></tr>
+          <tr><td class="hi">Biaxial (±45)</td><td>good</td><td>shear / torsion</td><td>Shafts, tubes loaded in torsion.</td></tr>
+          <tr><td class="hi">Chopped strand mat (CSM)</td><td>excellent</td><td>random / lower</td><td>Polyester boat hulls, complex shapes. Not compatible with epoxy (binder dissolves slowly).</td></tr>
+          <tr><td class="hi">Woven roving</td><td>poor</td><td>balanced, heavy</td><td>Thick laminates, hull skins. Coarse and economical.</td></tr>
+          <tr><td class="hi">Quadraxial (0/45/90/-45)</td><td>fair</td><td>quasi-isotropic</td><td>One layer gives loads in all directions.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Fabric weights in oz/yd² (US) or g/m² (everywhere else). 1 oz/yd² ≈ 34 g/m². Common: 4 oz (136 g/m²) light fiberglass, 5.7 oz (193 g/m²) the workhorse cloth, 10 oz (340 g/m²) structural, 24 oz (815 g/m²) roving.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Resin / Matrix Reference</span><span class="fig">TAB. 2Z-2</span></div>
+      <table>
+        <thead><tr><th>Resin</th><th>Properties</th><th>Pot Life @ 20°C</th><th>Compatible Fibers</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Polyester (orthophthalic)</td><td>cheap, brittle, smells</td><td class="num">15-30 min</td><td>fiberglass</td><td>Boat hulls, RV bodies, tooling. The budget resin.</td></tr>
+          <tr><td class="hi">Polyester (isophthalic)</td><td>better water res. than ortho</td><td class="num">15-30 min</td><td>fiberglass</td><td>Marine, gel coat substrate.</td></tr>
+          <tr><td class="hi">Vinyl ester</td><td>better than poly; less than epoxy</td><td class="num">15-45 min</td><td>fiberglass, carbon</td><td>Marine, chemical tanks, mid-grade structural.</td></tr>
+          <tr><td class="hi">Epoxy (laminating, slow)</td><td>strong, tough, low shrink</td><td class="num">2-4 hr</td><td>all fibers</td><td>Large layups, infusion, structural work.</td></tr>
+          <tr><td class="hi">Epoxy (laminating, fast)</td><td>strong, tough</td><td class="num">15-45 min</td><td>all fibers</td><td>Hand layup, repairs, smaller parts.</td></tr>
+          <tr><td class="hi">Epoxy (infusion)</td><td>very low viscosity</td><td class="num">2-8 hr</td><td>all fibers</td><td>Vacuum infusion; long pot life.</td></tr>
+          <tr><td class="hi">Epoxy (paste / putty)</td><td>thick, gap-filling</td><td class="num">15-90 min</td><td>fillers</td><td>Fillets, fairing, secondary bonding.</td></tr>
+          <tr><td class="hi">Prepreg epoxy</td><td>pre-impregnated</td><td>weeks (frozen)</td><td>all fibers</td><td>High-performance; needs autoclave or heated cure.</td></tr>
+          <tr><td class="hi">Polyurethane casting</td><td>flexible, fast</td><td class="num">2-30 min</td><td>chopped fiber</td><td>Molds, prototypes, soft parts.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Epoxy is the most-used small-shop resin. Polyester is acceptable for fiberglass-only work where cost matters. Pot life is heavily temperature-dependent: a 30-minute pot life at 25°C drops to 10-15 minutes at 35°C; doubles at 15°C. Mix only what you can use in half the pot life.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Layup Ply Calculator</span><span class="fig">TOOL 2Z-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field">
+            <label>Fabric weight</label>
+            <select id="ly-fabric">
+              <option value="136" data-rho="2540">4 oz / 136 g/m² fiberglass</option>
+              <option value="193" data-rho="2540" selected>5.7 oz / 193 g/m² fiberglass (cloth)</option>
+              <option value="340" data-rho="2540">10 oz / 340 g/m² fiberglass</option>
+              <option value="815" data-rho="2540">24 oz / 815 g/m² woven roving</option>
+              <option value="200" data-rho="1780">5.9 oz / 200 g/m² carbon (3K)</option>
+              <option value="380" data-rho="1780">11.2 oz / 380 g/m² carbon (6K)</option>
+              <option value="custom" data-rho="2540">Custom</option>
+            </select>
+          </div>
+          <div class="field"><label>Custom weight (g/m²)</label><input type="number" id="ly-gsm" step="any" value="200"></div>
+          <div class="field">
+            <label>Custom fiber density (kg/m³)</label>
+            <select id="ly-customrho">
+              <option value="2540" selected>2540 (E-glass)</option>
+              <option value="2500">2500 (S-glass)</option>
+              <option value="1780">1780 (carbon)</option>
+              <option value="1440">1440 (aramid)</option>
+              <option value="2650">2650 (basalt)</option>
+              <option value="970">970 (Dyneema)</option>
+            </select>
+          </div>
+          <div class="field"><label>Target laminate thickness (mm)</label><input type="number" id="ly-thick" step="any" value="3"></div>
+          <div class="field">
+            <label>Process / fiber volume fraction</label>
+            <select id="ly-vf">
+              <option value="0.35" selected>Hand layup (Vf ≈ 0.35)</option>
+              <option value="0.50">Vacuum bag (Vf ≈ 0.50)</option>
+              <option value="0.55">Resin infusion (Vf ≈ 0.55)</option>
+              <option value="0.60">Prepreg / autoclave (Vf ≈ 0.60)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Cured ply thickness</span><span class="val" id="ly-perply">—</span></div>
+            <div class="calc-row"><span class="lbl">Plies for target</span><span class="val" id="ly-n">—</span></div>
+            <div class="calc-row"><span class="lbl">Achieved thickness</span><span class="val" id="ly-achieved">—</span></div>
+            <div class="calc-row"><span class="lbl">Fiber volume fraction</span><span class="val" id="ly-vf-out">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Cured ply thickness ≈ (fabric_g/m² / fiber_density_kg/m³) / Vf, with fiber density ~2540 kg/m³ for E-glass and ~1800 for carbon. Vf (fiber volume fraction) is the key process variable: hand layup wets out roughly 35-40% fiber by volume; vacuum and infusion push that to 50-55%; prepreg autoclave 60%+. Higher Vf = thinner, stiffer, stronger.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Resin Quantity Calculator</span><span class="fig">TOOL 2Z-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Fabric weight (g/m²)</label><input type="number" id="rq-gsm" step="any" value="193"></div>
+          <div class="field"><label>Surface area (m²)</label><input type="number" id="rq-area" step="any" value="1"></div>
+          <div class="field"><label>Plies</label><input type="number" id="rq-plies" step="1" value="4"></div>
+          <div class="field">
+            <label>Process</label>
+            <select id="rq-process">
+              <option value="hand" selected>Hand layup (1.0:1 resin:fiber)</option>
+              <option value="vacuum">Vacuum bag (0.7:1)</option>
+              <option value="infusion">Infusion (0.5:1)</option>
+              <option value="prepreg">Prepreg (0.4:1 from pre-spec)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Total Fabric Mass</span><span class="val" id="rq-fmass">—</span></div>
+            <div class="calc-row"><span class="lbl">Resin Mass Required</span><span class="val" id="rq-rmass">—</span></div>
+            <div class="calc-row"><span class="lbl">Resin Volume</span><span class="val" id="rq-rvol">—</span></div>
+            <div class="calc-row"><span class="lbl">With 25% layup waste</span><span class="val" id="rq-waste">—</span></div>
+            <div class="calc-row"><span class="lbl">Process notes</span><span class="val" id="rq-notes">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Resin density is ~1.10 g/mL for most epoxies and ~1.05 for polyester. Hand layup wastes ~25% to brushes, rollers, mixing vessels, and over-application; infusion and prepreg are far more efficient. Always mix the calculated amount plus 10-15% reserve in case of slow saturation.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Layup Process Reference</span><span class="fig">TAB. 2Z-3</span></div>
+      <table>
+        <thead><tr><th>Process</th><th>Vf</th><th>Equipment</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Hand layup (wet)</td><td class="num">0.35-0.40</td><td>brushes, rollers</td><td>Repairs, boat hulls, simple parts. Lowest barrier.</td></tr>
+          <tr><td class="hi">Vacuum bag</td><td class="num">0.45-0.55</td><td>pump, bag film, breather</td><td>Better Vf, surface, consistency. Single-sided tool.</td></tr>
+          <tr><td class="hi">Vacuum infusion</td><td class="num">0.50-0.60</td><td>pump, infusion lines, peel ply</td><td>Large parts, single shot. No fiber-volume guesswork.</td></tr>
+          <tr><td class="hi">Pre-impregnated (prepreg)</td><td class="num">0.55-0.65</td><td>oven or autoclave</td><td>Aerospace, high-performance bike / racing parts.</td></tr>
+          <tr><td class="hi">RTM (resin transfer molding)</td><td class="num">0.50-0.60</td><td>closed tooling, pressure pot</td><td>Production runs; symmetric tool.</td></tr>
+          <tr><td class="hi">Compression molding</td><td class="num">0.55-0.65</td><td>heated press</td><td>High-volume SMC, BMC, prepreg.</td></tr>
+          <tr><td class="hi">Filament winding</td><td class="num">0.60-0.70</td><td>winding mandrel + machine</td><td>Pipes, tanks, pressure vessels.</td></tr>
+          <tr><td class="hi">Pultrusion</td><td class="num">0.50-0.65</td><td>heated die, puller</td><td>Continuous structural shapes (channel, rod, tube).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Core Materials</span><span class="fig">TAB. 2Z-4</span></div>
+      <table>
+        <thead><tr><th>Core</th><th>Density (kg/m³)</th><th>Properties</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">End-grain balsa</td><td class="num">96-180</td><td>strong, absorbs resin, natural</td><td>Boat decks, traditional sandwich.</td></tr>
+          <tr><td class="hi">PVC foam (Divinycell, Klegecell)</td><td class="num">60-200</td><td>closed-cell, water-tolerant</td><td>Marine, automotive sandwich.</td></tr>
+          <tr><td class="hi">SAN foam (Corecell)</td><td class="num">60-150</td><td>tougher than PVC at impact</td><td>Marine, racing, high-impact.</td></tr>
+          <tr><td class="hi">PMI foam (Rohacell)</td><td class="num">30-300</td><td>aerospace grade, temperature stable</td><td>Aerospace sandwich panels.</td></tr>
+          <tr><td class="hi">PET foam (Airex)</td><td class="num">60-200</td><td>recyclable, lower cost than PVC</td><td>Wind blades, transport panels.</td></tr>
+          <tr><td class="hi">Honeycomb (Nomex)</td><td class="num">30-150</td><td>highest stiffness-to-weight</td><td>Aerospace floors, race cars.</td></tr>
+          <tr><td class="hi">Honeycomb (aluminum)</td><td class="num">30-130</td><td>structural, conductive</td><td>Aerospace, where flammability matters less than weight.</td></tr>
+          <tr><td class="hi">Plywood (marine, okoume)</td><td class="num">450-650</td><td>cheap, easy to work, attachment</td><td>Boat bulkheads, fittings, transoms.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Sandwich construction separates two thin skins with a low-density core. Bending stiffness scales with the cube of thickness, so a 25 mm core panel can be 25-30× stiffer than a single skin of equal weight. Shear modulus and skin attachment are the key core properties.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Mold Release Reference</span><span class="fig">TAB. 2Z-5</span></div>
+      <table>
+        <thead><tr><th>Release</th><th>Type</th><th>Reapply</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Carnauba paste wax</td><td>wax</td><td>every part</td><td>Single parts, repairs; cheap and forgiving.</td></tr>
+          <tr><td class="hi">Mold release wax (high-temp)</td><td>wax</td><td>every 1-3 parts</td><td>Tooling waxes (Meguiar's, TR-104). Higher Vmax.</td></tr>
+          <tr><td class="hi">PVA film (mold release)</td><td>water-soluble film</td><td>every part</td><td>Brushed or sprayed over wax for double protection.</td></tr>
+          <tr><td class="hi">Semi-permanent</td><td>chemical bond</td><td>every 5-20 parts</td><td>Frekote, Chemlease, Loctite. Production runs.</td></tr>
+          <tr><td class="hi">Mold release film</td><td>plastic film</td><td>every part</td><td>Flat parts, peel ply, vacuum bag side.</td></tr>
+          <tr><td class="hi">Silicone spray</td><td>silicone</td><td>every part</td><td>Quick release; contaminates parts for painting.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Mold release must completely cover the tool surface; missed spots stick. Wax-then-PVA is the belt-and-suspenders approach for one-off parts. Avoid silicone if the part will later be painted, glued, or have a secondary lamination — silicone migrates and prevents adhesion of nearly everything.</div>
     </div>
   </section>
 
@@ -13543,6 +14066,243 @@ function calcRT60() {
 });
 
 
+// ====================== 2X · ADHESIVES ======================
+const ADHESIVE_FAMILIES = [
+  { name: 'PVA (polyvinyl acetate)',  cat: 'wood',    notes: 'Wood glue family. Type I interior, II water-resistant, III waterproof.' },
+  { name: 'Cyanoacrylate (CA)',       cat: 'instant', notes: 'Super glue. Moisture-cure, very fast. Thin to gel viscosities.' },
+  { name: 'Epoxy (2-part)',           cat: 'epoxy',   notes: 'Resin + hardener. Strongest small-shop adhesive. Most substrates.' },
+  { name: 'Polyurethane',             cat: 'pu',      notes: 'Moisture-cure, foaming. Gorilla Glue. Bonds dissimilar materials.' },
+  { name: 'Contact cement',           cat: 'contact', notes: 'Apply to both surfaces, flash off, press together. Instant bond.' },
+  { name: 'Silicone (RTV)',           cat: 'silicone',notes: 'Flexible, water-resistant. Glass, sealing, gaskets. Long cure.' },
+  { name: 'Construction (PL)',        cat: 'construct', notes: 'Heavy gap-filling; subfloor, paneling. Slow cure, high strength.' },
+  { name: 'Hot melt (EVA)',           cat: 'hotmelt', notes: 'Thermoplastic; instant bond on cooling. Crafts, packaging.' },
+  { name: 'Methacrylate (MMA)',       cat: 'mma',     notes: 'Plastics, metals; structural; comparable to epoxy on tough plastics.' },
+  { name: 'Anaerobic (Loctite)',      cat: 'anaerobic', notes: 'Cures in absence of air; threadlockers, sleeve retainers.' },
+  { name: 'Spray adhesive (3M 77)',   cat: 'spray',   notes: 'Light fabric, paper, foam. Repositionable to permanent.' },
+  { name: 'Wheat paste / methyl cellulose', cat: 'paste', notes: 'Traditional, reversible, archival. Paper and book work.' }
+];
+const ADHESIVE_CSS_CAT = {
+  wood: 'wood', instant: 'plastic', epoxy: 'titanium', pu: 'copper',
+  contact: 'aluminum', silicone: 'plastic', construct: 'steel',
+  hotmelt: 'plastic', mma: 'titanium', anaerobic: 'steel',
+  spray: 'plastic', paste: 'wood'
+};
+function renderAdhesiveFamilies() {
+  const grid = document.getElementById('adhesive-family-grid');
+  if (!grid) return;
+  grid.innerHTML = ADHESIVE_FAMILIES.map(a =>
+    '<div class="material-card ' + (ADHESIVE_CSS_CAT[a.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(a.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(a.cat) + '</div>' +
+      '<div class="mat-note">' + escHtml(a.notes) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function calcMixRatio() {
+  const ratioSel = document.getElementById('mix-ratio').value;
+  let A, B;
+  if (ratioSel === 'custom') {
+    A = parseFloat(document.getElementById('mix-a').value);
+    B = parseFloat(document.getElementById('mix-b').value);
+  } else {
+    const [a, b] = ratioSel.split(':').map(parseFloat);
+    A = a; B = b;
+  }
+  const total = parseFloat(document.getElementById('mix-total').value);
+  const basis = document.getElementById('mix-basis').value;
+  const unit = basis === 'weight' ? 'g' : 'mL';
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(A) || !isFinite(B) || A <= 0 || B <= 0 || !isFinite(total) || total <= 0) {
+    ['mix-ratio-out','mix-a-out','mix-b-out','mix-waste','mix-with-waste'].forEach(id => set(id, '—'));
+    return;
+  }
+  const sum = A + B;
+  const partA = total * A / sum;
+  const partB = total * B / sum;
+  set('mix-ratio-out', A + ' : ' + B + ' (' + basis + ')');
+  set('mix-a-out',     partA.toFixed(2) + ' ' + unit);
+  set('mix-b-out',     partB.toFixed(2) + ' ' + unit);
+  set('mix-waste',     (total * 0.10).toFixed(2) + ' ' + unit);
+  set('mix-with-waste', (total * 1.10).toFixed(2) + ' ' + unit + ' total');
+}
+['mix-ratio','mix-a','mix-b','mix-total','mix-basis'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcMixRatio); el.addEventListener('change', calcMixRatio); }
+});
+
+
+// ====================== 2Y · FINISHES ======================
+const FINISH_FAMILIES = [
+  { name: 'Penetrating oil',     cat: 'oil',     notes: 'Pure tung, linseed (BLO), walnut. Soaks in, no film. Easy repair.' },
+  { name: 'Wipe-on oil/varnish', cat: 'oil',     notes: 'Danish, Watco, Tried & True. Oil with added resin; thin film.' },
+  { name: 'Hard wax oil',        cat: 'oil',     notes: 'Osmo, Rubio Monocoat. Penetrating oil + hardening wax. Floors and tables.' },
+  { name: 'Shellac',             cat: 'shellac', notes: 'Alcohol-soluble; the universal sealer. Reversible. French polish.' },
+  { name: 'Lacquer (nitro)',     cat: 'lacquer', notes: 'Solvent-based film; furniture, instruments. Spray application.' },
+  { name: 'Polyurethane (oil)',  cat: 'urethane',notes: 'Tough amber film. Floors and counters. Strip to recoat.' },
+  { name: 'Polyurethane (water)',cat: 'urethane',notes: 'Clear film; less amber than oil. Floors, light woods.' },
+  { name: 'Conversion varnish',  cat: 'varnish', notes: 'Catalyzed acid-cure; commercial cabinets. Very durable.' },
+  { name: 'Spar varnish',        cat: 'varnish', notes: 'Long-oil alkyd; outdoor. Flexes with humidity.' },
+  { name: 'Paint (latex)',       cat: 'paint',   notes: 'Water-based acrylic. Walls, exterior. Easy clean-up.' },
+  { name: 'Paint (alkyd / oil)', cat: 'paint',   notes: 'Solvent-based; trim, tough surfaces. Slow dry.' },
+  { name: 'Milk paint',          cat: 'paint',   notes: 'Casein-based; traditional matte; ages to patina.' },
+  { name: 'Paste wax',           cat: 'wax',     notes: 'Carnauba / beeswax. Maintenance coat over any cured finish.' },
+  { name: 'Edge paint (leather)',cat: 'leather', notes: 'Acrylic, heat-set; Fenice, Giardini. Chrome and combo leathers.' },
+  { name: 'Ceramic glaze',       cat: 'ceramic', notes: 'Vitreous coating fired to maturity. See 2S for chemistry.' },
+  { name: 'Metal patina',        cat: 'metal',   notes: 'Chemical conversion: liver of sulfur, vinegar, ammonia, etc. Sealed with wax.' }
+];
+const FINISH_CSS_CAT = {
+  oil: 'wood', shellac: 'wood', lacquer: 'plastic', urethane: 'plastic',
+  varnish: 'plastic', paint: 'plastic', wax: 'wood',
+  leather: 'wood', ceramic: 'plastic', metal: 'steel'
+};
+function renderFinishFamilies() {
+  const grid = document.getElementById('finish-family-grid');
+  if (!grid) return;
+  grid.innerHTML = FINISH_FAMILIES.map(f =>
+    '<div class="material-card ' + (FINISH_CSS_CAT[f.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(f.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(f.cat) + '</div>' +
+      '<div class="mat-note">' + escHtml(f.notes) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+const FINISH_COVERAGE = {
+  oil: 400, wipe: 450, wax: 350, shellac: 300, poly: 400,
+  lacquer: 250, paint: 325, 'leather-edge': 500
+};
+function calcCoverage() {
+  const type = document.getElementById('cov-type').value;
+  let rate;
+  if (type === 'custom') rate = parseFloat(document.getElementById('cov-rate').value);
+  else rate = FINISH_COVERAGE[type];
+  const areaIn = parseFloat(document.getElementById('cov-area').value);
+  const unit = document.getElementById('cov-area-unit').value;
+  const coats = Math.max(1, parseInt(document.getElementById('cov-coats').value, 10) || 1);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(rate) || rate <= 0 || !isFinite(areaIn) || areaIn <= 0) {
+    ['cov-rate-out','cov-area-out','cov-percoat','cov-gal','cov-lit','cov-waste'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Convert area to sq ft
+  let areaFt;
+  if (unit === 'sqft') areaFt = areaIn;
+  else if (unit === 'sqm') areaFt = areaIn * 10.7639;
+  else areaFt = areaIn * 9; // sq yd
+  const perCoatGal = areaFt / rate;
+  const totalGal = perCoatGal * coats;
+  set('cov-rate-out',  rate + ' sq ft/gal');
+  set('cov-area-out',  areaFt.toFixed(1) + ' sq ft');
+  set('cov-percoat',   perCoatGal.toFixed(3) + ' gal');
+  set('cov-gal',       totalGal.toFixed(3) + ' gal');
+  set('cov-lit',       (totalGal * 3.7854).toFixed(2) + ' L');
+  set('cov-waste',     (totalGal * 1.15).toFixed(3) + ' gal (' + (totalGal * 1.15 * 3.7854).toFixed(2) + ' L)');
+}
+['cov-type','cov-rate','cov-area','cov-area-unit','cov-coats'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcCoverage); el.addEventListener('change', calcCoverage); }
+});
+
+
+// ====================== 2Z · COMPOSITES ======================
+const COMPOSITE_FIBERS = [
+  { name: 'E-glass',         cat: 'glass',   ten: '3.4 GPa',  mod: '72 GPa',  rho: '2.54 g/cc',  notes: 'Standard fiberglass. Cheap, common, structural. Workhorse fiber.' },
+  { name: 'S-glass',         cat: 'glass',   ten: '4.5 GPa',  mod: '88 GPa',  rho: '2.50 g/cc',  notes: 'Higher-strength glass; aerospace and ballistic. 2-3× cost.' },
+  { name: 'Carbon (standard)', cat: 'carbon', ten: '3.5 GPa',  mod: '230 GPa', rho: '1.78 g/cc', notes: 'T300, T700. Most-used carbon. Stiff and light.' },
+  { name: 'Carbon (high-mod)', cat: 'carbon', ten: '3.0 GPa',  mod: '395 GPa', rho: '1.84 g/cc', notes: 'M40J, M55J. Higher stiffness, lower strain to break.' },
+  { name: 'Aramid (Kevlar 49)', cat: 'aramid', ten: '3.0 GPa', mod: '125 GPa', rho: '1.44 g/cc', notes: 'Impact and abrasion resistance. Hard to cut and machine.' },
+  { name: 'Basalt',          cat: 'basalt',  ten: '3.0 GPa',  mod: '85 GPa',  rho: '2.65 g/cc',  notes: 'Volcanic-rock fiber; better than E-glass for some properties, similar cost.' },
+  { name: 'Natural flax (linen)', cat: 'natural', ten: '0.8 GPa', mod: '50 GPa', rho: '1.40 g/cc', notes: 'Renewable, vibration-damping. Lower properties; design accordingly.' },
+  { name: 'UHMWPE (Dyneema)', cat: 'polymer', ten: '3.5 GPa', mod: '110 GPa', rho: '0.97 g/cc',  notes: 'Lightest structural fiber; cut and stab resistance. Hard to bond.' }
+];
+function renderCompositeFibers() {
+  const grid = document.getElementById('composite-fiber-grid');
+  if (!grid) return;
+  const map = { glass: 'aluminum', carbon: 'steel', aramid: 'titanium', basalt: 'wood', natural: 'wood', polymer: 'plastic' };
+  grid.innerHTML = COMPOSITE_FIBERS.map(f =>
+    '<div class="material-card ' + (map[f.cat] || 'plastic') + '">' +
+      '<div class="mat-name">' + escHtml(f.name) + '</div>' +
+      '<div class="mat-cat">' + escHtml(f.cat) + '</div>' +
+      '<div class="mat-specs">' +
+        '<span class="l">Tensile</span><span class="v">' + escHtml(f.ten) + '</span>' +
+        '<span class="l">Modulus</span><span class="v">' + escHtml(f.mod) + '</span>' +
+        '<span class="l">Density</span><span class="v">' + escHtml(f.rho) + '</span>' +
+      '</div>' +
+      '<div class="mat-note">' + escHtml(f.notes) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function calcLayup() {
+  const fabricEl = document.getElementById('ly-fabric');
+  const fabricSel = fabricEl.value;
+  let gsm, fiberRho;
+  if (fabricSel === 'custom') {
+    gsm = parseFloat(document.getElementById('ly-gsm').value);
+    fiberRho = parseFloat(document.getElementById('ly-customrho').value);
+  } else {
+    gsm = parseFloat(fabricSel);
+    const opt = fabricEl.options[fabricEl.selectedIndex];
+    fiberRho = parseFloat(opt.dataset.rho) || 2540;
+  }
+  const target = parseFloat(document.getElementById('ly-thick').value);
+  const Vf = parseFloat(document.getElementById('ly-vf').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(gsm) || gsm <= 0 || !isFinite(target) || target <= 0 || !isFinite(Vf) || Vf <= 0 || !isFinite(fiberRho) || fiberRho <= 0) {
+    ['ly-perply','ly-n','ly-achieved','ly-vf-out'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Cured ply thickness in mm: gsm / (fiberRho × Vf)
+  // gsm is g/m². fiber volume per m² = (gsm/1000)/fiberRho m³ = ply_volume × Vf.
+  // ply_volume = (gsm/1000) / (fiberRho × Vf) m³ per m² = thickness in m.
+  // × 1000 = thickness in mm.
+  const tPly = gsm / (fiberRho * Vf);
+  const n = Math.ceil(target / tPly);
+  const achieved = n * tPly;
+  set('ly-perply',   tPly.toFixed(3) + ' mm/ply (ρ=' + fiberRho + ')');
+  set('ly-n',        n + ' plies');
+  set('ly-achieved', achieved.toFixed(2) + ' mm');
+  set('ly-vf-out',   (Vf * 100).toFixed(0) + '%');
+}
+['ly-fabric','ly-gsm','ly-customrho','ly-thick','ly-vf'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcLayup); el.addEventListener('change', calcLayup); }
+});
+
+const RESIN_RATIOS = { hand: 1.0, vacuum: 0.7, infusion: 0.5, prepreg: 0.4 };
+const RESIN_NOTES = {
+  hand:     'Wet hand layup; high waste, plan extra resin.',
+  vacuum:   'Vacuum bag; tighter resin control, less waste.',
+  infusion: 'Resin infusion; very controlled wet-out.',
+  prepreg:  'Pre-impregnated; resin is built in, ratio is reference.'
+};
+function calcResinQty() {
+  const gsm = parseFloat(document.getElementById('rq-gsm').value);
+  const area = parseFloat(document.getElementById('rq-area').value);
+  const plies = Math.max(1, parseInt(document.getElementById('rq-plies').value, 10) || 1);
+  const proc = document.getElementById('rq-process').value;
+  const ratio = RESIN_RATIOS[proc];
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(gsm) || gsm <= 0 || !isFinite(area) || area <= 0) {
+    ['rq-fmass','rq-rmass','rq-rvol','rq-waste','rq-notes'].forEach(id => set(id, '—'));
+    return;
+  }
+  const fMass = gsm * area * plies;       // grams
+  const rMass = fMass * ratio;             // grams resin
+  const rVol = rMass / 1.10;               // ~1.10 g/mL epoxy
+  set('rq-fmass', fMass.toFixed(0) + ' g (' + (fMass / 1000).toFixed(2) + ' kg)');
+  set('rq-rmass', rMass.toFixed(0) + ' g (' + (rMass / 1000).toFixed(2) + ' kg)');
+  set('rq-rvol',  rVol.toFixed(0) + ' mL (' + (rVol / 1000).toFixed(2) + ' L)');
+  set('rq-waste', (rMass * 1.25).toFixed(0) + ' g resin (mix this much)');
+  set('rq-notes', RESIN_NOTES[proc]);
+}
+['rq-gsm','rq-area','rq-plies','rq-process'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcResinQty); el.addEventListener('change', calcResinQty); }
+});
+
+
 renderLegend();
 updateSMD();
 renderEIA96Table();
@@ -13668,6 +14428,14 @@ calcDoF();
 calcVidShutter();
 calcStorage();
 calcRT60();
+// 2X Adhesives, 2Y Finishes, 2Z Composites
+renderAdhesiveFamilies();
+calcMixRatio();
+renderFinishFamilies();
+calcCoverage();
+renderCompositeFibers();
+calcLayup();
+calcResinQty();
 buildSearchIndex();
 </script>
 
