@@ -2082,6 +2082,104 @@ code {
 .assess-line.bad   { background: var(--red); color: #fff; }
 .assess-line.good  { background: #2a6028; color: var(--yellow); }
 
+/* =========================================================
+   VENDOR / PARTS SOURCING
+   ========================================================= */
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+.vendor-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--rule-2);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s;
+  line-height: 1.2;
+}
+.vendor-btn:hover { background: var(--bg-2); border-color: var(--ink-3); }
+.vendor-btn .vname { display: block; }
+.vendor-btn .vnote { display: block; font-size: 10px; font-weight: 400; color: var(--ink-4); margin-top: 3px; letter-spacing: 0; }
+.vendor-btn .ext { font-size: 11px; color: var(--ink-4); margin-left: 8px; }
+.vendor-btn.electronics { border-left: 4px solid #2d6cdf; }
+.vendor-btn.industrial  { border-left: 4px solid #c97a00; }
+.vendor-btn.hobby       { border-left: 4px solid #2a6028; }
+.vendor-btn.general     { border-left: 4px solid var(--ink-4); }
+
+.find-at-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule-2);
+}
+.find-at-row .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.find-at-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--rule-2);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.find-at-btn:hover { background: var(--bg-2); border-color: var(--ink-3); }
+.find-at-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.find-at-btn.digikey  { border-left: 3px solid #cc0000; }
+.find-at-btn.mouser   { border-left: 3px solid #0072ce; }
+.find-at-btn.lcsc     { border-left: 3px solid #1ba268; }
+.find-at-btn.mcmaster { border-left: 3px solid #ffcc00; }
+
+.quick-q-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.quick-q-row .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.quick-q-btn {
+  padding: 4px 9px;
+  border: 1px solid var(--rule-3);
+  background: var(--bg);
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+}
+.quick-q-btn:hover { background: var(--bg-2); color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -2190,6 +2288,7 @@ code {
       <li><button data-tab="photography"><span class="ref">4E</span><span>Project Photography</span></button></li>
       <li><button data-tab="videography"><span class="ref">4F</span><span>Project Videography</span></button></li>
       <li><button data-tab="audio"><span class="ref">4G</span><span>Audio Recording</span></button></li>
+      <li><button data-tab="parts"><span class="ref">4H</span><span>Parts Sourcing</span></button></li>
     </ul>
   </aside>
 
@@ -2222,6 +2321,12 @@ code {
               <div><span>Tolerance</span><strong id="band-result-tol">—</strong></div>
               <div><span>Temp coef</span><strong id="band-result-tc">—</strong></div>
             </div>
+          </div>
+          <div class="find-at-row">
+            <span class="label">Find this part:</span>
+            <button class="find-at-btn digikey"  data-vendor="digikey"  data-builder="resistor-decode">Digi-Key</button>
+            <button class="find-at-btn mouser"   data-vendor="mouser"   data-builder="resistor-decode">Mouser</button>
+            <button class="find-at-btn lcsc"     data-vendor="lcsc"     data-builder="resistor-decode">LCSC</button>
           </div>
         </div>
       </div>
@@ -2264,6 +2369,12 @@ code {
             <div class="big" id="rev-result-bands">—</div>
             <div class="sub">Band Sequence</div>
           </div>
+          <div class="find-at-row">
+            <span class="label">Find this part:</span>
+            <button class="find-at-btn digikey"  data-vendor="digikey"  data-builder="resistor-reverse">Digi-Key</button>
+            <button class="find-at-btn mouser"   data-vendor="mouser"   data-builder="resistor-reverse">Mouser</button>
+            <button class="find-at-btn lcsc"     data-vendor="lcsc"     data-builder="resistor-reverse">LCSC</button>
+          </div>
         </div>
       </div>
     </div>
@@ -2295,6 +2406,12 @@ code {
               <div><span>Multiplier</span><strong id="smd-mult">—</strong></div>
               <div><span>Tolerance</span><strong id="smd-tol">—</strong></div>
             </div>
+          </div>
+          <div class="find-at-row">
+            <span class="label">Find this part:</span>
+            <button class="find-at-btn digikey"  data-vendor="digikey"  data-builder="smd-decode">Digi-Key</button>
+            <button class="find-at-btn mouser"   data-vendor="mouser"   data-builder="smd-decode">Mouser</button>
+            <button class="find-at-btn lcsc"     data-vendor="lcsc"     data-builder="smd-decode">LCSC</button>
           </div>
         </div>
       </div>
@@ -7079,6 +7196,63 @@ code {
         </tbody>
       </table>
       <div class="note">α is the absorption coefficient at 500 Hz (the band most relevant to speech). Total absorption in a room = sum of (area × α) for every surface. For voiceover work, target an RT60 of 0.2-0.4 sec; for music, 0.5-0.8 sec depending on style. Egg crates, foam pyramids, and "studio foam" treat high frequencies but do almost nothing below 500 Hz — they make a bright room muddier, not more controlled.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 4H · PARTS SOURCING ====================== -->
+  <section id="parts" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 4H <span class="dot"></span> Shop &amp; Studio</div>
+      <h2>Parts Sourcing</h2>
+      <div class="page-desc">A search launcher for the vendors I reach for most often. Type a query once, click whichever vendor is most likely to stock the part. Search opens on the vendor's site in a new tab. The Almanac itself stays offline and does not log or transmit queries; vendor sites follow their own policies once you arrive. Covers Digi-Key, Mouser, LCSC, Newark, Arrow on the electronics side; McMaster-Carr, Grainger, MSC, Fastenal on the industrial side; SparkFun, Adafruit for hobby breakouts; Amazon as a generalist fallback.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Search Query</span><span class="fig">TOOL 4H-1</span></div>
+      <div class="field">
+        <label>What are you looking for?</label>
+        <input type="text" id="parts-q" placeholder="e.g. 4.7k 0805 1%, BC547, 1/4-20 SHCS stainless, 6 mm dowel pin" autocomplete="off" value="">
+      </div>
+      <div class="quick-q-row" id="parts-quick">
+        <span class="label">Examples:</span>
+        <button class="quick-q-btn" data-q="resistor 4.7k 1% 0805">resistor 4.7k 0805</button>
+        <button class="quick-q-btn" data-q="ceramic capacitor 0.1uF 50V 0805">cap 0.1uF 0805</button>
+        <button class="quick-q-btn" data-q="BC547 NPN transistor">BC547</button>
+        <button class="quick-q-btn" data-q="ESP32 module">ESP32</button>
+        <button class="quick-q-btn" data-q="STM32F103C8T6">STM32F103</button>
+        <button class="quick-q-btn" data-q="LM358 op amp">LM358</button>
+        <button class="quick-q-btn" data-q="1/4-20 socket head cap screw stainless">1/4-20 SHCS</button>
+        <button class="quick-q-btn" data-q="M3 button head cap screw">M3 BHCS</button>
+        <button class="quick-q-btn" data-q="6 mm dowel pin hardened">6mm dowel</button>
+        <button class="quick-q-btn" data-q="1018 cold rolled steel bar 1/2 inch">1018 steel bar</button>
+        <button class="quick-q-btn" data-q="acetal Delrin sheet 1/8 inch">Delrin sheet</button>
+        <button class="quick-q-btn" data-q="threadlocker Loctite 242 blue">Loctite 242</button>
+      </div>
+      <div class="note" style="margin-top:10px;">Pressing a vendor button below opens that vendor's search in a new tab. Different vendors index parts differently: Digi-Key parses values out of free-text (try "4.7k 0805 1%"), McMaster prefers descriptive phrases ("socket head cap screw 1/4-20 stainless"), LCSC matches generic part numbers tightly. Try the same query at two or three vendors when in doubt.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Electronics</span><span class="fig">TAB. 4H-1</span></div>
+      <div class="vendor-grid" id="vendors-electronics"></div>
+      <div class="note">Digi-Key and Mouser are the two big US authorized distributors with the deepest catalogs and most reliable lead times. LCSC pairs with JLCPCB for cheap China-direct sourcing and is the budget option for hobby work. Newark and Arrow round out the authorized-distributor set when one of the others is short.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Industrial &amp; Mechanical</span><span class="fig">TAB. 4H-2</span></div>
+      <div class="vendor-grid" id="vendors-industrial"></div>
+      <div class="note">McMaster-Carr is the gold standard for same-day shipping on shop hardware, raw stock, and obscure mechanical parts. Grainger and MSC are deeper on cutting tools, industrial supply, and bulk fasteners. Fastenal has local branches across the US for picking up fasteners and rod stock in person.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Hobby &amp; Maker</span><span class="fig">TAB. 4H-3</span></div>
+      <div class="vendor-grid" id="vendors-hobby"></div>
+      <div class="note">For dev boards, breakouts, and learn-focused kits. SparkFun and Adafruit both stock items oriented to maker-scale projects with documentation; Adafruit leans more education-and-tutorial, SparkFun more breakout-and-sensor catalog.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Generalist Fallback</span><span class="fig">TAB. 4H-4</span></div>
+      <div class="vendor-grid" id="vendors-general"></div>
+      <div class="note">When you cannot find it elsewhere, or need it tomorrow. Caveat emptor on counterfeits for branded electronic parts; verify by datasheet against package markings on arrival.</div>
     </div>
   </section>
 
@@ -14303,6 +14477,144 @@ function calcResinQty() {
 });
 
 
+// ====================== 4H · PARTS SOURCING ======================
+const VENDORS = [
+  // Electronics
+  { name: 'Digi-Key', key: 'digikey', cat: 'electronics',
+    note: 'US authorized distributor; deep catalog, accurate stock',
+    url: q => 'https://www.digikey.com/en/products/result?keywords=' + encodeURIComponent(q) },
+  { name: 'Mouser', key: 'mouser', cat: 'electronics',
+    note: 'US authorized distributor; deep catalog, global shipping',
+    url: q => 'https://www.mouser.com/c/?q=' + encodeURIComponent(q) },
+  { name: 'LCSC', key: 'lcsc', cat: 'electronics',
+    note: 'China direct; pairs with JLCPCB; budget components',
+    url: q => 'https://www.lcsc.com/search?q=' + encodeURIComponent(q) },
+  { name: 'Newark / element14', key: 'newark', cat: 'electronics',
+    note: 'US (Newark) / global (element14, Farnell)',
+    url: q => 'https://www.newark.com/webapp/wcs/stores/servlet/Search?st=' + encodeURIComponent(q) },
+  { name: 'Arrow', key: 'arrow', cat: 'electronics',
+    note: 'Authorized distributor; strong on stocked semis',
+    url: q => 'https://www.arrow.com/en/products/search?q=' + encodeURIComponent(q) },
+  // Industrial
+  { name: 'McMaster-Carr', key: 'mcmaster', cat: 'industrial',
+    note: 'Fast US ship; no API; the shop-day-saver',
+    url: q => 'https://www.mcmaster.com/products/?searchterm=' + encodeURIComponent(q) },
+  { name: 'Grainger', key: 'grainger', cat: 'industrial',
+    note: 'Industrial supply; broad stock, local branches',
+    url: q => 'https://www.grainger.com/search?searchQuery=' + encodeURIComponent(q) },
+  { name: 'MSC Direct', key: 'msc', cat: 'industrial',
+    note: 'Cutting tools, metalworking, machinist supply',
+    url: q => 'https://www.mscdirect.com/browse/tn?searchterm=' + encodeURIComponent(q) },
+  { name: 'Fastenal', key: 'fastenal', cat: 'industrial',
+    note: 'Fasteners and industrial; local pickup',
+    url: q => 'https://www.fastenal.com/products?term=' + encodeURIComponent(q) },
+  // Hobby
+  { name: 'SparkFun', key: 'sparkfun', cat: 'hobby',
+    note: 'Breakouts, dev boards, sensors',
+    url: q => 'https://www.sparkfun.com/search/results?term=' + encodeURIComponent(q) },
+  { name: 'Adafruit', key: 'adafruit', cat: 'hobby',
+    note: 'Breakouts, dev boards, learn-focused',
+    url: q => 'https://www.adafruit.com/?q=' + encodeURIComponent(q) },
+  // Generalist
+  { name: 'Amazon', key: 'amazon', cat: 'general',
+    note: 'Fast, broad, watch for counterfeits on branded parts',
+    url: q => 'https://www.amazon.com/s?k=' + encodeURIComponent(q) }
+];
+
+function _vendorByKey(key) { return VENDORS.find(v => v.key === key); }
+
+function renderVendorGrid(cat, targetId) {
+  const grid = document.getElementById(targetId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  VENDORS.filter(v => v.cat === cat).forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'vendor-btn ' + v.cat;
+    btn.innerHTML =
+      '<span><span class="vname">' + escHtml(v.name) + '</span>' +
+      '<span class="vnote">' + escHtml(v.note) + '</span></span>' +
+      '<span class="ext">↗</span>';
+    btn.title = 'Search ' + v.name + ' for the query above';
+    btn.dataset.vendor = v.key;
+    btn.addEventListener('click', () => {
+      const q = (document.getElementById('parts-q').value || '').trim();
+      if (!q) {
+        const inp = document.getElementById('parts-q');
+        inp.focus();
+        inp.placeholder = 'Type a query first…';
+        return;
+      }
+      window.open(v.url(q), '_blank', 'noopener,noreferrer');
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function renderAllVendorGrids() {
+  renderVendorGrid('electronics', 'vendors-electronics');
+  renderVendorGrid('industrial',  'vendors-industrial');
+  renderVendorGrid('hobby',       'vendors-hobby');
+  renderVendorGrid('general',     'vendors-general');
+}
+
+// Quick example chips populate the input
+function wireQuickQueries() {
+  const wrap = document.getElementById('parts-quick');
+  if (!wrap) return;
+  wrap.querySelectorAll('button[data-q]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const inp = document.getElementById('parts-q');
+      inp.value = btn.dataset.q;
+      inp.focus();
+    });
+  });
+}
+
+// ---------- Contextual "Find this part" handlers ----------
+// Query builders read the current decoded value of a section and return a vendor-friendly query.
+const QUERY_BUILDERS = {
+  // 1A Resistors decode side: bands picker
+  'resistor-decode': () => {
+    const v = (document.getElementById('band-result-value').textContent || '').trim();
+    const t = (document.getElementById('band-result-tol').textContent || '').trim();
+    if (!v || v === '—') return null;
+    // Convert "4.7 kΩ" → "4.7k", "470 Ω" → "470", "1 MΩ" → "1M"
+    const clean = v.replace(/\s/g, '').replace(/Ω/g, '')
+                   .replace(/kΩ?/i, 'k').replace(/MΩ?/i, 'M').replace(/GΩ?/i, 'G');
+    const tolPart = (t && t !== '—') ? ' ' + t.replace(/[\s±]/g, '') : '';
+    return clean + ' resistor' + tolPart;
+  },
+  // 1A Resistors reverse side: user typed a value
+  'resistor-reverse': () => {
+    const v = (document.getElementById('rev-input').value || '').trim();
+    const t = (document.getElementById('rev-tol').value || '').trim();
+    if (!v) return null;
+    return v + ' resistor' + (t ? ' ' + t + '%' : '');
+  },
+  // 1B SMD decoder: code typed → resistance value
+  'smd-decode': () => {
+    const v = (document.getElementById('smd-value').textContent || '').trim();
+    if (!v || v === '—') return null;
+    const clean = v.replace(/\s/g, '').replace(/Ω/g, '')
+                   .replace(/kΩ?/i, 'k').replace(/MΩ?/i, 'M').replace(/GΩ?/i, 'G');
+    return clean + ' 0805 resistor';
+  }
+};
+
+// Single delegated click handler for all contextual find-at buttons
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.find-at-btn[data-vendor][data-builder]');
+  if (!btn) return;
+  const builder = QUERY_BUILDERS[btn.dataset.builder];
+  if (!builder) return;
+  const q = builder();
+  if (!q) return;
+  const v = _vendorByKey(btn.dataset.vendor);
+  if (!v) return;
+  window.open(v.url(q), '_blank', 'noopener,noreferrer');
+});
+
+
 renderLegend();
 renderBandSelectors();
 updateSMD();
@@ -14437,6 +14749,9 @@ calcCoverage();
 renderCompositeFibers();
 calcLayup();
 calcResinQty();
+// 4H Parts Sourcing
+renderAllVendorGrids();
+wireQuickQueries();
 buildSearchIndex();
 </script>
 
