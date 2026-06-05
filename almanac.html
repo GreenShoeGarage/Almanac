@@ -2150,6 +2150,53 @@ code {
 }
 
 /* =========================================================
+   SCHEMATIC SYMBOL GRID (1O)
+   ========================================================= */
+.symbol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.symbol-card {
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  padding: 10px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.symbol-card .sym-svg {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.symbol-card .sym-svg svg {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+.symbol-card .sym-name {
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+.symbol-card .sym-note {
+  font-size: 9.5px;
+  color: var(--ink-3);
+  line-height: 1.3;
+}
+.symbol-card svg { stroke: var(--ink); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.symbol-card svg text { stroke: none; fill: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; }
+.symbol-card svg .fill-ink { fill: var(--ink); stroke: var(--ink); }
+
+/* =========================================================
    VENDOR / PARTS SOURCING
    ========================================================= */
 .vendor-grid {
@@ -2298,9 +2345,16 @@ code {
       <li><button data-tab="i2c"><span class="ref">1I</span><span>I²C Bus Planner</span></button></li>
       <li><button data-tab="opamp"><span class="ref">1J</span><span>Op-Amp Configurations</span></button></li>
       <li><button data-tab="transistor"><span class="ref">1K</span><span>MOSFET / BJT Selection</span></button></li>
-      <li><button data-tab="pcb"><span class="ref">1L</span><span>PCB Trace Calculator</span></button></li>
+      <li><button data-tab="pcb"><span class="ref">1L</span><span>PCB Layout Tools</span></button></li>
       <li><button data-tab="filter"><span class="ref">1M</span><span>Filter Designer</span></button></li>
       <li><button data-tab="battery"><span class="ref">1N</span><span>Battery Reference</span></button></li>
+      <li><button data-tab="symbols"><span class="ref">1O</span><span>Schematic Symbols</span></button></li>
+      <li><button data-tab="stackup"><span class="ref">1P</span><span>PCB Stackup &amp; Fabrication</span></button></li>
+      <li><button data-tab="landpatterns"><span class="ref">1Q</span><span>SMD Land Patterns</span></button></li>
+      <li><button data-tab="busrouting"><span class="ref">1R</span><span>Bus Routing Reference</span></button></li>
+      <li><button data-tab="pullup"><span class="ref">1S</span><span>Pull-up &amp; Pull-down</span></button></li>
+      <li><button data-tab="connectors"><span class="ref">1T</span><span>Connector Reference</span></button></li>
+      <li><button data-tab="emi"><span class="ref">1U</span><span>EMI Mitigation</span></button></li>
     </ul>
 
     <div class="category">
@@ -3404,6 +3458,45 @@ code {
       </div>
       <div class="note">Frequency pull estimate uses Δf/f ≈ −C0·ΔC<sub>L</sub> / (2·(C0 + C<sub>L</sub>)²) with C0 ≈ 1 pF typical. For tight-tolerance clocks (RTC, USB host), use trimmable caps or match to your specific crystal lot.</div>
     </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title"><span>LED Current-Limit Resistor</span><span class="fig">TOOL 1E-7</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Supply Voltage V<sub>s</sub> (V)</label><input type="number" id="led-vs" step="any" value="5"></div>
+          <div class="field">
+            <label>LED Color / V<sub>f</sub></label>
+            <select id="led-vf-preset">
+              <option value="2.0">Red (≈ 2.0 V)</option>
+              <option value="2.1">Yellow / Amber (≈ 2.1 V)</option>
+              <option value="2.2">Orange (≈ 2.2 V)</option>
+              <option value="3.2" selected>Green (≈ 3.2 V)</option>
+              <option value="3.0">Cyan (≈ 3.0 V)</option>
+              <option value="3.2">Blue (≈ 3.2 V)</option>
+              <option value="3.4">White (≈ 3.4 V)</option>
+              <option value="1.5">Infrared 940 nm (≈ 1.5 V)</option>
+              <option value="3.3">UV 400 nm (≈ 3.3 V)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="field"><label>Forward Voltage V<sub>f</sub> (V)</label><input type="number" id="led-vf" step="any" value="3.2"></div>
+          <div class="field"><label>Forward Current I<sub>f</sub> (mA)</label><input type="number" id="led-if" step="any" value="20"></div>
+          <div class="field"><label>LEDs in Series (N)</label><input type="number" id="led-n" step="1" min="1" value="1"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Total LED Drop</span><span class="val" id="led-vdrop">—</span></div>
+            <div class="calc-row"><span class="lbl">Voltage Across Resistor</span><span class="val" id="led-vres">—</span></div>
+            <div class="calc-row"><span class="lbl">Resistor (exact)</span><span class="val" id="led-r-exact">—</span></div>
+            <div class="calc-row"><span class="lbl">Resistor (E12 next-up)</span><span class="val" id="led-r-e12">—</span></div>
+            <div class="calc-row"><span class="lbl">Power Dissipated by R</span><span class="val" id="led-pr">—</span></div>
+            <div class="calc-row"><span class="lbl">Recommended SMD Size</span><span class="val" id="led-smd">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="led-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">R = (V<sub>s</sub> − N × V<sub>f</sub>) / I<sub>f</sub>. Pick the next E12 value <em>up</em> (higher R) to stay safely under rated current. SMD package sizing: 0603 handles 100 mW, 0805 handles 125 mW, 1206 handles 250 mW, 1210 handles 500 mW. For a series string the supply must exceed N × V<sub>f</sub> with at least 20-30% headroom or the LEDs run dim and react badly to supply variation. For PWM-dimmed LEDs, the average current matters; for constant brightness, use a constant-current driver (e.g., LM334, LM3914, AL8807) instead of a resistor above about 50 mA.</div>
+    </div>
   </section>
 
   <!-- ============ 1F · RF TOOLS ============ -->
@@ -3812,6 +3905,7 @@ code {
           <select id="sc-app">
             <option value="fusion360" selected>Autodesk Fusion 360</option>
             <option value="inventor">Autodesk Inventor</option>
+            <option value="kicad">KiCad 8 / 9 (Schematic + PCB)</option>
             <option value="photoshop">Adobe Photoshop</option>
             <option value="finalcut">Final Cut Pro</option>
           </select>
@@ -3901,6 +3995,63 @@ code {
         <tbody id="th-sa-table"></tbody>
       </table>
       <div class="note">Forced air typically improves θ<sub>sa</sub> by 2-4× over natural convection. Real performance depends on airflow direction, fin orientation, mounting torque, and surface finish (anodized fins radiate better than bare aluminum at high T).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>LDO &amp; Linear Regulator Thermal Calculator</span><span class="fig">TOOL 1H-3</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>V<sub>in</sub> (V)</label><input type="number" id="ldo-vin" step="any" value="12"></div>
+          <div class="field"><label>V<sub>out</sub> (V)</label><input type="number" id="ldo-vout" step="any" value="5"></div>
+          <div class="field"><label>I<sub>out</sub> (mA)</label><input type="number" id="ldo-iout" step="any" value="500"></div>
+          <div class="field"><label>Quiescent I<sub>q</sub> (µA)</label><input type="number" id="ldo-iq" step="any" value="100"></div>
+          <div class="field">
+            <label>Package (θ<sub>JA</sub>)</label>
+            <select id="ldo-pkg">
+              <option value="220">SOT-23 (220 °C/W, no pour)</option>
+              <option value="160">SOT-23-5 (160 °C/W, small pour)</option>
+              <option value="60" selected>SOT-223 (60 °C/W, 1 in² pour)</option>
+              <option value="30">DPAK / TO-252 (30 °C/W, generous pour)</option>
+              <option value="50">TO-220 standing (50 °C/W, no heatsink)</option>
+              <option value="3">TO-220 + heatsink (3-5 °C/W)</option>
+              <option value="25">D2PAK / TO-263 (25 °C/W, 1 in² pour)</option>
+              <option value="2">TO-247 + heatsink (2-4 °C/W)</option>
+              <option value="40">QFN with thermal pad + vias (40 °C/W)</option>
+            </select>
+          </div>
+          <div class="field"><label>Ambient (°C)</label><input type="number" id="ldo-tamb" step="any" value="25"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Dropout Voltage</span><span class="val" id="ldo-vdrop">—</span></div>
+            <div class="calc-row"><span class="lbl">Power Dissipated</span><span class="val" id="ldo-pd">—</span></div>
+            <div class="calc-row"><span class="lbl">Efficiency</span><span class="val" id="ldo-eff">—</span></div>
+            <div class="calc-row"><span class="lbl">Junction Temperature</span><span class="val" id="ldo-tj">—</span></div>
+            <div class="calc-row"><span class="lbl">Margin to 125°C</span><span class="val" id="ldo-margin">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="ldo-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">P = (V<sub>in</sub> − V<sub>out</sub>) × I<sub>out</sub> + V<sub>in</sub> × I<sub>q</sub>. The first term dominates for any meaningful load. LDOs become spectacularly inefficient at high dropout: 12V → 3.3V at 500mA wastes 4.35W as heat, which a SOT-223 cannot dissipate. Practical rule: keep P × θ<sub>JA</sub> below 80°C above ambient for reasonable lifetime. For dropout above 5V or current above 500mA, use a switching regulator instead; the only reasons to suffer an LDO at high dropout are low noise (linear regulators don't switch) or tiny board area (no inductor needed).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Regulator Package θ<sub>JA</sub> Reference</span><span class="fig">TAB. 1H-2</span></div>
+      <table>
+        <thead><tr><th>Package</th><th>θ<sub>JA</sub> (no pour)</th><th>θ<sub>JA</sub> (1 in² pour)</th><th>θ<sub>JA</sub> (heatsink)</th><th>Typical Current</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SOT-23</td><td class="num">220-260 °C/W</td><td class="num">160-200 °C/W</td><td>—</td><td class="num">&lt; 150 mA</td></tr>
+          <tr><td class="hi">SOT-23-5 / SC-70</td><td class="num">180-220 °C/W</td><td class="num">150-180 °C/W</td><td>—</td><td class="num">&lt; 250 mA</td></tr>
+          <tr><td class="hi">SOT-89</td><td class="num">100-140 °C/W</td><td class="num">80-100 °C/W</td><td>—</td><td class="num">&lt; 500 mA</td></tr>
+          <tr><td class="hi">SOT-223</td><td class="num">90-110 °C/W</td><td class="num">50-70 °C/W</td><td class="num">35-50 °C/W</td><td class="num">~1 A</td></tr>
+          <tr><td class="hi">TO-252 / DPAK</td><td class="num">70-90 °C/W</td><td class="num">25-45 °C/W</td><td class="num">15-25 °C/W</td><td class="num">~2-3 A</td></tr>
+          <tr><td class="hi">TO-263 / D2PAK</td><td class="num">55-70 °C/W</td><td class="num">20-30 °C/W</td><td class="num">10-15 °C/W</td><td class="num">~3-5 A</td></tr>
+          <tr><td class="hi">TO-220 (standing)</td><td class="num">50-65 °C/W</td><td>—</td><td class="num">3-5 °C/W</td><td class="num">~5-10 A</td></tr>
+          <tr><td class="hi">TO-247</td><td class="num">35-45 °C/W</td><td>—</td><td class="num">2-4 °C/W</td><td class="num">~10+ A</td></tr>
+          <tr><td class="hi">QFN (with thermal pad)</td><td>—</td><td class="num">30-50 °C/W</td><td>—</td><td>Varies by part</td></tr>
+        </tbody>
+      </table>
+      <div class="note">θ<sub>JA</sub> values are nominal; real performance varies with copper weight (2 oz vs 1 oz makes a measurable difference), via count under the tab, surrounding component heat, and airflow. Datasheet values typically assume specific JEDEC test boards (JESD51 standards). For tighter calculations use θ<sub>JC</sub> (junction-to-case) plus board and ambient thermal paths, but for most design work the table θ<sub>JA</sub> with a 1 in² copper pour is close enough.</div>
     </div>
   </section>
 
@@ -4027,12 +4178,12 @@ code {
     </div>
   </section>
 
-  <!-- ============ 1L · PCB TRACE CALCULATOR ============ -->
+  <!-- ============ 1L · PCB LAYOUT TOOLS ============ -->
   <section id="pcb" class="page">
     <div class="page-head">
       <div class="page-ref">Section 1L <span class="dot"></span> Electrical &amp; Electronics</div>
-      <h2>PCB Trace Calculator</h2>
-      <div class="page-desc">Microstrip characteristic impedance for controlled-impedance routing, and IPC-2221 current-carrying capacity for power and signal traces. Defaults assume FR-4 (ε<sub>r</sub> = 4.5).</div>
+      <h2>PCB Layout Tools</h2>
+      <div class="page-desc">Trace impedance (microstrip, stripline, differential pair), current capacity (IPC-2221), via current and thermal via calculators, decoupling capacitor strategy, and crystal load capacitance. Defaults assume FR-4 (ε<sub>r</sub> = 4.5). For stackup standards and fab DRC see 1P; for SMD pad sizing see 1Q; for high-speed bus rules see 1R.</div>
     </div>
 
     <div class="row">
@@ -4101,6 +4252,162 @@ code {
         <thead><tr><th>Material</th><th>ε<sub>r</sub></th><th>Loss Tan</th><th>Use Case</th></tr></thead>
         <tbody id="pcb-er-table"></tbody>
       </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Differential Pair Impedance (Edge-Coupled Microstrip)</span><span class="fig">TOOL 1L-3</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Trace Width W (mm)</label><input type="number" id="dpm-w" step="any" value="0.2"></div>
+          <div class="field"><label>Trace Spacing S (mm)</label><input type="number" id="dpm-s" step="any" value="0.2"></div>
+          <div class="field"><label>Dielectric Height H (mm)</label><input type="number" id="dpm-h" step="any" value="0.2"></div>
+          <div class="field"><label>Trace Thickness T (mm)</label><input type="number" id="dpm-t" step="any" value="0.035"></div>
+          <div class="field"><label>Dielectric Constant ε<sub>r</sub></label><input type="number" id="dpm-er" step="any" value="4.5"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Single-Ended Z₀</span><span class="val" id="dpm-z0">—</span></div>
+            <div class="calc-row"><span class="lbl">Coupling Factor</span><span class="val" id="dpm-coup">—</span></div>
+            <div class="calc-row"><span class="lbl">Differential Z<sub>diff</sub></span><span class="val" id="dpm-zdiff">—</span></div>
+            <div class="calc-row"><span class="lbl">Common-Mode Z<sub>cm</sub></span><span class="val" id="dpm-zcm">—</span></div>
+            <div class="calc-row"><span class="lbl">Match Quality</span><span class="val" id="dpm-match">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Edge-coupled microstrip uses the IPC-2141 / Hammerstad approximation: Z<sub>diff</sub> = 2 × Z₀ × (1 − 0.48 × e<sup>−0.96(S/H)</sup>). Tight coupling (S ≤ H) gives the strongest differential mode but is sensitive to dimensional variation. USB 2.0 targets 90Ω diff (±10%); HDMI, USB 3.x, gigabit Ethernet, and LVDS target 100Ω. For accurate manufacturing, ask your fab for their controlled-impedance trace dimensions; the math here is a starting point.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Stripline Impedance (Symmetric Inner Layer)</span><span class="fig">TOOL 1L-4</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Trace Width W (mm)</label><input type="number" id="sl-w" step="any" value="0.15"></div>
+          <div class="field"><label>Total Dielectric B (mm)<br><small>between both reference planes</small></label><input type="number" id="sl-b" step="any" value="0.4"></div>
+          <div class="field"><label>Trace Thickness T (mm)</label><input type="number" id="sl-t" step="any" value="0.018"></div>
+          <div class="field"><label>Dielectric Constant ε<sub>r</sub></label><input type="number" id="sl-er" step="any" value="4.5"></div>
+          <div class="field"><label>Spacing S (mm)<br><small>for differential</small></label><input type="number" id="sl-s" step="any" value="0.2"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Single-Ended Z₀ (Stripline)</span><span class="val" id="sl-z0">—</span></div>
+            <div class="calc-row"><span class="lbl">Differential Z<sub>diff</sub></span><span class="val" id="sl-zdiff">—</span></div>
+            <div class="calc-row"><span class="lbl">Velocity (% of c)</span><span class="val" id="sl-vp">—</span></div>
+            <div class="calc-row"><span class="lbl">Propagation Delay</span><span class="val" id="sl-tpd">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Symmetric stripline: trace centered between two reference planes. Uses Wheeler/IPC formula: Z₀ = (60/√ε<sub>r</sub>) × ln(4B / (0.67π(0.8W + T))). Stripline has slower propagation than microstrip (full dielectric, no air) but better noise immunity and natural EMI shielding. Use stripline for high-speed clocks and noise-sensitive signals. Inner-layer routing on a 4-layer board with planes on layers 2 and 3 is the canonical stripline configuration.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Via Current Capacity</span><span class="fig">TOOL 1L-5</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Drill Diameter D (mm)</label><input type="number" id="via-d" step="any" value="0.3"></div>
+          <div class="field">
+            <label>Plating Thickness</label>
+            <select id="via-plate">
+              <option value="0.0127">½ oz / 17.8 µm (light)</option>
+              <option value="0.0254" selected>1 oz / 25.4 µm (standard)</option>
+              <option value="0.05">2 oz / 50 µm (heavy)</option>
+              <option value="0.075">3 oz / 75 µm (heavy copper)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Temperature Rise (°C)</label>
+            <select id="via-dt">
+              <option value="10" selected>10°C (conservative)</option>
+              <option value="20">20°C (typical)</option>
+              <option value="30">30°C (aggressive)</option>
+            </select>
+          </div>
+          <div class="field"><label>Number of Parallel Vias</label><input type="number" id="via-n" step="1" min="1" value="1"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Annular Cross-Section</span><span class="val" id="via-area">—</span></div>
+            <div class="calc-row"><span class="lbl">Effective Width (π × D)</span><span class="val" id="via-effw">—</span></div>
+            <div class="calc-row"><span class="lbl">Current per Via</span><span class="val" id="via-i1">—</span></div>
+            <div class="calc-row"><span class="lbl">Total Current (parallel)</span><span class="val" id="via-itot">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="via-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Via current is modeled as a flat conductor of width π×D and thickness equal to plating. IPC-2152 external-trace formula: I = 0.048 × ΔT^0.44 × A^0.725 (A in mil²). Rule of thumb: a 0.3 mm via with standard 1 oz plating handles roughly 1 A at 10°C rise. Stitch multiple vias for power: 4-6 parallel vias for a 5A buck regulator output is typical. Plated through-holes carry less than the equivalent trace area because heat dissipation through the hole is poorer; use the temperature-rise slider to be conservative.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Thermal Via Array</span><span class="fig">TOOL 1L-6</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Drill Diameter (mm)</label><input type="number" id="tv-d" step="any" value="0.3"></div>
+          <div class="field"><label>Plating Thickness (mm)</label><input type="number" id="tv-plate" step="any" value="0.025"></div>
+          <div class="field"><label>Board Thickness (mm)</label><input type="number" id="tv-board" step="any" value="1.6"></div>
+          <div class="field"><label>Number of Vias</label><input type="number" id="tv-n" step="1" min="1" value="9"></div>
+          <div class="field"><label>Power to Dissipate (W)</label><input type="number" id="tv-power" step="any" value="2"></div>
+          <div class="field"><label>Heat Source (°C above ambient)</label><input type="number" id="tv-rise" step="any" value="40"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">θ per Via</span><span class="val" id="tv-theta-single">—</span></div>
+            <div class="calc-row"><span class="lbl">θ Array (parallel)</span><span class="val" id="tv-theta-array">—</span></div>
+            <div class="calc-row"><span class="lbl">Heat Flow Capacity</span><span class="val" id="tv-q-cap">—</span></div>
+            <div class="calc-row"><span class="lbl">ΔT @ given Power</span><span class="val" id="tv-dt-actual">—</span></div>
+            <div class="calc-row"><span class="lbl">Recommendation</span><span class="val" id="tv-rec">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Models each via as a copper cylinder: θ = L / (k × A), where k_copper = 400 W/m·K and A is the annular copper cross-section. Parallel vias divide the thermal resistance: θ_array = θ_single / N. Typical 3×3 array of 0.3mm vias under a SOT-23 or QFN gives ~6-10 K/W from die to inner plane, enough to dissipate 2-3W with reasonable margin. Filling vias with thermally-conductive paste or using filled-and-plated vias improves this further. For high-power applications (>5W) use solid copper coins or thermal pads pressed to the case.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Decoupling Capacitor Strategy</span><span class="fig">TAB. 1L-2</span></div>
+      <table>
+        <thead><tr><th>Cap Value</th><th>Role</th><th>Effective Range</th><th>Placement</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">10-100 µF (bulk)</td><td>Low-frequency reservoir; supplies droop from large load steps</td><td class="num">DC to ~100 kHz</td><td>One per power rail at point-of-entry; tantalum, electrolytic, or polymer</td></tr>
+          <tr><td class="hi">1-10 µF (mid)</td><td>Mid-frequency reservoir; supplies fast transients before bulk reacts</td><td class="num">~10 kHz to ~10 MHz</td><td>One per major IC or section; X7R/X5R ceramic</td></tr>
+          <tr><td class="hi">100 nF (the classic)</td><td>High-frequency local store for digital edge currents</td><td class="num">~100 kHz to ~100 MHz</td><td>One per power pin, &lt;3mm from pin, direct to plane</td></tr>
+          <tr><td class="hi">10 nF</td><td>Higher-frequency for fast logic</td><td class="num">~1 MHz to ~500 MHz</td><td>One per pair of digital pins on fast MCUs; FPGA Vccint</td></tr>
+          <tr><td class="hi">1 nF</td><td>Very high frequency; RF and SerDes</td><td class="num">~10 MHz to GHz</td><td>One per SerDes lane or RF stage; 0402 minimum</td></tr>
+          <tr><td class="hi">100 pF</td><td>RF / clock decoupling</td><td class="num">~100 MHz to multi-GHz</td><td>At GHz oscillators, PA outputs; 0201 sometimes used</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Use a hierarchy: one bulk cap at the power entry, one mid-value per board section, one 100nF per IC power pin. Place each cap on the IC side of the board with the shortest possible loop to ground through the plane (via to plane right next to the cap pad). The "100nF + 10nF + 1nF in parallel on one rail" trick mostly does not help below GHz; the 100nF's parasitic inductance dominates, and adding smaller caps creates anti-resonant peaks. Better to make the 100nF placement perfect than to stack more caps with bad placement.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Crystal Load Capacitance</span><span class="fig">REF. 1L-8</span></div>
+      <div class="see-also-card" style="margin-top:0;">
+        <div class="label">See also</div>
+        <div class="body">For full crystal load capacitance math (C1 = C2 = 2 × (C<sub>L</sub> − C<sub>stray</sub>), nearest E12 value, frequency pull estimate, gain margin), see <strong>1E Electrical Formulas → TOOL 1E-6 Crystal &amp; Clock Loading</strong>. For PCB layout: keep oscillator caps within 3 mm of the MCU pins, surround with continuous ground pour, tie the pour to the MCU ground pin closest to the oscillator, and do not route other signals under the crystal.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Crosstalk Estimator (Microstrip, Parallel Trace)</span><span class="fig">TOOL 1L-9</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Aggressor Signal Swing (V)</label><input type="number" id="xt-v" step="any" value="3.3"></div>
+          <div class="field"><label>Signal Rise Time (ns)</label><input type="number" id="xt-tr" step="any" value="1"></div>
+          <div class="field"><label>Trace Spacing S (mm)<br><small>edge-to-edge between aggressor and victim</small></label><input type="number" id="xt-s" step="any" value="0.2"></div>
+          <div class="field"><label>Dielectric Height H (mm)<br><small>to reference plane</small></label><input type="number" id="xt-h" step="any" value="0.2"></div>
+          <div class="field"><label>Parallel Run Length (mm)</label><input type="number" id="xt-len" step="any" value="50"></div>
+          <div class="field"><label>Dielectric Constant ε<sub>r</sub></label><input type="number" id="xt-er" step="any" value="4.5"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Edge Rate dV/dt</span><span class="val" id="xt-dvdt">—</span></div>
+            <div class="calc-row"><span class="lbl">Near-End (NEXT) Coupling</span><span class="val" id="xt-knext">—</span></div>
+            <div class="calc-row"><span class="lbl">Near-End Crosstalk</span><span class="val" id="xt-vnext">—</span></div>
+            <div class="calc-row"><span class="lbl">Far-End (FEXT) Coupling</span><span class="val" id="xt-kfext">—</span></div>
+            <div class="calc-row"><span class="lbl">Far-End Crosstalk</span><span class="val" id="xt-vfext">—</span></div>
+            <div class="calc-row"><span class="lbl">Critical Length (NEXT saturates)</span><span class="val" id="xt-lcrit">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="xt-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Approximation from Howard Johnson / IPC heuristics: K<sub>NEXT</sub> ≈ 0.25 × (1 / (1 + (S/H)²)) — near-end crosstalk saturates after the signal travels two trip-times down the parallel run (the "critical length"). K<sub>FEXT</sub> ≈ (1.1 × t<sub>pd</sub> × length / t<sub>r</sub>) × K<sub>NEXT</sub> for microstrip — far-end crosstalk scales with run length and inversely with rise time. Rule of thumb: keep S ≥ 3 × H for &lt; 1% NEXT, S ≥ 5 × H for &lt; 0.5%. Stripline cancels FEXT almost completely (signal and return-current share dielectric symmetrically); microstrip does not, which is why differential pairs and clocks belong on inner layers for fast designs.</div>
     </div>
   </section>
 
@@ -4256,6 +4563,737 @@ code {
         </tbody>
       </table>
       <div class="note">CC = constant current, CV = constant voltage. Li-ion charges to a voltage limit then holds until current tapers; this is the universal safe profile. Lead-acid has three stages: high current bulk, taper to absorption, then maintenance float. NiMH and NiCd use delta-V detection (the voltage briefly dips at full charge); good chargers also use temperature cutoff as a safety backup.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1O · SCHEMATIC SYMBOLS ============ -->
+  <section id="symbols" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1O <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Schematic Component Symbols</h2>
+      <div class="page-desc">Standard schematic symbols for passive components, diodes, transistors, op-amps, logic gates, sources, grounds, and switches. ANSI/US conventions shown by default; IEC variants noted where they differ. For physical pinouts (which pin is which on a real package) see 1C Pinouts; for op-amp circuit topologies see 1J; for RF schematics see 1F.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Passive Components</span><span class="fig">FIG. 1O-1</span></div>
+      <div class="symbol-grid" id="symbols-passive"></div>
+      <div class="note">Resistors are shown US-style (zigzag) by default; IEC-style (rectangle) is equally valid and is the default in European schematics. Polarized capacitors mark the positive terminal with a "+" and use a curved or filled plate for the negative side. Inductor symbols vary widely (humps, loops, even just a coiled line) but all read as "inductor" in context.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Diodes</span><span class="fig">FIG. 1O-2</span></div>
+      <div class="symbol-grid" id="symbols-diodes"></div>
+      <div class="note">The triangle points in the direction of conventional current flow (anode to cathode). The bar at the tip of the triangle is the cathode (negative). Variants modify the cathode bar: Zener bends, Schottky brackets. Optoelectronic variants (LED, photodiode) add arrows for light: outward arrows emit, inward arrows receive.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Transistors</span><span class="fig">FIG. 1O-3</span></div>
+      <div class="symbol-grid" id="symbols-transistors"></div>
+      <div class="note">BJT arrow on emitter; NPN points out (N-channel pushes current out the emitter), PNP points in. MOSFETs: enhancement-mode shows broken channel (three short segments); depletion-mode shows solid channel. Body-diode arrow indicates channel type: arrow into device = N-channel, arrow out = P-channel. JFETs have continuous channel and gate arrow.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Op-Amps &amp; Logic Gates</span><span class="fig">FIG. 1O-4</span></div>
+      <div class="symbol-grid" id="symbols-logic"></div>
+      <div class="note">Op-amp triangle: inverting input ("−") on top or bottom by convention varies; what matters is the labeling. Power pins (V+, V−) often omitted from schematics for clarity. Logic gates use distinctive ANSI shapes; IEC uses uniform rectangles with labels ("&amp;", "≥1", "=1", etc.). The bubble at the output indicates inversion (NOT, NAND, NOR, XNOR).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Sources &amp; Grounds</span><span class="fig">FIG. 1O-5</span></div>
+      <div class="symbol-grid" id="symbols-sources"></div>
+      <div class="note">Voltage sources show "+" and "−" or a longer line for positive. AC source uses sine wave inside circle. Battery: long line is positive, short line is negative; multiple cells = multiple line pairs. Ground symbols: earth ground (descending lines) for actual earth connection; chassis or signal ground (triangle) for circuit reference. Use distinct symbols for analog, digital, and earth grounds when the circuit has multiple reference planes.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Switches, Connectors &amp; Misc</span><span class="fig">FIG. 1O-6</span></div>
+      <div class="symbol-grid" id="symbols-misc"></div>
+      <div class="note">SPST = single-pole single-throw (one input, one output, on/off). SPDT = single-pole double-throw (one input, two outputs, A or B). Push-button defaults to normally-open (NO) unless explicitly drawn as normally-closed (NC). Transformer dots indicate phasing: same-polarity instantaneous voltages on dotted terminals. Crystal symbol is rectangular body between two short capacitor-like plates.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1P · PCB STACKUP & FABRICATION ============ -->
+  <section id="stackup" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1P <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>PCB Stackup &amp; Fabrication</h2>
+      <div class="page-desc">Standard PCB stackups (2, 4, 6, and 8 layer) with FR-4 dielectric, copper weight reference, drill size and aspect-ratio rules, and a side-by-side comparison of fab DRC minimums for common prototyping vendors (JLCPCB, OSH Park, PCBWay, Eurocircuits). Use this to decide layer count before routing and to confirm your design clears the chosen fab's tolerances. For trace impedance math see 1L; for SMD pad sizes see 1Q.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Standard PCB Stackups</span><span class="fig">TAB. 1P-1</span></div>
+      <table>
+        <thead><tr><th>Layer Count</th><th>Typical Use</th><th>Layer Assignment (top → bottom)</th><th>Total Thickness</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">2-layer</td><td>Hobby, simple digital, low-power, prototypes</td><td>L1 signal/power · core 1.5mm · L2 signal/ground</td><td class="num">1.6 mm</td></tr>
+          <tr><td class="hi">4-layer (signal-ground-power-signal)</td><td>Standard for MCU + RF, USB, mixed-signal</td><td>L1 signal · prepreg · L2 GND · core · L3 PWR · prepreg · L4 signal</td><td class="num">1.6 mm</td></tr>
+          <tr><td class="hi">4-layer (signal-ground-signal-signal)</td><td>Dense routing with one solid reference plane</td><td>L1 signal · prepreg · L2 GND · core · L3 signal · prepreg · L4 signal/PWR</td><td class="num">1.6 mm</td></tr>
+          <tr><td class="hi">6-layer</td><td>BGA breakout, high-speed digital, low EMI</td><td>L1 sig · GND · L3 sig · L4 sig · PWR · L6 sig</td><td class="num">1.6 mm</td></tr>
+          <tr><td class="hi">8-layer</td><td>FPGA boards, multi-GHz, multi-rail power</td><td>L1 sig · GND · L3 sig · PWR · GND · L6 sig · GND · L8 sig</td><td class="num">1.6 mm typical</td></tr>
+          <tr><td class="hi">Flex / rigid-flex</td><td>Wearables, cameras, folding mechanisms</td><td>Polyimide core, ½ oz copper, coverlay both sides</td><td class="num">0.1-0.3 mm flex</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Rules of thumb for layer count: 2 layers for anything DC and below ~10 MHz; 4 layers as soon as you have controlled-impedance signals or more than one supply rail; 6 layers for BGAs above ~256 balls or for boards with both high-speed and high-power; 8+ for FPGAs or multi-rail high-speed systems. Adjacency matters: signals should always have an unbroken reference plane directly below (GND ideally). Never sandwich signals between two power planes of different voltages.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Copper Weight Reference</span><span class="fig">TAB. 1P-2</span></div>
+      <table>
+        <thead><tr><th>Weight</th><th>Thickness (µm)</th><th>Thickness (mil)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">½ oz/ft²</td><td class="num">17.8</td><td class="num">0.7</td><td>Inner layers, fine-pitch signal traces, controlled-impedance inner stripline</td></tr>
+          <tr><td class="hi">1 oz/ft² (standard)</td><td class="num">35</td><td class="num">1.4</td><td>Outer layers default; signal traces and modest power up to ~3A on a 1mm trace</td></tr>
+          <tr><td class="hi">2 oz/ft² (heavy)</td><td class="num">70</td><td class="num">2.8</td><td>Power rails up to ~10A; thicker copper requires wider traces and gaps</td></tr>
+          <tr><td class="hi">3 oz/ft²</td><td class="num">105</td><td class="num">4.2</td><td>Motor controllers, switching power; specialty fab and higher cost</td></tr>
+          <tr><td class="hi">4-6 oz/ft²</td><td class="num">140-210</td><td class="num">5.5-8.4</td><td>Heavy industrial power, EV battery management, welder front ends</td></tr>
+        </tbody>
+      </table>
+      <div class="note">"Outer-2-inner-1" notation means 2 oz/ft² on outer layers, 1 oz/ft² on inner layers; very common for power boards. Heavier copper requires wider trace/space minimums because etching is less precise: at 2 oz copper, expect minimum trace/space to roughly double from the bare-copper minimum. Cost goes up roughly linearly with copper weight at most fabs; specialty heavy-copper houses (Bittele, etc.) offer 10+ oz weights.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Standard Drill Sizes &amp; Aspect Ratio</span><span class="fig">TAB. 1P-3</span></div>
+      <table>
+        <thead><tr><th>Drill (mm)</th><th>Drill (mil)</th><th>Use</th><th>Min Pad Diameter (mm)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">0.15</td><td class="num">6</td><td>Microvias (HDI fabs only; laser-drilled blind vias)</td><td class="num">0.30</td></tr>
+          <tr><td class="hi">0.20</td><td class="num">8</td><td>Small signal vias (HDI capable fabs)</td><td class="num">0.40</td></tr>
+          <tr><td class="hi">0.25</td><td class="num">10</td><td>Signal via, dense BGA breakout</td><td class="num">0.50</td></tr>
+          <tr><td class="hi">0.30</td><td class="num">12</td><td>Standard signal/power via; the workhorse</td><td class="num">0.60</td></tr>
+          <tr><td class="hi">0.40</td><td class="num">16</td><td>Power vias, larger TH pads</td><td class="num">0.70</td></tr>
+          <tr><td class="hi">0.50</td><td class="num">20</td><td>Through-hole component leads (small resistors, headers)</td><td class="num">0.80</td></tr>
+          <tr><td class="hi">0.80</td><td class="num">31.5</td><td>TH leads, 0.1" headers</td><td class="num">1.20</td></tr>
+          <tr><td class="hi">1.0-1.2</td><td class="num">39-47</td><td>TH headers, larger leads, edge mounts</td><td class="num">1.6-2.0</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Aspect ratio (board thickness / drill diameter) determines plating reliability. Standard fab tier supports 8:1 aspect ratio: a 0.30mm drill works through 2.4mm of board. For a 1.6mm board, drills down to 0.20mm are workable; below that requires HDI capable fabs. Annular ring (pad radius minus drill radius) is typically 0.10-0.15mm for standard tier and is what limits how small the pad around a given drill can be.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Fab DRC Comparison (Prototyping Vendors)</span><span class="fig">TAB. 1P-4</span></div>
+      <table>
+        <thead><tr><th>Spec</th><th>JLCPCB (standard)</th><th>OSH Park (4-layer)</th><th>PCBWay (standard)</th><th>Eurocircuits (Standard pool)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Min trace/space</td><td class="num">5 mil / 5 mil</td><td class="num">5 mil / 5 mil</td><td class="num">5 mil / 5 mil</td><td class="num">5 mil / 5 mil (PE), 4/4 (RF)</td></tr>
+          <tr><td class="hi">Min drill (mech.)</td><td class="num">0.20 mm</td><td class="num">0.25 mm</td><td class="num">0.20 mm</td><td class="num">0.20 mm</td></tr>
+          <tr><td class="hi">Min annular ring</td><td class="num">0.13 mm</td><td class="num">0.15 mm (6 mil)</td><td class="num">0.125 mm</td><td class="num">0.125 mm</td></tr>
+          <tr><td class="hi">Min hole-to-copper</td><td class="num">0.20 mm</td><td class="num">0.20 mm</td><td class="num">0.15 mm</td><td class="num">0.15 mm</td></tr>
+          <tr><td class="hi">Min edge clearance</td><td class="num">0.20 mm</td><td class="num">0.25 mm</td><td class="num">0.20 mm</td><td class="num">0.20 mm</td></tr>
+          <tr><td class="hi">Min solder mask sliver</td><td class="num">0.10 mm</td><td class="num">0.10 mm</td><td class="num">0.10 mm</td><td class="num">0.10 mm</td></tr>
+          <tr><td class="hi">Min silkscreen text</td><td class="num">0.8 mm (0.15 mm stroke)</td><td class="num">1.0 mm</td><td class="num">0.8 mm</td><td class="num">1.0 mm</td></tr>
+          <tr><td class="hi">Max copper weight (std.)</td><td class="num">2 oz outer</td><td class="num">1 oz</td><td class="num">2 oz outer</td><td class="num">1 oz / 35 µm</td></tr>
+          <tr><td class="hi">Controlled impedance</td><td>Extra cost</td><td>Calculator-only</td><td>Standard offer</td><td>Standard offer</td></tr>
+          <tr><td class="hi">Min board size</td><td class="num">10 × 10 mm</td><td class="num">none stated</td><td class="num">10 × 10 mm</td><td class="num">10 × 10 mm</td></tr>
+          <tr><td class="hi">Aspect ratio (PTH)</td><td class="num">8:1</td><td class="num">7:1</td><td class="num">8:1 (10:1 advanced)</td><td class="num">8:1</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Values are nominal minimums for standard production tiers as of 2024-2025; check current capability pages before committing to a tight design. "Advanced" or "high-precision" tiers at each vendor go significantly tighter (3 mil trace/space, 4 mil annular ring, smaller drills) at higher cost and lead time. For first-prototype work the standard tier at any of these vendors is usually fine; the cheapest path is to design to OSH Park or JLCPCB standard tier and then verify against the vendor's published rules.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Solder Paste Powder Sizes &amp; Selection</span><span class="fig">TAB. 1P-5</span></div>
+      <table>
+        <thead><tr><th>Type</th><th>Particle Size (µm)</th><th>Smallest Aperture</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">T3</td><td class="num">25-45</td><td class="num">0.30 mm (12 mil)</td><td>Most common; up to 0.5mm pitch; standard 0603/0402 reflow</td></tr>
+          <tr><td class="hi">T4</td><td class="num">20-38</td><td class="num">0.20 mm (8 mil)</td><td>Fine-pitch QFN, 0402, smaller; better release through stencil</td></tr>
+          <tr><td class="hi">T5</td><td class="num">15-25</td><td class="num">0.15 mm (6 mil)</td><td>Very fine pitch BGA (0.4 mm), 0201, microvia paste-in-hole</td></tr>
+          <tr><td class="hi">T6</td><td class="num">5-15</td><td class="num">0.10 mm (4 mil)</td><td>Specialty; 01005 chips, 0.3 mm BGA; expensive, short shelf life</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Alloy</th><th>Composition</th><th>Liquidus</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SAC305</td><td class="num">Sn 96.5 / Ag 3.0 / Cu 0.5</td><td class="num">217-220 °C</td><td>The default lead-free alloy. Strong, expensive (silver content)</td></tr>
+          <tr><td class="hi">SAC0307</td><td class="num">Sn 99 / Ag 0.3 / Cu 0.7</td><td class="num">217-227 °C</td><td>Low-silver lead-free; cheaper, more brittle joints</td></tr>
+          <tr><td class="hi">Sn-Pb eutectic</td><td class="num">Sn 63 / Pb 37</td><td class="num">183 °C</td><td>Lower temp, easier rework, banned for consumer EU goods (RoHS)</td></tr>
+          <tr><td class="hi">Bi-Sn (low-temp)</td><td class="num">Sn 42 / Bi 58</td><td class="num">138 °C</td><td>Heat-sensitive components, connectors with plastic shells</td></tr>
+          <tr><td class="hi">Sn-Cu</td><td class="num">Sn 99.3 / Cu 0.7</td><td class="num">227 °C</td><td>Cheapest lead-free; wave soldering common</td></tr>
+        </tbody>
+      </table>
+      <div class="note">No-clean fluxes are standard for most assembly; water-soluble fluxes leave conductive residues that must be washed off (and require specialized wash equipment). Solder paste shelf life is 6-12 months refrigerated, 4-8 hours at room temperature. Stir before use; never re-refrigerate after opening. For hobby reflow with hot air or a toaster oven, T3 SAC305 in a 100g tub is the standard choice.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Stencil Thickness &amp; Area Ratio</span><span class="fig">TAB. 1P-6</span></div>
+      <table>
+        <thead><tr><th>Stencil Thickness</th><th>Best For</th><th>Min Aperture (Area Ratio &gt; 0.66)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">0.20 mm (8 mil)</td><td>0805 and larger; THT pads; rugged industrial</td><td class="num">~0.65 mm square</td></tr>
+          <tr><td class="hi">0.15 mm (6 mil)</td><td>Common general-purpose; 0603, SOIC, QFP, basic QFN</td><td class="num">~0.50 mm square</td></tr>
+          <tr><td class="hi">0.13 mm (5 mil)</td><td>Mixed fine and coarse; 0402, 0.5mm QFN</td><td class="num">~0.42 mm square</td></tr>
+          <tr><td class="hi">0.10 mm (4 mil)</td><td>Fine-pitch; 0.4mm BGA, 0201, smaller QFN</td><td class="num">~0.33 mm square</td></tr>
+          <tr><td class="hi">0.08 mm (3 mil)</td><td>Ultra-fine; 0.3mm BGA, WLCSP</td><td class="num">~0.26 mm square</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Area ratio = aperture-opening area / aperture-wall area. For laser-cut stainless stencils, paste releases reliably when ratio &gt; 0.66 (some sources say 0.50 for electroformed). Below this, paste sticks to the aperture walls instead of the pad and you get insufficient paste. For a 0.15 mm stencil with a 0.5 mm square aperture: area = 0.25 mm², walls = 4 × 0.5 × 0.15 = 0.30 mm², ratio = 0.83. Stencils with mixed coarse/fine apertures often use step-down (thinner where fine, thicker elsewhere) or split into two stencils.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Reflow Profile Reference</span><span class="fig">TAB. 1P-7</span></div>
+      <table>
+        <thead><tr><th>Phase</th><th>SnPb (Sn63/Pb37)</th><th>SAC305 (lead-free)</th><th>Bi-Sn (low-temp)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Preheat ramp</td><td class="num">1-3 °C/s to 100°C</td><td class="num">1-3 °C/s to 150°C</td><td class="num">1-2 °C/s to 80°C</td></tr>
+          <tr><td class="hi">Soak (flux activation)</td><td class="num">100-150°C, 60-90s</td><td class="num">150-200°C, 60-120s</td><td class="num">80-100°C, 60-90s</td></tr>
+          <tr><td class="hi">Ramp to peak</td><td class="num">2-3 °C/s</td><td class="num">1.5-3 °C/s</td><td class="num">1.5-2 °C/s</td></tr>
+          <tr><td class="hi">Peak temperature</td><td class="num">210-230°C</td><td class="num">235-250°C</td><td class="num">155-175°C</td></tr>
+          <tr><td class="hi">Time above liquidus (TAL)</td><td class="num">45-90s (Liq = 183°C)</td><td class="num">45-90s (Liq = 217°C)</td><td class="num">45-60s (Liq = 138°C)</td></tr>
+          <tr><td class="hi">Cool-down rate</td><td class="num">2-4 °C/s</td><td class="num">2-4 °C/s</td><td class="num">2-4 °C/s</td></tr>
+          <tr><td class="hi">Total cycle time</td><td class="num">3-5 minutes</td><td class="num">4-6 minutes</td><td class="num">3-4 minutes</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Always check the paste datasheet first; manufacturers tune fluxes for specific profiles. Soak phase activates the flux and equalizes board temperature; skipping it causes tombstoning on small parts. Time above liquidus (TAL) must be long enough for full wetting but short enough to limit intermetallic growth. For hot-plate or toaster-oven reflow, a thermocouple on the board with a profile-tracking app (PhasePlot, ReflowKit) is much more reliable than timer guesses. Bi-Sn low-temp paste is excellent for boards with heat-sensitive components but is brittle and not recommended for thermal-cycling applications.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1Q · SMD LAND PATTERNS ============ -->
+  <section id="landpatterns" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1Q <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>SMD Land Patterns</h2>
+      <div class="page-desc">Reference pad sizes for common surface-mount packages following IPC-7351 nominal (Density Level B) conventions. For each package: pad dimensions, pitch, and notes on via-in-pad and fine-pitch handling. These are starting points; always cross-check against the part datasheet's recommended pattern, which takes precedence.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Chip Resistors &amp; Capacitors (2-terminal)</span><span class="fig">TAB. 1Q-1</span></div>
+      <table>
+        <thead><tr><th>Package</th><th>Body L × W (mm)</th><th>Pad L × W (mm)</th><th>Pad Gap (mm)</th><th>Hand Solder?</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">0201 (0603 metric)</td><td class="num">0.60 × 0.30</td><td class="num">0.30 × 0.30</td><td class="num">0.30</td><td>No (microscope only)</td></tr>
+          <tr><td class="hi">0402 (1005 metric)</td><td class="num">1.00 × 0.50</td><td class="num">0.55 × 0.50</td><td class="num">0.50</td><td>Tweezers + flux, with patience</td></tr>
+          <tr><td class="hi">0603 (1608 metric)</td><td class="num">1.60 × 0.80</td><td class="num">0.85 × 0.95</td><td class="num">0.85</td><td>Yes, the everyday default for hand work</td></tr>
+          <tr><td class="hi">0805 (2012 metric)</td><td class="num">2.00 × 1.25</td><td class="num">1.15 × 1.30</td><td class="num">0.90</td><td>Yes, easy</td></tr>
+          <tr><td class="hi">1206 (3216 metric)</td><td class="num">3.20 × 1.60</td><td class="num">1.65 × 1.60</td><td class="num">1.80</td><td>Yes, easy</td></tr>
+          <tr><td class="hi">1210 (3225 metric)</td><td class="num">3.20 × 2.50</td><td class="num">1.65 × 2.50</td><td class="num">1.80</td><td>Yes</td></tr>
+          <tr><td class="hi">2010 (5025 metric)</td><td class="num">5.00 × 2.50</td><td class="num">2.70 × 2.50</td><td class="num">2.00</td><td>Yes (often used for high-power resistors)</td></tr>
+          <tr><td class="hi">2512 (6432 metric)</td><td class="num">6.30 × 3.20</td><td class="num">2.70 × 3.20</td><td class="num">3.20</td><td>Yes (1W+ chip resistors)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">"0603" in US Imperial nomenclature is "1608" in metric; they refer to the same part. The metric designation gives the body length and width in tenths of a millimeter. For hand assembly, 0603 is the sweet spot: small enough for dense layouts, large enough to handle with tweezers and standard 0.5-0.8mm iron tips. Anything smaller than 0402 is reflow-only for most makers.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>SOT &amp; SOIC Packages</span><span class="fig">TAB. 1Q-2</span></div>
+      <table>
+        <thead><tr><th>Package</th><th>Pitch (mm)</th><th>Pad L × W (mm)</th><th>Pin Count</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SOT-23</td><td class="num">0.95</td><td class="num">1.20 × 0.60</td><td class="num">3</td><td>Single transistor / small regulator; ubiquitous</td></tr>
+          <tr><td class="hi">SOT-23-5</td><td class="num">0.95</td><td class="num">1.20 × 0.60</td><td class="num">5</td><td>Op-amps, single-channel logic; same footprint as SOT-23</td></tr>
+          <tr><td class="hi">SOT-23-6</td><td class="num">0.95</td><td class="num">1.20 × 0.60</td><td class="num">6</td><td>USB protection ICs, single MOSFETs with body diode</td></tr>
+          <tr><td class="hi">SOT-89</td><td class="num">1.50</td><td class="num">1.65 × 0.95 + thermal pad</td><td class="num">3</td><td>Small power regulator / transistor with tab</td></tr>
+          <tr><td class="hi">SOT-223</td><td class="num">2.30</td><td class="num">1.65 × 1.95 + tab</td><td class="num">4</td><td>1-1.5A linear regulators; tab is heat sink</td></tr>
+          <tr><td class="hi">SOIC-8 (narrow)</td><td class="num">1.27</td><td class="num">1.95 × 0.60</td><td class="num">8</td><td>Op-amps, small MCUs, EEPROMs</td></tr>
+          <tr><td class="hi">SOIC-16 (narrow)</td><td class="num">1.27</td><td class="num">1.95 × 0.60</td><td class="num">16</td><td>Logic, ADCs, drivers</td></tr>
+          <tr><td class="hi">SOIC-16 (wide)</td><td class="num">1.27</td><td class="num">2.05 × 0.60</td><td class="num">16</td><td>Wider body for higher voltage isolation</td></tr>
+          <tr><td class="hi">TSSOP-14</td><td class="num">0.65</td><td class="num">1.45 × 0.40</td><td class="num">14</td><td>Smaller alternative to SOIC; harder to hand-solder</td></tr>
+          <tr><td class="hi">TSSOP-28</td><td class="num">0.65</td><td class="num">1.45 × 0.40</td><td class="num">28</td><td>Common for ICs needing more I/O than SOIC offers</td></tr>
+          <tr><td class="hi">SSOP-20</td><td class="num">0.65</td><td class="num">1.45 × 0.40</td><td class="num">20</td><td>Very similar to TSSOP; slightly different body height</td></tr>
+        </tbody>
+      </table>
+      <div class="note">SOIC packages have 1.27mm (50 mil) pitch and are the easiest fine-pitch packages to hand solder. TSSOP/SSOP at 0.65mm pitch require either fine-tip soldering or drag-soldering with plenty of flux. For first-time use of a 0.65mm package, lay down a thicker line of flux, tack two diagonally-opposite pins, then drag-solder each side with the iron pulling solder away from the lead row.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>QFN / DFN Packages</span><span class="fig">TAB. 1Q-3</span></div>
+      <table>
+        <thead><tr><th>Package</th><th>Pitch (mm)</th><th>Body (mm)</th><th>Pad L × W (mm)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">DFN-6 (1×1)</td><td class="num">0.50</td><td class="num">1.0 × 1.0</td><td class="num">0.30 × 0.20</td><td>Tiny single-channel parts (ADC, ESD)</td></tr>
+          <tr><td class="hi">DFN-8 (2×2)</td><td class="num">0.50</td><td class="num">2.0 × 2.0</td><td class="num">0.35 × 0.25</td><td>Small op-amps, LDOs</td></tr>
+          <tr><td class="hi">QFN-16 (3×3)</td><td class="num">0.50</td><td class="num">3.0 × 3.0</td><td class="num">0.35 × 0.25</td><td>Small MCUs (e.g. ATtiny), low-pin-count ICs</td></tr>
+          <tr><td class="hi">QFN-20 (4×4)</td><td class="num">0.50</td><td class="num">4.0 × 4.0</td><td class="num">0.55 × 0.30</td><td>Wireless modules, power management ICs</td></tr>
+          <tr><td class="hi">QFN-32 (5×5)</td><td class="num">0.50</td><td class="num">5.0 × 5.0</td><td class="num">0.60 × 0.30</td><td>ESP32 modules, mid-range MCUs</td></tr>
+          <tr><td class="hi">QFN-48 (7×7)</td><td class="num">0.50</td><td class="num">7.0 × 7.0</td><td class="num">0.80 × 0.30</td><td>STM32 mid-range, sensor hubs</td></tr>
+          <tr><td class="hi">QFN-64 (9×9)</td><td class="num">0.50</td><td class="num">9.0 × 9.0</td><td class="num">0.85 × 0.30</td><td>Higher-end MCUs, audio codecs, USB hubs</td></tr>
+          <tr><td class="hi">QFN-100 (12×12)</td><td class="num">0.40</td><td class="num">12 × 12</td><td class="num">0.65 × 0.20</td><td>FPGAs (low-end), application processors</td></tr>
+        </tbody>
+      </table>
+      <div class="note">QFN central thermal pad is almost always present and must be soldered for both thermal and (often) electrical reasons (it's usually internally bonded to ground). Use a 4 × 4 array of 0.3mm thermal vias under the pad to escape heat to inner layers. Hand-soldering QFNs is possible but tedious: tack two pins, reflow the body with a hot-air station, then touch-up edge fillets. Solder paste + stencil + hot-air or hotplate is the saner workflow for QFN.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>BGA Packages</span><span class="fig">TAB. 1Q-4</span></div>
+      <table>
+        <thead><tr><th>Pitch (mm)</th><th>Ball Diameter (mm)</th><th>Pad Diameter (mm)</th><th>Min Trace Escape (mil)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1.27</td><td class="num">0.75</td><td class="num">0.65</td><td class="num">5 mil</td><td>Older "PGA-like" BGA; easy to route</td></tr>
+          <tr><td class="hi">1.00</td><td class="num">0.50</td><td class="num">0.50</td><td class="num">5 mil</td><td>Common for memory, FPGAs (older parts)</td></tr>
+          <tr><td class="hi">0.80</td><td class="num">0.40</td><td class="num">0.40</td><td class="num">4 mil</td><td>Application processors, mid-range FPGAs</td></tr>
+          <tr><td class="hi">0.65</td><td class="num">0.30</td><td class="num">0.30</td><td class="num">4 mil + microvia</td><td>Mobile SoCs; needs HDI</td></tr>
+          <tr><td class="hi">0.50</td><td class="num">0.25</td><td class="num">0.25</td><td class="num">3 mil + microvia</td><td>WLCSP (chip-scale); HDI required</td></tr>
+          <tr><td class="hi">0.40</td><td class="num">0.20</td><td class="num">0.20</td><td class="num">3 mil + microvia</td><td>Very dense WLCSP; specialty fabs only</td></tr>
+        </tbody>
+      </table>
+      <div class="note">BGA escape routing: for pitch ≥ 1.0mm, you can route through-vias between balls on a 2-layer board. From 0.8mm pitch down, you need a 4-layer minimum and dog-bone (via offset to pad with short trace) routing. From 0.65mm and below, microvias and HDI become mandatory: blind/buried vias laser-drilled into the pad. Outer-ball-only routing is the standard first-pass escape; inner balls drop to inner layers via dog-bones or via-in-pad.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Pad Sizing Conventions (IPC-7351 Density Levels)</span><span class="fig">TAB. 1Q-5</span></div>
+      <table>
+        <thead><tr><th>Density Level</th><th>Toe / Heel Extension</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Level A — Most (largest pads)</td><td>Larger pad past lead</td><td>Hand soldering, harsh environment, low-quantity prototype</td></tr>
+          <tr><td class="hi">Level B — Nominal</td><td>Standard reflow-friendly</td><td>Most commercial reflow assembly; the default</td></tr>
+          <tr><td class="hi">Level C — Least (smallest pads)</td><td>Minimal extension</td><td>High-density designs, BGA escape, mobile devices</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Most design tools (KiCad, Altium, Eagle) ship with Level B as default. For hand-solder prototypes, switching to Level A library variants gives you more pad to land on with the iron tip. The size differences are small (typically 5-15% larger pads) but the practical difference at the bench is real.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1R · BUS ROUTING REFERENCE ============ -->
+  <section id="busrouting" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1R <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Bus Routing Reference</h2>
+      <div class="page-desc">Impedance targets, length limits, and length-matching tolerances for common high-speed and high-current buses. Use these as routing rules of thumb; specific protocol specs (USB-IF, JEDEC, HDMI Forum) take precedence for compliant designs. For impedance math see 1L; for connector footprints and pin assignments, see 1C Pinouts.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>USB 2.0 (Full / High Speed)</span><span class="fig">TAB. 1R-1</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Differential impedance</td><td class="num">90 Ω ±15%</td><td>Edge-coupled microstrip or stripline</td></tr>
+          <tr><td class="hi">Max trace length</td><td class="num">~150 mm (6 in)</td><td>Beyond this needs equalization or repeater</td></tr>
+          <tr><td class="hi">Length matching (D+ ↔ D−)</td><td class="num">±0.15 mm (±6 mil)</td><td>Skew &lt; 100 ps</td></tr>
+          <tr><td class="hi">Length to common-mode choke</td><td class="num">&lt; 15 mm from connector</td><td>For ESD/EMI on the host side</td></tr>
+          <tr><td class="hi">Reference plane</td><td>Solid ground; no splits under pair</td><td>Critical for return-current continuity</td></tr>
+          <tr><td class="hi">Stubs</td><td>None tolerated</td><td>No daisy-chain, no test points dangling</td></tr>
+          <tr><td class="hi">Via count</td><td>Minimize; 0 ideal, 2 max</td><td>Each via adds ~30 ps skew and impedance discontinuity</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>USB 3.x SuperSpeed (5/10/20 Gbps)</span><span class="fig">TAB. 1R-2</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Differential impedance</td><td class="num">85-100 Ω (typ. 90 Ω)</td><td>Tighter tolerance than USB 2.0</td></tr>
+          <tr><td class="hi">Max trace length</td><td class="num">~150 mm (USB 3.0), ~100 mm (3.1/3.2)</td><td>Higher speeds = shorter loss budget</td></tr>
+          <tr><td class="hi">Length matching</td><td class="num">±0.13 mm (±5 mil)</td><td>Within each diff pair</td></tr>
+          <tr><td class="hi">Intra-pair coupling</td><td>Tight (S ≈ W ≈ H)</td><td>Keep pair geometry constant for full length</td></tr>
+          <tr><td class="hi">AC coupling caps</td><td class="num">100 nF (0402 GRM type, very low ESL)</td><td>Required on TX side of each lane</td></tr>
+          <tr><td class="hi">Via stubs</td><td>Forbidden; back-drill or skip-layer route</td><td>Any back-drill must remove stub to &lt; 10 mil</td></tr>
+          <tr><td class="hi">Reference plane</td><td>Solid GND adjacent layer</td><td>No splits, no other signals near</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>HDMI 1.4 / 2.0 / 2.1 (TMDS Lanes)</span><span class="fig">TAB. 1R-3</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Differential impedance</td><td class="num">100 Ω ±10%</td><td>Per TMDS lane</td></tr>
+          <tr><td class="hi">Max trace length</td><td class="num">~150 mm at 1080p, ~100 mm at 4K, ~75 mm at 8K</td><td>Loss-budget driven</td></tr>
+          <tr><td class="hi">Length matching (within pair)</td><td class="num">±0.13 mm (±5 mil)</td><td>Within each lane</td></tr>
+          <tr><td class="hi">Length matching (lane-to-lane)</td><td class="num">±1.27 mm (±50 mil)</td><td>Between TMDS lanes</td></tr>
+          <tr><td class="hi">Clock-to-data skew</td><td class="num">±10 mil</td><td>HDMI clock lane to data lanes</td></tr>
+          <tr><td class="hi">Via budget</td><td class="num">≤ 2 per lane</td><td>Each via degrades signal integrity</td></tr>
+          <tr><td class="hi">Reference plane</td><td>Solid GND under entire lane group</td><td>Avoid plane splits and slots</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Gigabit Ethernet (1000BASE-T)</span><span class="fig">TAB. 1R-4</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Differential impedance</td><td class="num">100 Ω ±10%</td><td>Four bidirectional pairs (MDI0-3)</td></tr>
+          <tr><td class="hi">Max trace length</td><td class="num">~100 mm (PHY to magnetics)</td><td>Plus 100 m over the Cat-5e+ cable</td></tr>
+          <tr><td class="hi">Length matching (intra-pair)</td><td class="num">±1.27 mm (±50 mil)</td><td>1000BASE-T is more forgiving than serial protocols</td></tr>
+          <tr><td class="hi">Length matching (pair-to-pair)</td><td>Loose; not critical</td><td>Each pair is independent</td></tr>
+          <tr><td class="hi">Magnetics placement</td><td class="num">&lt; 25 mm from RJ45</td><td>Between PHY and RJ45; isolation barrier required</td></tr>
+          <tr><td class="hi">PHY-side termination</td><td class="num">49.9 Ω center-tap to chassis</td><td>Bob Smith termination via 1 kΩ + 1nF to chassis ground</td></tr>
+          <tr><td class="hi">Chassis ground</td><td>Separate from logic GND, joined at one point</td><td>Common-mode noise mitigation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>DDR3 / DDR4 SDRAM</span><span class="fig">TAB. 1R-5</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>DDR3</th><th>DDR4</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Single-ended impedance</td><td class="num">40 Ω ±10%</td><td class="num">40 Ω ±10%</td></tr>
+          <tr><td class="hi">Differential impedance (DQS, CK)</td><td class="num">80 Ω</td><td class="num">80 Ω</td></tr>
+          <tr><td class="hi">Topology</td><td>Fly-by (one trace through all chips)</td><td>Fly-by</td></tr>
+          <tr><td class="hi">Address/command skew</td><td class="num">±100 mil to longest DQS</td><td class="num">±50 mil</td></tr>
+          <tr><td class="hi">DQ-to-DQS skew (within byte)</td><td class="num">±25 mil</td><td class="num">±10 mil</td></tr>
+          <tr><td class="hi">Termination</td><td>VTT termination at end of fly-by</td><td>On-die termination (ODT); no VTT</td></tr>
+          <tr><td class="hi">Stackup minimum</td><td>4 layer for single chip, 6 for arrays</td><td>6 layer minimum</td></tr>
+          <tr><td class="hi">Voltage</td><td class="num">1.5 V (1.35 V LP)</td><td class="num">1.2 V (1.05 V LP)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">DDR memory routing is the deepest end of mainstream PCB design. Plan on at least 6 layers, controlled impedance from the fab, and a tool with constraint-driven length matching (KiCad has it; expect to spend real time on it). For one chip on a known-good reference design, you can copy the schematic + layout from the SoC vendor's eval board and skip a lot of this. For multi-chip arrays, you need to read the JEDEC docs.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>LVDS / SerDes Lanes</span><span class="fig">TAB. 1R-6</span></div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Differential impedance</td><td class="num">100 Ω ±10%</td><td>Common to FPD-Link, V-by-One, JESD204B</td></tr>
+          <tr><td class="hi">Max trace length</td><td class="num">~250 mm (low-speed), ~100 mm (multi-Gbps)</td><td>Speed-dependent; check standard</td></tr>
+          <tr><td class="hi">Intra-pair skew</td><td class="num">±5 mil typical</td><td>Tighter for higher speeds</td></tr>
+          <tr><td class="hi">Termination</td><td class="num">100 Ω at receiver</td><td>Single resistor across pair; close to RX</td></tr>
+          <tr><td class="hi">AC coupling</td><td class="num">100 nF (0402 GRM)</td><td>Required for JESD204B; optional for FPD-Link</td></tr>
+          <tr><td class="hi">Common-mode chokes</td><td>Not on the signal path</td><td>Use ESD only at connector; never inline</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>I²C / SPI / CAN (Lower-Speed)</span><span class="fig">TAB. 1R-7</span></div>
+      <table>
+        <thead><tr><th>Bus</th><th>Topology</th><th>Termination</th><th>Length / Capacitance Limit</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">I²C Standard (100 kHz)</td><td>Multi-drop, open-drain</td><td>Pullup to Vcc (4.7-10 kΩ)</td><td class="num">~400 pF total bus capacitance</td></tr>
+          <tr><td class="hi">I²C Fast (400 kHz)</td><td>Multi-drop, open-drain</td><td>Pullup to Vcc (2.2-4.7 kΩ)</td><td class="num">~400 pF total</td></tr>
+          <tr><td class="hi">I²C Fast+ (1 MHz)</td><td>Multi-drop, open-drain</td><td>Pullup (1-2.2 kΩ) or active</td><td class="num">~550 pF total</td></tr>
+          <tr><td class="hi">SPI (any speed)</td><td>Master + multi-slave (CS each)</td><td>Source-series 22-33 Ω if &gt; 25 MHz</td><td>Speed-limited by capacitance &amp; ringing</td></tr>
+          <tr><td class="hi">CAN 2.0 (1 Mbps)</td><td>Bus (linear topology)</td><td>120 Ω at each end</td><td class="num">~40 m at 1 Mbps, ~500 m at 125 kbps</td></tr>
+          <tr><td class="hi">RS-485</td><td>Bus (linear)</td><td>120 Ω at each end + bias resistors</td><td class="num">~1200 m at 100 kbps</td></tr>
+          <tr><td class="hi">RS-232</td><td>Point-to-point</td><td>None</td><td class="num">~15 m at 19.2 kbps</td></tr>
+        </tbody>
+      </table>
+      <div class="note">I²C bus capacitance is the most common gotcha: each device contributes ~10 pF, plus 1-2 pF/cm of trace. A 400 kHz bus with 20 devices on a 30 cm trace network is already near the limit. If you have to go longer or faster, use an I²C buffer (PCA9517, P82B96) or lower the pullups. SPI doesn't have a hard length limit but ringing kills it; 22-33 Ω source-series resistors near the MCU are cheap insurance above 25 MHz.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1S · PULL-UP & PULL-DOWN REFERENCE ============ -->
+  <section id="pullup" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1S <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Pull-up &amp; Pull-down Resistors</h2>
+      <div class="page-desc">Sizing rules and gotchas for pull-up and pull-down resistors. I²C bus pull-up calculator (capacitance, speed, and supply voltage to maximum resistance), typical values by signal type, and notes on internal MCU pull-ups, MOSFET gate handling, and reset/boot configuration. For I²C bus topology see 1I; for SPI and slower bus rules see 1R.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>I²C Pull-up Resistor Calculator</span><span class="fig">TOOL 1S-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Bus Voltage V<sub>cc</sub> (V)</label><input type="number" id="pu-vcc" step="any" value="3.3"></div>
+          <div class="field"><label>Total Bus Capacitance (pF)<br><small>~10 pF per device + 1-2 pF/cm trace</small></label><input type="number" id="pu-cbus" step="any" value="100"></div>
+          <div class="field">
+            <label>I²C Speed</label>
+            <select id="pu-speed">
+              <option value="standard" selected>Standard (100 kHz, t_r ≤ 1000 ns)</option>
+              <option value="fast">Fast (400 kHz, t_r ≤ 300 ns)</option>
+              <option value="fastplus">Fast Plus (1 MHz, t_r ≤ 120 ns)</option>
+              <option value="hs">High-Speed (3.4 MHz, t_r ≤ 80 ns)</option>
+            </select>
+          </div>
+          <div class="field"><label>Min Sink Current (mA)<br><small>weakest device on bus</small></label><input type="number" id="pu-isink" step="any" value="3"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Max Pull-up (rise time)</span><span class="val" id="pu-rmax">—</span></div>
+            <div class="calc-row"><span class="lbl">Min Pull-up (sink current)</span><span class="val" id="pu-rmin">—</span></div>
+            <div class="calc-row"><span class="lbl">Recommended Value</span><span class="val" id="pu-rrec">—</span></div>
+            <div class="calc-row"><span class="lbl">Sink Current @ V_OL</span><span class="val" id="pu-iol">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="pu-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">R<sub>max</sub> from rise time: t<sub>r</sub> = 0.8473 × R × C, solving R = t<sub>r</sub> / (0.8473 × C). R<sub>min</sub> from sink current: R = (V<sub>cc</sub> − V<sub>OL</sub>) / I<sub>OL</sub>, with V<sub>OL</sub> = 0.4V typical. The bus speed sets the maximum allowed rise time per the I²C spec. Higher capacitance forces lower R (faster pull-up) which forces higher sink current. For 100 pF bus at 400 kHz: 2.2-4.7 kΩ is typical. For long busses or many devices, use an active buffer rather than fighting the math.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Typical Pull-up / Pull-down Values by Signal Type</span><span class="fig">TAB. 1S-1</span></div>
+      <table>
+        <thead><tr><th>Signal Type</th><th>Typical Value</th><th>Range</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">I²C bus pull-up (3.3V)</td><td class="num">4.7 kΩ</td><td class="num">2.2-10 kΩ</td><td>Lower for fast-mode or high capacitance buses</td></tr>
+          <tr><td class="hi">I²C bus pull-up (5V)</td><td class="num">10 kΩ</td><td class="num">4.7-10 kΩ</td><td>Higher V<sub>cc</sub> needs higher R to keep sink current in spec</td></tr>
+          <tr><td class="hi">GPIO input bias (unused)</td><td class="num">10-100 kΩ</td><td class="num">10 kΩ-1 MΩ</td><td>Prevent floating; balance leakage vs noise immunity</td></tr>
+          <tr><td class="hi">Reset / NRST line</td><td class="num">10 kΩ</td><td class="num">4.7-100 kΩ</td><td>Pair with a 100nF cap to ground for clean POR</td></tr>
+          <tr><td class="hi">MCU boot / config strap</td><td class="num">10 kΩ</td><td class="num">4.7-47 kΩ</td><td>Boot mode pins on ESP32, STM32; must dominate strap state</td></tr>
+          <tr><td class="hi">MOSFET gate pull-down (logic-level)</td><td class="num">10-100 kΩ</td><td class="num">1 kΩ-1 MΩ</td><td>Ensures OFF state when driver is high-Z (power-up, reset)</td></tr>
+          <tr><td class="hi">MOSFET gate pull-down (high-side)</td><td class="num">10-100 kΩ</td><td class="num">10-470 kΩ</td><td>Tied to source, not GND; varies with topology</td></tr>
+          <tr><td class="hi">SPI CS (chip select) idle</td><td class="num">10 kΩ pull-up</td><td>—</td><td>Prevents bus contention if MCU is in reset / unconfigured</td></tr>
+          <tr><td class="hi">USB D+ (full-speed detect)</td><td class="num">1.5 kΩ to 3.3V</td><td>—</td><td>Specific spec value; not a typical pull-up</td></tr>
+          <tr><td class="hi">UART RX (idle protection)</td><td class="num">100 kΩ to V<sub>cc</sub></td><td class="num">10-470 kΩ</td><td>Optional; keeps line idle-high when transmitter disconnects</td></tr>
+          <tr><td class="hi">Button input (to ground)</td><td class="num">10 kΩ pull-up</td><td class="num">1-100 kΩ</td><td>Often handled by MCU internal pull-up; add external for noise</td></tr>
+          <tr><td class="hi">JTAG / SWD lines</td><td class="num">10-100 kΩ</td><td>—</td><td>TMS, TDI typically pull-up; TCK pull-down; check JEDEC</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Internal MCU Pull-up / Pull-down Reference</span><span class="fig">TAB. 1S-2</span></div>
+      <table>
+        <thead><tr><th>MCU Family</th><th>Internal Pull-up</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">AVR (ATmega, ATtiny)</td><td class="num">~20-50 kΩ</td><td>Pull-up only (no internal pull-down on most parts)</td></tr>
+          <tr><td class="hi">STM32 (most)</td><td class="num">30-50 kΩ</td><td>Both pull-up and pull-down available per pin</td></tr>
+          <tr><td class="hi">ESP32 / ESP32-S3</td><td class="num">~45 kΩ</td><td>Both directions; not on strap pins during boot</td></tr>
+          <tr><td class="hi">RP2040 (Pi Pico)</td><td class="num">~50-80 kΩ</td><td>Both directions; pad current can be configured</td></tr>
+          <tr><td class="hi">SAM D / E (Atmel)</td><td class="num">~40 kΩ</td><td>Both directions; per-pin configurable</td></tr>
+          <tr><td class="hi">PIC (mid-range)</td><td class="num">~50-200 kΩ</td><td>Pull-up only on most parts; weak (high R)</td></tr>
+          <tr><td class="hi">MSP430</td><td class="num">~20-50 kΩ</td><td>Both directions</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Internal pull-ups are convenient but weak: they take 20-50 µs to charge a typical bus, which is too slow for fast I²C or high-capacitance loads. Internal pull-ups are fine for GPIO buttons and unused pins, but always use external resistors for I²C bus and any signal where rise time matters. Internal pull-ups are also typically disabled during reset, which is why straps need external resistors that "win" against the floating-input state.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Gotchas &amp; Design Notes</span><span class="fig">TAB. 1S-3</span></div>
+      <table>
+        <thead><tr><th>Gotcha</th><th>What Happens</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Pull-up too weak on I²C</td><td>Slow rise time; data corruption at fast speeds</td><td>Drop R; or use buffer for very long buses</td></tr>
+          <tr><td class="hi">Pull-up too strong on I²C</td><td>Excess sink current required; weak devices fail</td><td>Check V_OL spec of weakest device on bus</td></tr>
+          <tr><td class="hi">Floating MOSFET gate</td><td>Random turn-on during MCU boot or reset</td><td>10-100 kΩ pull-down (logic-level) or pull-up (high-side)</td></tr>
+          <tr><td class="hi">Reset line bouncing</td><td>Multiple resets per power-up; brown-out misbehavior</td><td>10 kΩ pull-up + 100 nF cap; consider supervisor IC</td></tr>
+          <tr><td class="hi">Strap pin contested</td><td>MCU boots into wrong mode (USB, UART, flash)</td><td>Strap resistor must dominate; check internal pull direction</td></tr>
+          <tr><td class="hi">GPIO leakage on tight pull-up</td><td>Voltage divider effect; pin reads incorrectly</td><td>Pull-up &lt; 100 kΩ for noisy environments; check I_leak spec</td></tr>
+          <tr><td class="hi">Open-drain to higher V<sub>cc</sub></td><td>Pull-up clamped by IC ESD diode to its own V<sub>cc</sub></td><td>Use proper level shifter (BSS138 + 10 kΩ trick or dedicated IC)</td></tr>
+          <tr><td class="hi">Series + pull-up mismatch</td><td>RC divider creates slow signal; signal misread</td><td>Source-series &lt; 10% of pull-up value</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 1T · CONNECTOR REFERENCE ============ -->
+  <section id="connectors" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1T <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Connector Reference</h2>
+      <div class="page-desc">Quick reference for common connector pinouts and footprints: USB family, Ethernet RJ45, SD/microSD, JST family, common pin headers, programming headers (JTAG, SWD, UART, ICSP), and power barrel jacks. For high-speed routing rules of buses using these connectors see 1R; for MCU pin-side pinouts see 1C.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>USB Connector Family</span><span class="fig">TAB. 1T-1</span></div>
+      <table>
+        <thead><tr><th>Connector</th><th>Pins</th><th>Pinout</th><th>Footprint Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">USB-A (host)</td><td class="num">4</td><td>1: V<sub>BUS</sub> (+5V), 2: D−, 3: D+, 4: GND</td><td>Through-hole standard; 4 signal + 2 shield tabs</td></tr>
+          <tr><td class="hi">USB-B (device, classic)</td><td class="num">4</td><td>Same as USB-A</td><td>Larger device-side connector; older printers, audio</td></tr>
+          <tr><td class="hi">Mini-USB</td><td class="num">5</td><td>1: V<sub>BUS</sub>, 2: D−, 3: D+, 4: ID, 5: GND</td><td>Mostly retired; ID pin for OTG</td></tr>
+          <tr><td class="hi">Micro-USB B</td><td class="num">5</td><td>Same as Mini-USB</td><td>Mostly replaced by USB-C; still common in low-cost devices</td></tr>
+          <tr><td class="hi">USB-C (basic 2.0 only)</td><td class="num">6 used of 24</td><td>VBUS × 2, GND × 2, CC1, CC2, D+, D−</td><td>5.1 kΩ to GND on CC1/CC2 for device; 56 kΩ to V<sub>BUS</sub> for host</td></tr>
+          <tr><td class="hi">USB-C (full SuperSpeed)</td><td class="num">24</td><td>4× SuperSpeed pairs, 2× USB 2.0, CC1/CC2, SBU1/SBU2, V<sub>BUS</sub> × 4, GND × 4</td><td>Reversible; CC pins set orientation; flat C-style ESD/EMI design required</td></tr>
+        </tbody>
+      </table>
+      <div class="note">USB-C minimum-viable design (USB 2.0 only, no Power Delivery): connect VBUS to power, D+ and D− to USB 2.0 pair, CC1 and CC2 each through a 5.1 kΩ resistor to GND. Without the CC resistors a host won't enumerate the device. For PD or DisplayPort Alt Mode you need a USB-C PD controller IC; this is not a DIY-friendly area. SuperSpeed traces are routed only on inner pairs and must be impedance-controlled (90 Ω diff).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Ethernet RJ45 (T568A / T568B)</span><span class="fig">TAB. 1T-2</span></div>
+      <table>
+        <thead><tr><th>Pin</th><th>T568A</th><th>T568B</th><th>10/100 BASE-T</th><th>1000 BASE-T</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1</td><td>White/Green</td><td>White/Orange</td><td>TX+</td><td>BI_DA+</td></tr>
+          <tr><td class="hi">2</td><td>Green</td><td>Orange</td><td>TX−</td><td>BI_DA−</td></tr>
+          <tr><td class="hi">3</td><td>White/Orange</td><td>White/Green</td><td>RX+</td><td>BI_DB+</td></tr>
+          <tr><td class="hi">4</td><td>Blue</td><td>Blue</td><td>unused</td><td>BI_DC+</td></tr>
+          <tr><td class="hi">5</td><td>White/Blue</td><td>White/Blue</td><td>unused</td><td>BI_DC−</td></tr>
+          <tr><td class="hi">6</td><td>Orange</td><td>Green</td><td>RX−</td><td>BI_DB−</td></tr>
+          <tr><td class="hi">7</td><td>White/Brown</td><td>White/Brown</td><td>unused</td><td>BI_DD+</td></tr>
+          <tr><td class="hi">8</td><td>Brown</td><td>Brown</td><td>unused</td><td>BI_DD−</td></tr>
+        </tbody>
+      </table>
+      <div class="note">T568B is the dominant standard in commercial wiring; T568A is the older residential standard. They are pin-compatible (same physical jack) but the color order on the paired wires differs. For PCB designs you connect via a magnetics-integrated RJ45 (HanRun, Bel, Pulse) or use discrete magnetics + a plain RJ45. The four diff pairs go to the PHY in pin-order; PHY datasheet maps MDI0-3 to BI_DA-D pairs. PoE-capable jacks have center taps brought out for 48V power injection (Mode A or Mode B).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>SD Card / microSD Pinout</span><span class="fig">TAB. 1T-3</span></div>
+      <table>
+        <thead><tr><th>microSD Pin</th><th>SPI Mode</th><th>SD 1-bit</th><th>SD 4-bit</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1</td><td>CS (chip select)</td><td>DAT3</td><td>DAT3</td></tr>
+          <tr><td class="hi">2</td><td>MOSI (data in)</td><td>CMD</td><td>CMD</td></tr>
+          <tr><td class="hi">3</td><td>V<sub>SS</sub> (GND)</td><td>V<sub>SS</sub></td><td>V<sub>SS</sub></td></tr>
+          <tr><td class="hi">4</td><td>V<sub>DD</sub> (2.7-3.6 V)</td><td>V<sub>DD</sub></td><td>V<sub>DD</sub></td></tr>
+          <tr><td class="hi">5</td><td>CLK (SCK)</td><td>CLK</td><td>CLK</td></tr>
+          <tr><td class="hi">6</td><td>V<sub>SS</sub> (GND)</td><td>V<sub>SS</sub></td><td>V<sub>SS</sub></td></tr>
+          <tr><td class="hi">7</td><td>MISO (data out)</td><td>DAT0</td><td>DAT0</td></tr>
+          <tr><td class="hi">8</td><td>(reserved)</td><td>(unused)</td><td>DAT1</td></tr>
+          <tr><td class="hi">9</td><td>(reserved)</td><td>(unused)</td><td>DAT2</td></tr>
+        </tbody>
+      </table>
+      <div class="note">For most microcontroller projects, SD cards run in SPI mode: only CS, MOSI, MISO, CLK, V<sub>DD</sub>, V<sub>SS</sub> are connected. Add a 10 kΩ pull-up on each data line (CMD, DAT0-3, or CS/MOSI/MISO in SPI mode). The card runs on 2.7-3.6V; 5V MCUs need level shifting on every signal line. Full SD 4-bit mode is faster but requires more complex host controller support; SPI mode is simpler and works on any MCU with an SPI peripheral.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>JST Connector Family</span><span class="fig">TAB. 1T-4</span></div>
+      <table>
+        <thead><tr><th>Series</th><th>Pitch</th><th>Current/Pin</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SH</td><td class="num">1.00 mm</td><td class="num">1 A</td><td>Tiny; common on dev boards (Pixhawk, Sparkfun Qwiic alternative)</td></tr>
+          <tr><td class="hi">ZH</td><td class="num">1.50 mm</td><td class="num">1 A</td><td>Compact; battery balance leads on small RC packs</td></tr>
+          <tr><td class="hi">PH</td><td class="num">2.00 mm</td><td class="num">2 A</td><td>The hobby workhorse; battery connectors, LCD modules, sensors</td></tr>
+          <tr><td class="hi">XH</td><td class="num">2.50 mm</td><td class="num">3 A</td><td>Mid-size; common on LiPo balance leads, fans</td></tr>
+          <tr><td class="hi">EH</td><td class="num">2.50 mm</td><td class="num">3 A</td><td>Locking variant of XH</td></tr>
+          <tr><td class="hi">VH</td><td class="num">3.96 mm</td><td class="num">10 A</td><td>Power; older equipment</td></tr>
+          <tr><td class="hi">NH</td><td class="num">5.00 mm</td><td class="num">10 A</td><td>High-current power; appliance internals</td></tr>
+          <tr><td class="hi">GH (top-entry)</td><td class="num">1.25 mm</td><td class="num">1 A</td><td>Locking version of SH; resists vibration</td></tr>
+        </tbody>
+      </table>
+      <div class="note">JST PH 2.0mm is so common it has become the de facto standard for hobby/dev-board battery connections (Adafruit, Sparkfun, and many LiPo cells use it natively). Watch polarity: there is no universal convention for which pin is positive. Battery packs from one vendor may have opposite polarity from another with the same connector. Always verify before plugging in or you get a short across the cell. JST connectors are crimp, not solder; you need a proper crimper for clean assembly.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Pin Header Standards</span><span class="fig">TAB. 1T-5</span></div>
+      <table>
+        <thead><tr><th>Pitch</th><th>Common Name</th><th>Drill</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">2.54 mm (0.100")</td><td>Standard / 0.1" / breadboard</td><td class="num">0.9-1.0 mm</td><td>The most common pin header; breadboards, Dupont jumpers, ICSP</td></tr>
+          <tr><td class="hi">2.00 mm</td><td>2 mm header</td><td class="num">0.7-0.8 mm</td><td>Compact; many sensors, LCD modules, BLE/Wi-Fi modules</td></tr>
+          <tr><td class="hi">1.27 mm (0.050")</td><td>Sub-D / Picoblade-style</td><td class="num">0.5 mm</td><td>JTAG, SWD, programming headers, compact debug</td></tr>
+          <tr><td class="hi">1.00 mm</td><td>1 mm header</td><td class="num">0.4 mm</td><td>High-density board-to-board, dev kit add-ons</td></tr>
+          <tr><td class="hi">0.50 mm</td><td>0.5 mm FFC/FPC</td><td>SMD only</td><td>Flex cables, cameras, displays; not a typical pin header</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Programming &amp; Debug Headers</span><span class="fig">TAB. 1T-6</span></div>
+      <table>
+        <thead><tr><th>Header</th><th>Pitch</th><th>Pins</th><th>Layout</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">ARM JTAG (20-pin)</td><td class="num">2.54 mm</td><td class="num">20</td><td>2×10 row; TCK TMS TDO TDI nTRST nSRST V<sub>cc</sub> GND × multiple</td></tr>
+          <tr><td class="hi">ARM SWD (Cortex Debug, 10-pin)</td><td class="num">1.27 mm</td><td class="num">10</td><td>2×5 row; V<sub>tref</sub> SWDIO SWCLK SWO nRESET GND × 4 + key</td></tr>
+          <tr><td class="hi">ARM SWD (compact, 4-pin)</td><td class="num">2.54 mm</td><td class="num">4-5</td><td>Linear or 2×2: V<sub>cc</sub> GND SWDIO SWCLK (nRST optional)</td></tr>
+          <tr><td class="hi">AVR ISP (6-pin)</td><td class="num">2.54 mm</td><td class="num">6</td><td>2×3 row; MISO V<sub>cc</sub> SCK MOSI RESET GND</td></tr>
+          <tr><td class="hi">AVR ISP (10-pin, legacy)</td><td class="num">2.54 mm</td><td class="num">10</td><td>2×5 row; older Atmel programmers (STK500)</td></tr>
+          <tr><td class="hi">UART (FTDI-style)</td><td class="num">2.54 mm</td><td class="num">6</td><td>Linear: GND CTS V<sub>cc</sub> TX RX DTR (FTDI cable convention)</td></tr>
+          <tr><td class="hi">UART (Sparkfun)</td><td class="num">2.54 mm</td><td class="num">6</td><td>Linear: DTR RX TX V<sub>cc</sub> CTS GND (note reversed)</td></tr>
+          <tr><td class="hi">PIC ICSP (5-pin)</td><td class="num">2.54 mm</td><td class="num">5-6</td><td>Linear: MCLR V<sub>dd</sub> GND ICSPDAT ICSPCLK (+ LVP/AUX)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The ARM Cortex Debug 10-pin (1.27mm) header is the modern standard, supported by ST-Link, J-Link, and Black Magic Probe. It uses keyed shrouds so you can't plug in backwards. For space-constrained designs, a 4-pin SWD pinout (V<sub>cc</sub>, GND, SWDIO, SWCLK) is sufficient for programming and debugging most ARM Cortex-M parts. UART pinouts vary frustratingly by manufacturer: always check before connecting a FTDI cable; many a dead board has come from swapped TX/RX or reversed V<sub>cc</sub>/GND.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Power Barrel Jacks</span><span class="fig">TAB. 1T-7</span></div>
+      <table>
+        <thead><tr><th>Outer × Inner</th><th>Voltage</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">5.5 × 2.1 mm</td><td>5-24 V DC</td><td>Most hobby boards, Arduino-style; the universal default</td></tr>
+          <tr><td class="hi">5.5 × 2.5 mm</td><td>5-24 V DC</td><td>Slightly larger inner; "wrong" plug fits but loose; check before use</td></tr>
+          <tr><td class="hi">3.5 × 1.3 mm</td><td>3-12 V DC</td><td>Small electronics, USB hubs, small adapters</td></tr>
+          <tr><td class="hi">4.0 × 1.7 mm</td><td>5-19 V DC</td><td>Some routers, audio gear, older Sony devices</td></tr>
+          <tr><td class="hi">6.3 × 3.0 mm</td><td>12-24 V DC, &gt;3 A</td><td>Larger laptops, mid-power gear</td></tr>
+          <tr><td class="hi">7.4 × 5.0 mm</td><td>19-20 V DC, &gt;5 A</td><td>HP / Dell laptops; high-current</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Center-positive is the modern convention for almost all DC barrel-jack equipment; if a device wants center-negative it will be marked. The schematic symbol shows the polarity as concentric circles with a dash on whichever lead matches the center. Wrong polarity will damage anything without reverse-protection. Adding a reverse-biased Schottky from V<sub>in</sub> to GND with a series fuse, or a MOSFET-based ideal diode (LTC4359 or similar), is cheap insurance.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1U · EMI MITIGATION REFERENCE ============ -->
+  <section id="emi" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1U <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>EMI Mitigation Reference</h2>
+      <div class="page-desc">Working reference for reducing radiated and conducted emissions: common-mode chokes, ferrite beads, board-level shielding, and the slot-antenna geometry to avoid. Covers when each technique applies, typical component values, and PCB layout patterns. For controlled-impedance routing and reference planes see 1L; for connector ESD considerations see 1T.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Common EMI Sources &amp; Mitigations</span><span class="fig">TAB. 1U-1</span></div>
+      <table>
+        <thead><tr><th>Source</th><th>Mechanism</th><th>Primary Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Switching regulator</td><td>Fast dI/dt at switch node creates broadband noise to ~300 MHz</td><td>Minimize hot loop; input cap right at IC pin; spread-spectrum mode if available</td></tr>
+          <tr><td class="hi">Digital clock harmonics</td><td>Square waves emit harmonics up to GHz range</td><td>Series source termination (22-33 Ω); spread-spectrum clock; route on inner layer</td></tr>
+          <tr><td class="hi">Cable-conducted noise</td><td>Common-mode noise rides on power and signal cables</td><td>Common-mode chokes at I/O; ferrite beads on power feeds</td></tr>
+          <tr><td class="hi">Ground bounce</td><td>High dI/dt in return path raises GND momentarily above 0V</td><td>Solid GND plane; decoupling caps near every IC; star or fishbone return for sensitive analog</td></tr>
+          <tr><td class="hi">Slot in reference plane</td><td>Forces return current to detour; trace becomes a loop antenna</td><td>No splits under high-speed signals; bridge with stitching caps if unavoidable</td></tr>
+          <tr><td class="hi">Crystal &amp; oscillator radiation</td><td>Resonant circuit radiates harmonics at clock frequency</td><td>Ground guard ring; ground pour under crystal; metal can if needed</td></tr>
+          <tr><td class="hi">High-speed pair stubs</td><td>Stubs ring at λ/4 frequency</td><td>Back-drill or route on inner layer with no stub; or use short pads</td></tr>
+          <tr><td class="hi">Floating heatsink</td><td>Acts as patch antenna for switch-node noise capacitively coupled through TIM</td><td>Tie heatsink to GND; use grounded TIM if isolated; insulated TIM for clearance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common-Mode Choke Reference</span><span class="fig">TAB. 1U-2</span></div>
+      <table>
+        <thead><tr><th>Application</th><th>Typical Impedance @ 100 MHz</th><th>Current Rating</th><th>Common Part Numbers</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">USB 2.0 data lines</td><td class="num">90 Ω @ 100 MHz</td><td class="num">300 mA</td><td>Murata DLW21SN900 series, TDK ACM2012</td></tr>
+          <tr><td class="hi">USB 3.0 SuperSpeed</td><td class="num">90 Ω @ 100 MHz (low DCR)</td><td class="num">300-500 mA</td><td>Murata DLP11SN, Würth WE-CNSW HF</td></tr>
+          <tr><td class="hi">CAN bus</td><td class="num">51-100 Ω @ 100 MHz</td><td class="num">100-200 mA</td><td>Würth 744232101, TDK ACT45B</td></tr>
+          <tr><td class="hi">Ethernet (10/100, signal)</td><td>Built into magnetics</td><td>—</td><td>Part of integrated magnetics jack</td></tr>
+          <tr><td class="hi">AC power input</td><td class="num">10 mH (line current)</td><td class="num">1-10 A</td><td>Würth 744843, TDK B82731-M, Schaffner FN</td></tr>
+          <tr><td class="hi">DC power input (low V)</td><td class="num">100-1000 µH</td><td class="num">1-5 A</td><td>Würth 744226, Bourns SRF series</td></tr>
+          <tr><td class="hi">Audio signal lines</td><td class="num">90-600 Ω @ 100 MHz</td><td class="num">200 mA</td><td>Murata DLW31S, TDK ACM3225</td></tr>
+        </tbody>
+      </table>
+      <div class="note">A common-mode choke is two windings on a shared core: differential currents (signal) cancel in the core, common-mode currents (noise) see the full inductance. Placement: at the I/O connector entry, not in the middle of the cable run. The choke must be the closest component to the connector pad on the inside; ESD diodes and decoupling caps go between the choke and the system. Wrong polarity (winding sense reversed) makes it useless; check the dot or marking on the package against the schematic.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Ferrite Bead Selection</span><span class="fig">TAB. 1U-3</span></div>
+      <table>
+        <thead><tr><th>Bead Class</th><th>Peak Impedance Range</th><th>Use Case</th><th>Watch Out For</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Low impedance (60 Ω @ 100 MHz)</td><td class="num">10-100 Ω broadband</td><td>Signal lines, low-current bias, audio</td><td>Low effect on EMI; mainly for damping resonance</td></tr>
+          <tr><td class="hi">Mid impedance (120-220 Ω)</td><td class="num">100-300 Ω @ 100 MHz</td><td>General logic supply rails (1.8V, 3.3V, 5V)</td><td>The typical "throw a bead at it" choice</td></tr>
+          <tr><td class="hi">High impedance (600-1000 Ω)</td><td class="num">600-1500 Ω @ 100 MHz</td><td>Sensitive analog supply, ADC/DAC V<sub>DDA</sub></td><td>DCR can be 0.5-2 Ω; voltage drop matters at high I</td></tr>
+          <tr><td class="hi">Ultra-high impedance (2200+ Ω)</td><td class="num">2200-3000 Ω @ 100 MHz</td><td>Wireless module RF supply (Wi-Fi, BT, cellular)</td><td>High DCR; designed for low-current applications</td></tr>
+          <tr><td class="hi">High-current beads</td><td class="num">100-600 Ω @ 100 MHz</td><td>Power rails at 1-6 A; large package (1206, 1812)</td><td>Lower peak impedance for higher current rating</td></tr>
+        </tbody>
+      </table>
+      <div class="note">A ferrite bead is a lossy series impedance: at low frequency it's nearly a wire (low DCR), at the bead's peak frequency it dissipates EMI as heat. Caveats: (1) Beads + capacitors can resonate and amplify noise at certain frequencies; verify with measurement, not assumption. (2) Beads on switching regulator outputs disrupt the feedback loop if placed inside the loop; always place them after the output sense point. (3) High-impedance beads have meaningful DCR; check the voltage drop at full current. (4) Murata, Würth, and TDK all publish impedance-vs-frequency curves; pick a bead whose peak aligns with the noise you actually have.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Shielding Reference</span><span class="fig">TAB. 1U-4</span></div>
+      <table>
+        <thead><tr><th>Shielding Method</th><th>Frequency Range</th><th>Use Case</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">PCB shield can (board-mount)</td><td>30 MHz to 6 GHz</td><td>RF modules (Wi-Fi, BT, cellular, GPS), sensitive analog</td><td>Solderable nickel-silver or steel can; needs grounded fence ring of vias on PCB</td></tr>
+          <tr><td class="hi">Conductive gasket (chassis)</td><td>30 MHz to 18 GHz</td><td>Enclosure seams; lid-to-body interfaces</td><td>Fingerstock, conductive elastomer, or copper mesh; needs clean conductive contact</td></tr>
+          <tr><td class="hi">Conductive paint / spray</td><td>30 MHz to 1 GHz</td><td>Plastic enclosures (consumer electronics)</td><td>Nickel or copper paint inside enclosure; lower effectiveness than metal</td></tr>
+          <tr><td class="hi">Faraday cage (full enclosure)</td><td>DC to 40 GHz</td><td>Test setups, sensitive instrumentation, EMC compliance labs</td><td>Continuous metal box with grounded seams; bonding straps where panels meet</td></tr>
+          <tr><td class="hi">Shielded cable</td><td>10 kHz to ~1 GHz</td><td>Sensor leads, audio, USB, video</td><td>Single-end-grounded shield for analog low-frequency; both-end for RF</td></tr>
+          <tr><td class="hi">Ground pour / fence vias</td><td>100 MHz+</td><td>Inside PCB between sensitive and noisy circuits</td><td>Stitching vias spaced &lt; λ/10 of highest frequency of interest</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Shielding effectiveness (SE) depends on aperture size, not just material. A 1 GHz frequency has λ = 300 mm; effective shielding requires apertures smaller than λ/20 (15 mm) for &gt; 20 dB attenuation. Any unsealed seam, vent hole, or cable pass-through is a potential antenna. Cable-pass-through is the most common shielding failure: a shielded box with an unfiltered cable exiting is barely better than no shield. Use feedthrough capacitors, conductive bushings, or pi-filters at every cable port.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Slot Antennas to Avoid</span><span class="fig">TAB. 1U-5</span></div>
+      <table>
+        <thead><tr><th>Layout Mistake</th><th>Why It Radiates</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Plane split under high-speed trace</td><td>Return current diverts around split; loop area increases; loop radiates</td><td>Don't split planes under signals. If unavoidable, bridge with 100 nF stitching caps every 10 mm.</td></tr>
+          <tr><td class="hi">Connector cut-out in ground plane</td><td>Slot in plane resonates at λ/2 of slot length</td><td>Bring the GND plane right up to the connector pads; minimize keepout area</td></tr>
+          <tr><td class="hi">Long power-rail island</td><td>Power island forms a patch antenna when not stitched to ground</td><td>Stitching caps (100 nF) every 10-15 mm between rail and GND</td></tr>
+          <tr><td class="hi">Cutout for through-hole connector pins</td><td>Pin field creates an effective slot when not stitched</td><td>Add GND vias around the pin field to maintain plane continuity</td></tr>
+          <tr><td class="hi">Crystal cutout in ground</td><td>Crystal sits over a slot; near-field couples to anything nearby</td><td>Solid GND plane under crystal; ground guard ring around crystal body</td></tr>
+          <tr><td class="hi">Long unstitched edge of board</td><td>Edge of board radiates if signals run near it</td><td>Stitch GND vias along edges every λ/20 of highest frequency</td></tr>
+          <tr><td class="hi">Asymmetric return path</td><td>Signal on outer layer with reference plane two layers down</td><td>Reference plane directly under signal, every time, no exceptions</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Most "mysterious" EMI failures trace back to one of these patterns. The standard diagnostic: get a near-field probe (or a piece of wire on a scope), sweep over the board, and look for the loudest spot. It will almost always be at a slot or split. The fix is geometric, not component-level: rearrange the layout so return current flows in the smallest possible loop directly under the signal.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Field Reduction Checklist (Pre-EMC)</span><span class="fig">TAB. 1U-6</span></div>
+      <table>
+        <thead><tr><th>Stage</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1. Layout</td><td>Solid GND plane on layer 2 (4-layer min) with no splits under signals; reference plane directly below every signal</td></tr>
+          <tr><td class="hi">2. Power entry</td><td>Common-mode choke + bulk cap + ceramic cap at every external power input</td></tr>
+          <tr><td class="hi">3. I/O</td><td>Common-mode choke + ESD diodes + ferrite bead on every cable interface</td></tr>
+          <tr><td class="hi">4. Switching reg</td><td>Hot loop &lt; 25 mm² area; input cap right at IC; ground polygon shield</td></tr>
+          <tr><td class="hi">5. Decoupling</td><td>100 nF per IC power pin, &lt; 3 mm from pin, ground via right next to cap pad</td></tr>
+          <tr><td class="hi">6. Crystal</td><td>Ground pour under crystal, guard ring of vias, ground caps tied directly to MCU GND pin</td></tr>
+          <tr><td class="hi">7. High-speed</td><td>Source termination (22-33 Ω) on clocks; differential routing for SerDes; impedance matched</td></tr>
+          <tr><td class="hi">8. Connectors</td><td>Pad-side GND continuous to body of connector; shielded I/O grounded at connector shell</td></tr>
+          <tr><td class="hi">9. Mechanical</td><td>Conductive gasket between lid and body; cable shields bonded to chassis at entry</td></tr>
+          <tr><td class="hi">10. Pre-scan</td><td>Near-field probe sweep of the board before EMC chamber; fix the loud spots first</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The cheap insurance order: layout first (free), then bulk caps and ferrite beads (cents), then common-mode chokes (dollar each), then shielding (tens of dollars), then redesign (weeks). Most EMC failures are caught at step 1 if the layout is done right; the rest of the list is for when step 1 was rushed or constrained. If you have any choice, do EMC pre-compliance scans at a local lab or buy a near-field probe ($50-200 used) before committing to a chamber-quality test ($5000+).</div>
     </div>
   </section>
 
@@ -4794,7 +5832,7 @@ code {
     <div class="page-head">
       <div class="page-ref">Section 2N <span class="dot"></span> Mechanical</div>
       <h2>Hardness and Surface Finish</h2>
-      <div class="page-desc">Hardness conversion between Rockwell C / B, Vickers, Brinell, and equivalent tensile strength. Surface roughness (Ra) reference for typical fabrication processes.</div>
+      <div class="page-desc">Hardness conversion between Rockwell C / B, Vickers, Brinell, and equivalent tensile strength. Surface roughness (Ra) reference for typical fabrication processes. Blacksmith heat-color reference (forging temperature by eye) and tempering oxide-color reference (heat-treat color by eye on bright steel).</div>
     </div>
 
     <div class="card">
@@ -4867,6 +5905,50 @@ code {
         </tbody>
       </table>
       <div class="note">Ra = arithmetic average roughness. Convert: 1 µm = 39.4 µin. For matched surfaces, finish requirements step down with precision: bearing journals at 0.2-0.4 µm, sliding fits at 0.8-1.6, general machined at 1.6-6.3.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Forging Heat Colors</span><span class="fig">TAB. 2N-3</span></div>
+      <table>
+        <thead><tr><th>Color (Steel)</th><th>Temperature (°C)</th><th>Temperature (°F)</th><th>Working Range</th></tr></thead>
+        <tbody>
+          <tr><td class="hi" style="background:#2a1810;color:#fef;">Black heat (no glow)</td><td class="num">400</td><td class="num">752</td><td>Too cold to work; brittle range for many steels</td></tr>
+          <tr><td class="hi" style="background:#4a0808;color:#fef;">Faint red (visible in dark)</td><td class="num">480-530</td><td class="num">895-985</td><td>Just visible glow; still too cold to forge</td></tr>
+          <tr><td class="hi" style="background:#6a0a08;color:#fef;">Blood red</td><td class="num">560-600</td><td class="num">1040-1110</td><td>Below forging temperature for steel</td></tr>
+          <tr><td class="hi" style="background:#8b1410;color:#fef;">Dark red</td><td class="num">630-660</td><td class="num">1165-1220</td><td>Approaching critical for some carbon steels</td></tr>
+          <tr><td class="hi" style="background:#c0241a;color:#fff;">Cherry red</td><td class="num">680-720</td><td class="num">1255-1330</td><td>Hardening range for some tool steels (A2, O1)</td></tr>
+          <tr><td class="hi" style="background:#d83820;color:#fff;">Bright cherry red</td><td class="num">740-770</td><td class="num">1365-1420</td><td>Hardening range for high-carbon (1095, W1)</td></tr>
+          <tr><td class="hi" style="background:#e85820;color:#fff;">Dark orange</td><td class="num">780-810</td><td class="num">1435-1490</td><td>Low-temp forging range; tough steels</td></tr>
+          <tr><td class="hi" style="background:#f57828;color:#fff;">Orange</td><td class="num">830-860</td><td class="num">1525-1580</td><td>General forging temperature for mild steel</td></tr>
+          <tr><td class="hi" style="background:#fa9830;color:#000;">Light orange / orange-yellow</td><td class="num">880-920</td><td class="num">1615-1690</td><td>Easy forging range; most carbon and tool steels</td></tr>
+          <tr><td class="hi" style="background:#febc40;color:#000;">Yellow</td><td class="num">950-1000</td><td class="num">1740-1830</td><td>Easy work; high carbon at upper end of safe range</td></tr>
+          <tr><td class="hi" style="background:#fee460;color:#000;">Light yellow</td><td class="num">1050-1100</td><td class="num">1920-2010</td><td>Forge-welding range; risk of burning carbon steel</td></tr>
+          <tr><td class="hi" style="background:#fff8b8;color:#000;">White (welding heat)</td><td class="num">1150-1300</td><td class="num">2100-2370</td><td>Forge-welding wrought iron and low-carbon steels</td></tr>
+          <tr><td class="hi" style="background:#ffffff;color:#000;border:1px solid var(--rule-2);">Sparking white</td><td class="num">1400+</td><td class="num">2550+</td><td>Burning: carbon spitting as sparks; steel ruined</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Read these in even, low light; sunlight makes everything look colder than it is and most forge work in a sunlit shop runs hot. Color shifts roughly 100°C between dimly-lit and brightly-lit readings. Critical temperatures vary by alloy: simple carbon steels (1075, 1095, W1) have Ac1 around 720-740°C and harden from bright cherry; tool steels (A2, D2, O1) harden from a darker color (cherry red, 760-820°C); stainless and high-alloy tool steels are bright yellow and above. Always verify against the steel's data sheet rather than color alone.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Tempering Colors (Oxide Colors on Bright Steel)</span><span class="fig">TAB. 2N-4</span></div>
+      <table>
+        <thead><tr><th>Oxide Color</th><th>Temperature (°C)</th><th>Temperature (°F)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi" style="background:#fef8e8;color:#000;border:1px solid var(--rule-2);">Faint pale straw</td><td class="num">200</td><td class="num">390</td><td>Scrapers, razors, scribes (hard, brittle)</td></tr>
+          <tr><td class="hi" style="background:#fee4a0;color:#000;">Pale straw</td><td class="num">220</td><td class="num">430</td><td>Engraving tools, light scribes</td></tr>
+          <tr><td class="hi" style="background:#f8c870;color:#000;">Light straw</td><td class="num">230</td><td class="num">445</td><td>Drills, lathe tools for hard materials</td></tr>
+          <tr><td class="hi" style="background:#e8a848;color:#000;">Dark straw</td><td class="num">240</td><td class="num">465</td><td>Reamers, taps, end mills</td></tr>
+          <tr><td class="hi" style="background:#d08828;color:#000;">Brown / dark yellow</td><td class="num">250</td><td class="num">480</td><td>Knife blades (kitchen, EDC); razors over-tempered</td></tr>
+          <tr><td class="hi" style="background:#b85820;color:#fff;">Brown-purple</td><td class="num">260</td><td class="num">500</td><td>Axes, chisels, woodworking edge tools</td></tr>
+          <tr><td class="hi" style="background:#984068;color:#fff;">Purple</td><td class="num">270</td><td class="num">520</td><td>Cold chisels, punches, screwdrivers</td></tr>
+          <tr><td class="hi" style="background:#583890;color:#fff;">Dark purple / violet</td><td class="num">280</td><td class="num">535</td><td>Hammers, springs (lower end), masonry chisels</td></tr>
+          <tr><td class="hi" style="background:#384080;color:#fff;">Blue</td><td class="num">290</td><td class="num">555</td><td>Springs, saws, screwdrivers; "spring blue"</td></tr>
+          <tr><td class="hi" style="background:#3870b0;color:#fff;">Light blue</td><td class="num">310</td><td class="num">590</td><td>Hand saws, wood saws, springs (upper end)</td></tr>
+          <tr><td class="hi" style="background:#6098c8;color:#000;">Grey-blue</td><td class="num">320-340</td><td class="num">610-645</td><td>End of useful tempering range; structural</td></tr>
+        </tbody>
+      </table>
+      <div class="note">These colors appear on bright (sanded, polished) carbon-steel surfaces as a thin oxide layer forms during tempering. Sand the steel to a clean finish after quench, then heat slowly and watch the colors progress from straw at the heat source outward. For knives and edge tools, the color you want is at the cutting edge, not at the spine or tang. Stainless and high-alloy steels do not show tempering colors reliably; use an oven and a thermocouple. Always temper twice (or three times for some tool steels) at the target temperature, with full cool between cycles.</div>
     </div>
   </section>
 
@@ -5427,6 +6509,39 @@ code {
         </tbody>
       </table>
       <div class="note">Unity formula expresses a glaze as molecular ratios with fluxes summed to 1. Tools like Glazy or Insight let you punch in materials and read the unity automatically. Test in tiles; do not guess and pour into a teabowl.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Wood-Ash Glaze Reference</span><span class="fig">TAB. 2S-7</span></div>
+      <table>
+        <thead><tr><th>Recipe</th><th>Ash</th><th>Feldspar</th><th>Silica</th><th>Clay</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Simple base (Leach)</td><td class="num">40</td><td class="num">40</td><td class="num">20</td><td class="num">0</td><td>The classic cone 9-11 reduction base. Move silica up for glossy, down for matte.</td></tr>
+          <tr><td class="hi">Tri-axial center</td><td class="num">33</td><td class="num">33</td><td class="num">33</td><td class="num">0</td><td>1:1:1 starting point for blends; useful for testing ash from a new source.</td></tr>
+          <tr><td class="hi">Ash-heavy (running)</td><td class="num">50-60</td><td class="num">25-30</td><td class="num">15-20</td><td class="num">0</td><td>Mobile, will pool and run; classic ash-glaze drips and rivulets.</td></tr>
+          <tr><td class="hi">Stable (stiffened)</td><td class="num">30</td><td class="num">40</td><td class="num">20</td><td class="num">10</td><td>Kaolin or ball clay stiffens; less running, more matte, better for vertical surfaces.</td></tr>
+          <tr><td class="hi">Cone 6 oxidation</td><td class="num">25-40</td><td class="num">30-40</td><td class="num">20-30</td><td class="num">5-15</td><td>Lower-fire ash glazes need more flux from the feldspar/frit side; ash alone melts higher.</td></tr>
+          <tr><td class="hi">Iron addition (kaki)</td><td colspan="4" class="num">base + 6-10% red iron oxide</td><td>Adds rust-red break and saturated brown breaks where thick.</td></tr>
+          <tr><td class="hi">Iron addition (tenmoku-like)</td><td colspan="4" class="num">base + 8-12% red iron oxide, high silica</td><td>Black with rust-orange edge breaks. Needs reduction for the classic tenmoku character.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Recipe weights are by percent. Wood ash is chemically variable: hardwood (oak, maple) vs softwood (pine, fir) vs fruit wood vs rice straw all produce different glazes. Always test a new ash source on small tiles before committing to a batch. Ash composition averages roughly 30-50% silica, 20-30% calcia, 5-15% potassia, 5-15% magnesia, plus trace iron and manganese, but specific values vary widely by species and burn conditions.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Wood-Ash Processing</span><span class="fig">TAB. 2S-8</span></div>
+      <table>
+        <thead><tr><th>Step</th><th>Procedure</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Collect</td><td>Hardwood ash from a clean wood stove or pit; no painted wood, no pressure-treated, no plastic contamination.</td><td>Foreign material introduces unpredictable fluxes and toxic metals.</td></tr>
+          <tr><td class="hi">Dry sieve</td><td>Pass through 30-mesh, then 60-mesh screens to remove charcoal chunks and debris.</td><td>Coarse carbon and large char pieces will fire as black spots in the glaze.</td></tr>
+          <tr><td class="hi">Wash (optional)</td><td>Soak in water 24-48 hr, decant, repeat 2-3 times. Dry the remaining ash.</td><td>Removes soluble potash and soda; gives a milder, less-running glaze. "Unwashed" ash produces more dramatic surfaces but is harsher and harder to control.</td></tr>
+          <tr><td class="hi">Caution: lye</td><td>Wash water is strongly alkaline (lye). Use gloves and eye protection; do not pour onto plants or in metal sinks.</td><td>Wood ash + water → KOH and NaOH. Caustic to skin and to aluminum/zinc.</td></tr>
+          <tr><td class="hi">Test fire</td><td>Mix at the simple base (40/40/20) and fire test tiles before any real piece.</td><td>Every batch of ash is different; no recipe is universal.</td></tr>
+          <tr><td class="hi">Store dry</td><td>Sealed container, labeled with species and date.</td><td>Ash absorbs CO₂ from air and shifts chemistry slowly over months.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Washing is the single biggest choice you make with ash glazes. Washed ash gives smoother, more reproducible glazes and is the standard for production. Unwashed ash gives the dramatic running, crawling, and crystallization that ash glazes are famous for. Most studio potters working in this tradition keep both, and choose by the piece. Always wear a P100 respirator when handling dry ash; it is alkaline dust and you do not want it in your lungs.</div>
     </div>
 
     <div class="card" style="margin-top:18px;">
@@ -11285,6 +12400,123 @@ const SHORTCUTS = {
         ['Cmd + R', 'Render selection']
       ]}
     ]
+  },
+  kicad: {
+    label: 'KiCad 8 / 9 (Schematic + PCB)',
+    sections: [
+      { title: 'Schematic Editor — General', items: [
+        ['Esc', 'Cancel current action / unselect'],
+        ['Ctrl + S', 'Save'],
+        ['Ctrl + Z / Ctrl + Y', 'Undo / Redo'],
+        ['F1 / F2', 'Zoom in / out'],
+        ['F3', 'Refresh view'],
+        ['F4', 'Center view on cursor'],
+        ['Home', 'Zoom to fit'],
+        ['Ctrl + Mouse wheel', 'Zoom'],
+        ['Mouse wheel', 'Pan vertical'],
+        ['Shift + Mouse wheel', 'Pan horizontal'],
+        ['Space', 'Reset local coordinates']
+      ]},
+      { title: 'Schematic — Place', items: [
+        ['A', 'Place symbol (component)'],
+        ['P', 'Place power port (GND, VCC, etc.)'],
+        ['W', 'Place wire'],
+        ['B', 'Place bus'],
+        ['Y', 'Place bus entry'],
+        ['L', 'Place label (net name)'],
+        ['Ctrl + L', 'Place global label'],
+        ['Ctrl + H', 'Place hierarchical label'],
+        ['J', 'Place junction'],
+        ['Q', 'Place no-connect flag'],
+        ['T', 'Place text'],
+        ['Shift + V', 'Place voltage class label']
+      ]},
+      { title: 'Schematic — Edit', items: [
+        ['M', 'Move (keep connections)'],
+        ['G', 'Drag (stretch connections)'],
+        ['R', 'Rotate selection'],
+        ['X / Y', 'Mirror horizontally / vertically'],
+        ['E', 'Edit properties of selected item'],
+        ['V', 'Edit value'],
+        ['U', 'Edit reference designator'],
+        ['F', 'Edit footprint association'],
+        ['Delete', 'Delete selection'],
+        ['Ctrl + D', 'Duplicate'],
+        ['C', 'Copy item (with reference)']
+      ]},
+      { title: 'Schematic — Tools', items: [
+        ['Ctrl + F', 'Find'],
+        ['Ctrl + Shift + F', 'Find and replace'],
+        ['F8', 'Update PCB from schematic'],
+        ['F7', 'Run ERC (Electrical Rules Check)'],
+        ['Ctrl + Shift + I', 'Open simulator (ngspice)'],
+        ['Ctrl + B', 'Annotate schematic'],
+        ['Ctrl + Shift + B', 'Generate BOM']
+      ]},
+      { title: 'PCB Editor — General', items: [
+        ['Esc', 'Cancel / unselect'],
+        ['F1 / F2', 'Zoom in / out'],
+        ['F3', 'Refresh view'],
+        ['F4', 'Center on cursor'],
+        ['Home', 'Zoom to fit'],
+        ['+ / −', 'Cycle to next/previous grid'],
+        ['Space', 'Reset local coordinates'],
+        ['B', 'Refill all zones'],
+        ['Ctrl + B', 'Refill zones in selection'],
+        ['` (backtick)', 'Toggle high-contrast mode'],
+        ['Tab', 'Cycle through stacked items at cursor']
+      ]},
+      { title: 'PCB — Routing', items: [
+        ['X', 'Start routing track from cursor'],
+        ['V', 'Add via (while routing)'],
+        ['Shift + V', 'Add blind/buried via'],
+        ['Ctrl + Shift + V', 'Add microvia'],
+        ['/', 'Switch layer (during routing)'],
+        ['D', 'Drag track segment'],
+        ['W', 'Switch track width'],
+        ['Shift + W', 'Use next track width preset'],
+        ['F5', 'Switch active layer (cycle)'],
+        ['PgUp / PgDn', 'Switch to top / bottom layer'],
+        ['End', 'Finish routing']
+      ]},
+      { title: 'PCB — Place', items: [
+        ['A', 'Place footprint'],
+        ['Shift + N', 'Place net tie'],
+        ['Ctrl + Shift + Z', 'Place zone (copper pour)'],
+        ['Ctrl + Shift + K', 'Place keepout zone'],
+        ['Ctrl + Shift + D', 'Place dimension'],
+        ['Ctrl + Shift + L', 'Place text']
+      ]},
+      { title: 'PCB — Edit', items: [
+        ['M', 'Move (preserve tracks)'],
+        ['G', 'Drag (rubber-band tracks)'],
+        ['R', 'Rotate'],
+        ['F', 'Flip footprint to other side'],
+        ['E', 'Edit properties'],
+        ['Delete', 'Delete'],
+        ['Ctrl + D', 'Duplicate'],
+        ['Shift + S', 'Set scope of selection']
+      ]},
+      { title: 'PCB — Tools &amp; Inspection', items: [
+        ['Ctrl + F', 'Find'],
+        ['F8', 'Update PCB from schematic'],
+        ['F5', 'Switch active layer'],
+        ['Ctrl + Shift + F5', 'Toggle ratsnest'],
+        ['Ctrl + Shift + B', 'Generate Gerbers / drill files'],
+        ['Ctrl + Alt + 3', '3D Viewer'],
+        ['Ctrl + Shift + N', 'Net inspector'],
+        ['F7', 'Run DRC (Design Rules Check)'],
+        ['Ctrl + 1 through Ctrl + 9', 'Toggle layer visibility 1-9']
+      ]},
+      { title: 'KiCad-wide', items: [
+        ['Ctrl + N', 'New project'],
+        ['Ctrl + O', 'Open project'],
+        ['Ctrl + S', 'Save'],
+        ['Ctrl + Q', 'Quit'],
+        ['Ctrl + ,', 'Preferences'],
+        ['Ctrl + Shift + ,', 'Preferences (alternate path)']
+      ]}
+    ]
   }
 };
 
@@ -12342,6 +13574,387 @@ function renderPcbErTable() {
 ['cc-i','cc-dt','cc-oz','cc-layer'].forEach(id => {
   const el = document.getElementById(id); if (el) el.addEventListener('input', calcCurrentCapacity);
   if (el) el.addEventListener('change', calcCurrentCapacity);
+});
+
+// ====================== 1L · DIFF PAIR (edge-coupled microstrip) ======================
+function calcDiffPairMicrostrip() {
+  const w = parseFloat(document.getElementById('dpm-w').value);
+  const s = parseFloat(document.getElementById('dpm-s').value);
+  const h = parseFloat(document.getElementById('dpm-h').value);
+  const t = parseFloat(document.getElementById('dpm-t').value);
+  const er = parseFloat(document.getElementById('dpm-er').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![w,s,h,t,er].every(x => isFinite(x) && x > 0)) {
+    ['dpm-z0','dpm-coup','dpm-zdiff','dpm-zcm','dpm-match'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Single-ended Z0 (Hammerstad-Jensen approx) for microstrip
+  const weff = w + (t / Math.PI) * (1 + Math.log(2 * h / t));
+  const ereff = (er + 1) / 2 + (er - 1) / 2 * Math.pow(1 + 12 * h / weff, -0.5);
+  let Z0;
+  if (weff / h <= 1) {
+    Z0 = (60 / Math.sqrt(ereff)) * Math.log(8 * h / weff + weff / (4 * h));
+  } else {
+    Z0 = (120 * Math.PI / Math.sqrt(ereff)) / (weff / h + 1.393 + 0.667 * Math.log(weff / h + 1.444));
+  }
+  // Differential impedance (IPC-2141 approx)
+  const coup = 1 - 0.48 * Math.exp(-0.96 * s / h);
+  const Zdiff = 2 * Z0 * coup;
+  const Zcm = Z0 / 2 * (1 + 0.48 * Math.exp(-0.96 * s / h));
+  set('dpm-z0', Z0.toFixed(2) + ' Ω');
+  set('dpm-coup', (coup).toFixed(3) + ' (1 = uncoupled)');
+  set('dpm-zdiff', Zdiff.toFixed(2) + ' Ω');
+  set('dpm-zcm', Zcm.toFixed(2) + ' Ω');
+  let match;
+  const d90 = Math.abs(Zdiff - 90);
+  const d100 = Math.abs(Zdiff - 100);
+  if (d90 < 5)  match = 'USB 2.0 target (90 Ω)';
+  else if (d100 < 5) match = 'HDMI / GbE / LVDS target (100 Ω)';
+  else if (d90 < 9)  match = 'Close to 90 Ω (±10%)';
+  else if (d100 < 10) match = 'Close to 100 Ω (±10%)';
+  else match = 'Outside common targets; tune W or S';
+  set('dpm-match', match);
+}
+['dpm-w','dpm-s','dpm-h','dpm-t','dpm-er'].forEach(id => {
+  const el = document.getElementById(id); if (el) el.addEventListener('input', calcDiffPairMicrostrip);
+});
+
+// ====================== 1L · STRIPLINE ======================
+function calcStripline() {
+  const w = parseFloat(document.getElementById('sl-w').value);
+  const b = parseFloat(document.getElementById('sl-b').value);
+  const t = parseFloat(document.getElementById('sl-t').value);
+  const er = parseFloat(document.getElementById('sl-er').value);
+  const s = parseFloat(document.getElementById('sl-s').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![w,b,t,er].every(x => isFinite(x) && x > 0)) {
+    ['sl-z0','sl-zdiff','sl-vp','sl-tpd'].forEach(id => set(id, '—'));
+    return;
+  }
+  // IPC stripline approx: Z0 = (60/√er) × ln(4b / (0.67π × (0.8w + t)))
+  const Z0 = (60 / Math.sqrt(er)) * Math.log(4 * b / (0.67 * Math.PI * (0.8 * w + t)));
+  // Differential stripline approx (similar coupling formula)
+  let Zdiff = '—';
+  if (isFinite(s) && s > 0) {
+    const coup = 1 - 0.347 * Math.exp(-2.9 * s / b);
+    Zdiff = (2 * Z0 * coup).toFixed(2) + ' Ω';
+  }
+  // Propagation: vp = c / √er, tpd = √er / c
+  const vp_pct = (1 / Math.sqrt(er)) * 100;
+  const tpd_ps_per_mm = Math.sqrt(er) / 0.2998; // 1/c in ps/mm = 3.336 ps/mm
+  set('sl-z0', Z0.toFixed(2) + ' Ω');
+  set('sl-zdiff', Zdiff);
+  set('sl-vp', vp_pct.toFixed(1) + '% c');
+  set('sl-tpd', tpd_ps_per_mm.toFixed(2) + ' ps/mm (' + (tpd_ps_per_mm * 25.4).toFixed(1) + ' ps/in)');
+}
+['sl-w','sl-b','sl-t','sl-er','sl-s'].forEach(id => {
+  const el = document.getElementById(id); if (el) el.addEventListener('input', calcStripline);
+});
+
+// ====================== 1L · VIA CURRENT CAPACITY ======================
+function calcViaCurrent() {
+  const d = parseFloat(document.getElementById('via-d').value);
+  const plate = parseFloat(document.getElementById('via-plate').value);
+  const dT = parseFloat(document.getElementById('via-dt').value);
+  const n = parseInt(document.getElementById('via-n').value, 10);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![d, plate, dT].every(x => isFinite(x) && x > 0) || !isFinite(n) || n < 1) {
+    ['via-area','via-effw','via-i1','via-itot','via-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Annular area: π × (D - t) × t (cylindrical wall)
+  const area_mm2 = Math.PI * (d - plate) * plate;
+  const effW = Math.PI * d;
+  // Convert mm² to mil² for IPC-2152 formula
+  const area_mil2 = area_mm2 * (1000 / 25.4) * (1000 / 25.4);
+  // IPC-2152 external: I = 0.048 × ΔT^0.44 × A^0.725
+  const I = 0.048 * Math.pow(dT, 0.44) * Math.pow(area_mil2, 0.725);
+  const I_total = I * n;
+  set('via-area', area_mm2.toFixed(4) + ' mm² (' + area_mil2.toFixed(2) + ' mil²)');
+  set('via-effw', effW.toFixed(3) + ' mm (' + (effW * 39.37).toFixed(1) + ' mil)');
+  set('via-i1', I.toFixed(2) + ' A');
+  set('via-itot', I_total.toFixed(2) + ' A (' + n + '× parallel)');
+  let assess;
+  if (I_total < 0.5)      assess = 'Low-current signal/control use';
+  else if (I_total < 2)   assess = 'General signal and low-power supply';
+  else if (I_total < 5)   assess = 'Power distribution; check ground stitching';
+  else if (I_total < 15)  assess = 'High-current power rail; verify thermal';
+  else                    assess = 'Heavy power; consider copper coin or bus bar';
+  set('via-assess', assess);
+}
+['via-d','via-plate','via-dt','via-n'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcViaCurrent); el.addEventListener('change', calcViaCurrent); }
+});
+
+// ====================== 1L · THERMAL VIA ARRAY ======================
+function calcThermalVia() {
+  const d = parseFloat(document.getElementById('tv-d').value);
+  const plate = parseFloat(document.getElementById('tv-plate').value);
+  const board = parseFloat(document.getElementById('tv-board').value);
+  const n = parseInt(document.getElementById('tv-n').value, 10);
+  const power = parseFloat(document.getElementById('tv-power').value);
+  const targetRise = parseFloat(document.getElementById('tv-rise').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![d, plate, board].every(x => isFinite(x) && x > 0) || !isFinite(n) || n < 1) {
+    ['tv-theta-single','tv-theta-array','tv-q-cap','tv-dt-actual','tv-rec'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Copper thermal conductivity
+  const k = 400; // W/m·K
+  // Annular cross-section in m²
+  const A_m2 = Math.PI * ((d - plate) / 1000) * (plate / 1000);
+  const L_m = board / 1000;
+  const theta_single = L_m / (k * A_m2);   // K/W
+  const theta_array = theta_single / n;
+  // Q at given target rise
+  const Q_cap = targetRise / theta_array;
+  // Actual rise at given power
+  const dT_actual = isFinite(power) && power > 0 ? power * theta_array : null;
+  set('tv-theta-single', theta_single.toFixed(2) + ' K/W');
+  set('tv-theta-array', theta_array.toFixed(2) + ' K/W');
+  set('tv-q-cap', Q_cap.toFixed(2) + ' W @ ΔT=' + targetRise + '°C');
+  set('tv-dt-actual', dT_actual !== null ? dT_actual.toFixed(1) + ' °C' : '—');
+  let rec;
+  if (dT_actual === null) rec = 'Enter power to assess';
+  else if (dT_actual < 10)  rec = 'Generous margin; could reduce via count';
+  else if (dT_actual < 25)  rec = 'Good thermal margin';
+  else if (dT_actual < 50)  rec = 'Adequate; consider adding 2-4 more vias';
+  else                       rec = 'Underspec; add vias, copper pour, or external heatsink';
+  set('tv-rec', rec);
+}
+['tv-d','tv-plate','tv-board','tv-n','tv-power','tv-rise'].forEach(id => {
+  const el = document.getElementById(id); if (el) el.addEventListener('input', calcThermalVia);
+});
+
+// ====================== 1L · CRYSTAL LOAD CAPACITANCE ======================
+// (See 1E TOOL 1E-6 for the working crystal calculator; 1L card is a reference pointer.)
+
+// ====================== 1H · LDO THERMAL CALCULATOR ======================
+function calcLdoThermal() {
+  const vin = parseFloat(document.getElementById('ldo-vin').value);
+  const vout = parseFloat(document.getElementById('ldo-vout').value);
+  const iout = parseFloat(document.getElementById('ldo-iout').value) / 1000; // mA to A
+  const iq = parseFloat(document.getElementById('ldo-iq').value) / 1e6;       // µA to A
+  const theta = parseFloat(document.getElementById('ldo-pkg').value);
+  const tamb = parseFloat(document.getElementById('ldo-tamb').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![vin, vout, iout, theta, tamb].every(x => isFinite(x)) || vin <= 0 || vout < 0 || iout < 0 || theta <= 0) {
+    ['ldo-vdrop','ldo-pd','ldo-eff','ldo-tj','ldo-margin','ldo-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  const vdrop = vin - vout;
+  if (vdrop < 0) {
+    set('ldo-vdrop', vdrop.toFixed(2) + ' V (NEGATIVE)');
+    set('ldo-pd', '—');
+    set('ldo-eff', '—');
+    set('ldo-tj', '—');
+    set('ldo-margin', '—');
+    set('ldo-assess', 'V_out > V_in: LDO cannot operate; use a boost converter');
+    return;
+  }
+  const pd = vdrop * iout + vin * iq;
+  const pout = vout * iout;
+  const pin = vin * (iout + iq);
+  const eff = pin > 0 ? (pout / pin) * 100 : 0;
+  const tj = tamb + pd * theta;
+  const margin = 125 - tj;
+  set('ldo-vdrop', vdrop.toFixed(2) + ' V');
+  set('ldo-pd', pd.toFixed(3) + ' W (' + (pd * 1000).toFixed(0) + ' mW)');
+  set('ldo-eff', eff.toFixed(1) + '%');
+  set('ldo-tj', tj.toFixed(1) + ' °C');
+  set('ldo-margin', margin.toFixed(1) + ' °C below 125°C max');
+  let assess;
+  if (margin < 0)        assess = 'Will overheat; switching reg or larger package required';
+  else if (margin < 25)  assess = 'Tight margin; add copper pour or switch to switching reg';
+  else if (margin < 50)  assess = 'Adequate margin; consider derating for ambient extremes';
+  else if (eff < 30)     assess = 'Cool but wasteful (' + eff.toFixed(0) + '% efficient); consider buck converter';
+  else if (eff < 50)     assess = 'Acceptable; LDO works but burns power';
+  else                   assess = 'Good thermal margin and efficiency';
+  set('ldo-assess', assess);
+}
+['ldo-vin','ldo-vout','ldo-iout','ldo-iq','ldo-pkg','ldo-tamb'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcLdoThermal); el.addEventListener('change', calcLdoThermal); }
+});
+
+// ====================== 1E · LED CURRENT-LIMIT RESISTOR ======================
+function calcLedResistor() {
+  const vs = parseFloat(document.getElementById('led-vs').value);
+  const vf = parseFloat(document.getElementById('led-vf').value);
+  const ifMa = parseFloat(document.getElementById('led-if').value);
+  const n = parseInt(document.getElementById('led-n').value, 10);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![vs, vf, ifMa, n].every(x => isFinite(x)) || vs <= 0 || vf <= 0 || ifMa <= 0 || n < 1) {
+    ['led-vdrop','led-vres','led-r-exact','led-r-e12','led-pr','led-smd','led-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  const totalVf = n * vf;
+  const vRes = vs - totalVf;
+  if (vRes <= 0) {
+    set('led-vdrop', totalVf.toFixed(2) + ' V');
+    set('led-vres', vRes.toFixed(2) + ' V (NEGATIVE)');
+    ['led-r-exact','led-r-e12','led-pr','led-smd'].forEach(id => set(id, '—'));
+    set('led-assess', 'Supply too low for ' + n + ' × ' + vf + 'V LED' + (n > 1 ? 's' : '') + ' in series');
+    return;
+  }
+  const iA = ifMa / 1000;
+  const rExact = vRes / iA;
+  // Round UP to next E12 for safety (lower current is safer than higher)
+  const E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+  const log = Math.log10(rExact);
+  const decade = Math.floor(log);
+  const mantissa = rExact / Math.pow(10, decade);
+  let nextUp = null;
+  for (const v of E12) {
+    if (v >= mantissa - 1e-9) { nextUp = v * Math.pow(10, decade); break; }
+  }
+  if (nextUp === null) nextUp = E12[0] * Math.pow(10, decade + 1);
+  const power = vRes * iA;
+  let smd;
+  if (power < 0.0625)      smd = '0402 (62 mW) ok';
+  else if (power < 0.10)   smd = '0603 (100 mW) ok';
+  else if (power < 0.125)  smd = '0805 (125 mW) ok';
+  else if (power < 0.25)   smd = '1206 (250 mW) ok';
+  else if (power < 0.50)   smd = '1210 (500 mW) or larger';
+  else if (power < 1.0)    smd = '2010 (750 mW) or larger';
+  else                     smd = '2512 (1 W) or through-hole; consider constant-current driver';
+  set('led-vdrop', totalVf.toFixed(2) + ' V');
+  set('led-vres', vRes.toFixed(2) + ' V');
+  set('led-r-exact', rExact.toFixed(1) + ' Ω');
+  set('led-r-e12', nextUp.toFixed(0) + ' Ω');
+  set('led-pr', (power * 1000).toFixed(1) + ' mW');
+  set('led-smd', smd);
+  // Assessment
+  let assess;
+  const headroom = vRes / vs;
+  if (headroom < 0.1)      assess = 'Very tight headroom; brightness will vary with supply';
+  else if (headroom < 0.2) assess = 'Tight headroom; sensitive to supply variation';
+  else if (n > 1 && headroom < 0.3) assess = 'Series string with limited headroom; OK if supply is regulated';
+  else if (ifMa > 50)      assess = 'High current; consider a constant-current driver IC';
+  else                     assess = 'Standard configuration; good design';
+  set('led-assess', assess);
+}
+// Sync the preset dropdown with the V_f input
+function ledVfPresetSync() {
+  const preset = document.getElementById('led-vf-preset').value;
+  if (preset !== 'custom') {
+    document.getElementById('led-vf').value = preset;
+    calcLedResistor();
+  }
+}
+['led-vs','led-vf','led-if','led-n'].forEach(id => {
+  const el = document.getElementById(id); if (el) el.addEventListener('input', calcLedResistor);
+});
+const ledPresetEl = document.getElementById('led-vf-preset');
+if (ledPresetEl) ledPresetEl.addEventListener('change', ledVfPresetSync);
+
+// ====================== 1L · CROSSTALK ESTIMATOR ======================
+function calcCrosstalk() {
+  const v = parseFloat(document.getElementById('xt-v').value);
+  const tr = parseFloat(document.getElementById('xt-tr').value);
+  const s = parseFloat(document.getElementById('xt-s').value);
+  const h = parseFloat(document.getElementById('xt-h').value);
+  const len = parseFloat(document.getElementById('xt-len').value);
+  const er = parseFloat(document.getElementById('xt-er').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (![v, tr, s, h, len, er].every(x => isFinite(x) && x > 0)) {
+    ['xt-dvdt','xt-knext','xt-vnext','xt-kfext','xt-vfext','xt-lcrit','xt-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Edge rate dV/dt in V/ns
+  const dvdt = v / tr;
+  // Microstrip propagation delay: tpd = √((er+1)/2) / c, in ps/mm (effective er for microstrip)
+  const erEff = (er + 1) / 2;
+  const tpd_ps_per_mm = Math.sqrt(erEff) / 0.2998;  // ~5.3 ps/mm for FR4 microstrip
+  // K_NEXT (near-end crosstalk coefficient) approx, Howard Johnson:
+  // K_NEXT ≈ 0.25 × 1 / (1 + (S/H)²)
+  const sh = s / h;
+  const Knext = 0.25 / (1 + sh * sh);
+  // Near-end crosstalk voltage (saturated, when length > critical)
+  const Vnext = Knext * v;
+  // Critical length (NEXT saturates): L_crit = tr × c / (2 × √er_eff)
+  // In mm: L_crit_mm = tr_ps / (2 × tpd_ps_per_mm)
+  const tr_ps = tr * 1000;
+  const Lcrit_mm = tr_ps / (2 * tpd_ps_per_mm);
+  // K_FEXT (far-end crosstalk coefficient) for microstrip, length-dependent:
+  // K_FEXT ≈ (length × tpd / tr) × K_NEXT (rough approximation)
+  // Capped: only valid if length > critical, else scales linearly
+  const Kfext_per_length = Knext * (tpd_ps_per_mm / tr_ps);
+  const Kfext_total = Kfext_per_length * len;
+  const Vfext = Kfext_total * v;
+  // Display
+  set('xt-dvdt', dvdt.toFixed(2) + ' V/ns');
+  set('xt-knext', (Knext * 100).toFixed(2) + '% (' + Knext.toFixed(4) + ')');
+  set('xt-vnext', (Vnext * 1000).toFixed(1) + ' mV (sat.)');
+  set('xt-kfext', (Kfext_total * 100).toFixed(2) + '%');
+  set('xt-vfext', (Vfext * 1000).toFixed(1) + ' mV');
+  set('xt-lcrit', Lcrit_mm.toFixed(1) + ' mm');
+  // Assessment
+  let assess;
+  const worst_mV = Math.max(Vnext * 1000, Vfext * 1000);
+  if (worst_mV < 50)        assess = 'Negligible (<50 mV)';
+  else if (worst_mV < 100)  assess = 'Low; safe for most logic';
+  else if (worst_mV < 200)  assess = 'Moderate; may affect ADC inputs or LVDS';
+  else if (worst_mV < 500)  assess = 'High; will likely cause logic glitches';
+  else                      assess = 'Severe; redesign needed (more spacing or stripline)';
+  if (sh < 1)               assess += ' · S/H < 1 is tight coupling';
+  set('xt-assess', assess);
+}
+['xt-v','xt-tr','xt-s','xt-h','xt-len','xt-er'].forEach(id => {
+  const el = document.getElementById(id); if (el) el.addEventListener('input', calcCrosstalk);
+});
+
+// ====================== 1S · I²C PULL-UP CALCULATOR ======================
+function calcPullup() {
+  const vcc = parseFloat(document.getElementById('pu-vcc').value);
+  const cbus = parseFloat(document.getElementById('pu-cbus').value) * 1e-12; // pF to F
+  const speed = document.getElementById('pu-speed').value;
+  const isink = parseFloat(document.getElementById('pu-isink').value) / 1000; // mA to A
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(vcc) || !isFinite(cbus) || !isFinite(isink) || vcc <= 0 || cbus <= 0 || isink <= 0) {
+    ['pu-rmax','pu-rmin','pu-rrec','pu-iol','pu-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  // I²C max rise time per spec (in seconds)
+  const trMax = { standard: 1000e-9, fast: 300e-9, fastplus: 120e-9, hs: 80e-9 }[speed];
+  // R_max = t_r / (0.8473 × C)
+  const Rmax = trMax / (0.8473 * cbus);
+  // R_min = (V_cc - V_OL) / I_OL, V_OL = 0.4V per I²C spec
+  const Vol = 0.4;
+  const Rmin = (vcc - Vol) / isink;
+  // Recommendation: geometric mean rounded to nearest E12, but typically nearer to Rmax/2 to Rmax
+  const Rrec_raw = Math.sqrt(Rmin * Rmax);
+  const Rrec_e12 = nearestE12Ohms(Rrec_raw);
+  // Actual sink current with chosen R
+  const Iol_actual = (vcc - Vol) / Rrec_e12;
+  set('pu-rmax', (Rmax / 1000).toFixed(2) + ' kΩ');
+  set('pu-rmin', (Rmin / 1000).toFixed(2) + ' kΩ');
+  set('pu-rrec', (Rrec_e12 / 1000).toFixed(2) + ' kΩ (E12)');
+  set('pu-iol', (Iol_actual * 1000).toFixed(2) + ' mA');
+  let assess;
+  if (Rmin >= Rmax)            assess = 'Impossible: bus capacitance is too high for this sink current and speed';
+  else if (Rmax / Rmin < 1.5)  assess = 'Marginal window; consider lower speed or active buffer';
+  else if (Rmax / Rmin < 3)    assess = 'Workable; pick close to R_max for low power';
+  else                         assess = 'Comfortable window for design';
+  set('pu-assess', assess);
+}
+function nearestE12Ohms(value) {
+  if (!isFinite(value) || value <= 0) return 0;
+  const E12 = [1, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+  const log = Math.log10(value);
+  const decade = Math.floor(log);
+  const mantissa = value / Math.pow(10, decade);
+  let best = E12[0], bestDiff = Math.abs(mantissa - best);
+  for (const v of E12) {
+    const diff = Math.abs(mantissa - v);
+    if (diff < bestDiff) { best = v; bestDiff = diff; }
+  }
+  return best * Math.pow(10, decade);
+}
+['pu-vcc','pu-cbus','pu-speed','pu-isink'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcPullup); el.addEventListener('change', calcPullup); }
 });
 
 // ====================== 1M · FILTER DESIGNER ======================
@@ -15353,6 +16966,14 @@ renderOpampRefTable();
 calcTransistor();
 calcMicrostrip();
 calcCurrentCapacity();
+calcDiffPairMicrostrip();
+calcStripline();
+calcViaCurrent();
+calcThermalVia();
+calcLdoThermal();
+calcLedResistor();
+calcCrosstalk();
+calcPullup();
 renderPcbErTable();
 calcFilterDesigner();
 renderTorqueMetric();
@@ -15431,6 +17052,287 @@ calcResinQty();
 // 4H Parts Sourcing
 renderAllVendorGrids();
 wireQuickQueries();
+
+// ====================== 1O · SCHEMATIC SYMBOLS ======================
+const SCHEMATIC_SYMBOLS = {
+  passive: [
+    { name: 'Resistor (US)', note: 'Zigzag form, ANSI', svg:
+      '<svg viewBox="0 0 120 30"><line x1="0" y1="15" x2="25" y2="15"/>' +
+      '<polyline points="25,15 30,5 40,25 50,5 60,25 70,5 80,25 90,5 95,15"/>' +
+      '<line x1="95" y1="15" x2="120" y2="15"/></svg>' },
+    { name: 'Resistor (IEC)', note: 'Rectangle form, European', svg:
+      '<svg viewBox="0 0 120 30"><line x1="0" y1="15" x2="30" y2="15"/>' +
+      '<rect x="30" y="7" width="60" height="16"/>' +
+      '<line x1="90" y1="15" x2="120" y2="15"/></svg>' },
+    { name: 'Variable Resistor', note: 'Rheostat (2-term)', svg:
+      '<svg viewBox="0 0 120 50"><line x1="0" y1="25" x2="25" y2="25"/>' +
+      '<polyline points="25,25 30,15 40,35 50,15 60,35 70,15 80,35 90,15 95,25"/>' +
+      '<line x1="95" y1="25" x2="120" y2="25"/>' +
+      '<line x1="30" y1="48" x2="90" y2="5"/>' +
+      '<polyline class="fill-ink" points="90,5 84,8 88,13"/></svg>' },
+    { name: 'Potentiometer', note: '3-terminal wiper', svg:
+      '<svg viewBox="0 0 120 50"><line x1="0" y1="30" x2="25" y2="30"/>' +
+      '<polyline points="25,30 30,20 40,40 50,20 60,40 70,20 80,40 90,20 95,30"/>' +
+      '<line x1="95" y1="30" x2="120" y2="30"/>' +
+      '<line x1="60" y1="2" x2="60" y2="22"/>' +
+      '<polyline class="fill-ink" points="60,22 56,16 64,16"/></svg>' },
+    { name: 'Capacitor', note: 'Non-polarized', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="32" y2="20"/>' +
+      '<line x1="32" y1="6" x2="32" y2="34"/>' +
+      '<line x1="42" y1="6" x2="42" y2="34"/>' +
+      '<line x1="42" y1="20" x2="80" y2="20"/></svg>' },
+    { name: 'Capacitor (polar)', note: 'Electrolytic, + marked', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="32" y2="20"/>' +
+      '<line x1="32" y1="6" x2="32" y2="34"/>' +
+      '<path d="M 42 6 Q 50 20 42 34"/>' +
+      '<line x1="42" y1="20" x2="80" y2="20"/>' +
+      '<text x="20" y="12">+</text></svg>' },
+    { name: 'Inductor', note: 'Coil, air-core', svg:
+      '<svg viewBox="0 0 120 30"><line x1="0" y1="20" x2="20" y2="20"/>' +
+      '<path d="M 20 20 A 10 10 0 0 1 40 20 A 10 10 0 0 1 60 20 A 10 10 0 0 1 80 20 A 10 10 0 0 1 100 20"/>' +
+      '<line x1="100" y1="20" x2="120" y2="20"/></svg>' },
+    { name: 'Inductor (core)', note: 'Iron-core, ferrite', svg:
+      '<svg viewBox="0 0 120 30"><line x1="0" y1="20" x2="20" y2="20"/>' +
+      '<path d="M 20 20 A 10 10 0 0 1 40 20 A 10 10 0 0 1 60 20 A 10 10 0 0 1 80 20 A 10 10 0 0 1 100 20"/>' +
+      '<line x1="100" y1="20" x2="120" y2="20"/>' +
+      '<line x1="20" y1="6" x2="100" y2="6"/>' +
+      '<line x1="20" y1="9" x2="100" y2="9"/></svg>' },
+    { name: 'Fuse', note: 'Wire-form, IEC', svg:
+      '<svg viewBox="0 0 80 30"><line x1="0" y1="15" x2="15" y2="15"/>' +
+      '<rect x="15" y="8" width="50" height="14"/>' +
+      '<line x1="15" y1="15" x2="65" y2="15"/>' +
+      '<line x1="65" y1="15" x2="80" y2="15"/></svg>' },
+    { name: 'Crystal', note: 'Quartz oscillator', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="20" y2="20"/>' +
+      '<line x1="20" y1="8" x2="20" y2="32"/>' +
+      '<rect x="25" y="8" width="30" height="24"/>' +
+      '<line x1="60" y1="8" x2="60" y2="32"/>' +
+      '<line x1="60" y1="20" x2="80" y2="20"/></svg>' }
+  ],
+  diodes: [
+    { name: 'Diode', note: 'Standard rectifier', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="25" y2="20"/>' +
+      '<polygon class="fill-ink" points="25,8 25,32 45,20"/>' +
+      '<line x1="45" y1="8" x2="45" y2="32"/>' +
+      '<line x1="45" y1="20" x2="80" y2="20"/></svg>' },
+    { name: 'Zener Diode', note: 'Reverse breakdown', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="25" y2="20"/>' +
+      '<polygon class="fill-ink" points="25,8 25,32 45,20"/>' +
+      '<polyline points="38,8 45,8 45,32 52,32"/>' +
+      '<line x1="45" y1="20" x2="80" y2="20"/></svg>' },
+    { name: 'Schottky Diode', note: 'Low forward drop', svg:
+      '<svg viewBox="0 0 80 40"><line x1="0" y1="20" x2="25" y2="20"/>' +
+      '<polygon class="fill-ink" points="25,8 25,32 45,20"/>' +
+      '<polyline points="38,12 38,8 45,8 45,32 52,32 52,28"/>' +
+      '<line x1="45" y1="20" x2="80" y2="20"/></svg>' },
+    { name: 'LED', note: 'Light-emitting diode', svg:
+      '<svg viewBox="0 0 80 50"><line x1="0" y1="30" x2="25" y2="30"/>' +
+      '<polygon class="fill-ink" points="25,18 25,42 45,30"/>' +
+      '<line x1="45" y1="18" x2="45" y2="42"/>' +
+      '<line x1="45" y1="30" x2="80" y2="30"/>' +
+      '<line x1="48" y1="14" x2="58" y2="4"/><polyline class="fill-ink" points="58,4 53,5 55,10"/>' +
+      '<line x1="56" y1="18" x2="66" y2="8"/><polyline class="fill-ink" points="66,8 61,9 63,14"/></svg>' },
+    { name: 'Photodiode', note: 'Light receiver', svg:
+      '<svg viewBox="0 0 80 50"><line x1="0" y1="30" x2="25" y2="30"/>' +
+      '<polygon class="fill-ink" points="25,18 25,42 45,30"/>' +
+      '<line x1="45" y1="18" x2="45" y2="42"/>' +
+      '<line x1="45" y1="30" x2="80" y2="30"/>' +
+      '<line x1="58" y1="4" x2="48" y2="14"/><polyline class="fill-ink" points="48,14 53,13 51,8"/>' +
+      '<line x1="66" y1="8" x2="56" y2="18"/><polyline class="fill-ink" points="56,18 61,17 59,12"/></svg>' }
+  ],
+  transistors: [
+    { name: 'NPN BJT', note: 'Bipolar, arrow out', svg:
+      '<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="22"/>' +
+      '<line x1="5" y1="40" x2="28" y2="40"/>' +
+      '<line x1="28" y1="25" x2="28" y2="55"/>' +
+      '<line x1="28" y1="32" x2="55" y2="15"/>' +
+      '<line x1="55" y1="15" x2="55" y2="5"/>' +
+      '<line x1="28" y1="48" x2="55" y2="65"/>' +
+      '<polyline class="fill-ink" points="55,65 47,60 50,67"/>' +
+      '<line x1="55" y1="65" x2="55" y2="75"/></svg>' },
+    { name: 'PNP BJT', note: 'Bipolar, arrow in', svg:
+      '<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="22"/>' +
+      '<line x1="5" y1="40" x2="28" y2="40"/>' +
+      '<line x1="28" y1="25" x2="28" y2="55"/>' +
+      '<line x1="28" y1="32" x2="55" y2="15"/>' +
+      '<line x1="55" y1="15" x2="55" y2="5"/>' +
+      '<line x1="28" y1="48" x2="55" y2="65"/>' +
+      '<polyline class="fill-ink" points="33,52 41,48 38,55"/>' +
+      '<line x1="55" y1="65" x2="55" y2="75"/></svg>' },
+    { name: 'N-MOSFET', note: 'Enhancement, gate arrow in', svg:
+      '<svg viewBox="0 0 80 80"><line x1="5" y1="40" x2="22" y2="40"/>' +
+      '<line x1="22" y1="20" x2="22" y2="60"/>' +
+      '<line x1="28" y1="20" x2="28" y2="28"/>' +
+      '<line x1="28" y1="36" x2="28" y2="44"/>' +
+      '<line x1="28" y1="52" x2="28" y2="60"/>' +
+      '<line x1="28" y1="24" x2="55" y2="24"/>' +
+      '<line x1="55" y1="24" x2="55" y2="5"/>' +
+      '<line x1="28" y1="56" x2="55" y2="56"/>' +
+      '<line x1="55" y1="56" x2="55" y2="75"/>' +
+      '<line x1="28" y1="40" x2="42" y2="40"/>' +
+      '<polyline class="fill-ink" points="36,40 30,36 30,44"/></svg>' },
+    { name: 'P-MOSFET', note: 'Enhancement, gate arrow out', svg:
+      '<svg viewBox="0 0 80 80"><line x1="5" y1="40" x2="22" y2="40"/>' +
+      '<line x1="22" y1="20" x2="22" y2="60"/>' +
+      '<line x1="28" y1="20" x2="28" y2="28"/>' +
+      '<line x1="28" y1="36" x2="28" y2="44"/>' +
+      '<line x1="28" y1="52" x2="28" y2="60"/>' +
+      '<line x1="28" y1="24" x2="55" y2="24"/>' +
+      '<line x1="55" y1="24" x2="55" y2="5"/>' +
+      '<line x1="28" y1="56" x2="55" y2="56"/>' +
+      '<line x1="55" y1="56" x2="55" y2="75"/>' +
+      '<line x1="28" y1="40" x2="42" y2="40"/>' +
+      '<polyline class="fill-ink" points="34,40 40,36 40,44"/></svg>' },
+    { name: 'JFET', note: 'N-channel, junction', svg:
+      '<svg viewBox="0 0 80 80"><line x1="5" y1="40" x2="22" y2="40"/>' +
+      '<line x1="28" y1="20" x2="28" y2="60"/>' +
+      '<line x1="28" y1="24" x2="55" y2="24"/>' +
+      '<line x1="55" y1="24" x2="55" y2="5"/>' +
+      '<line x1="28" y1="56" x2="55" y2="56"/>' +
+      '<line x1="55" y1="56" x2="55" y2="75"/>' +
+      '<line x1="22" y1="40" x2="28" y2="40"/>' +
+      '<polyline class="fill-ink" points="22,40 28,36 28,44"/></svg>' }
+  ],
+  logic: [
+    { name: 'Op-Amp', note: 'Differential amplifier', svg:
+      '<svg viewBox="0 0 90 70"><polygon points="10,8 10,62 80,35"/>' +
+      '<line x1="0" y1="20" x2="10" y2="20"/>' +
+      '<line x1="0" y1="50" x2="10" y2="50"/>' +
+      '<line x1="80" y1="35" x2="90" y2="35"/>' +
+      '<text x="14" y="24">−</text>' +
+      '<text x="14" y="54">+</text></svg>' },
+    { name: 'AND Gate', note: 'Logical conjunction', svg:
+      '<svg viewBox="0 0 90 60"><path d="M 10 8 L 40 8 A 25 22 0 0 1 40 52 L 10 52 Z"/>' +
+      '<line x1="0" y1="20" x2="10" y2="20"/>' +
+      '<line x1="0" y1="40" x2="10" y2="40"/>' +
+      '<line x1="65" y1="30" x2="90" y2="30"/></svg>' },
+    { name: 'OR Gate', note: 'Logical disjunction', svg:
+      '<svg viewBox="0 0 90 60"><path d="M 8 8 Q 25 30 8 52 L 35 52 Q 60 52 75 30 Q 60 8 35 8 Z"/>' +
+      '<line x1="0" y1="20" x2="14" y2="20"/>' +
+      '<line x1="0" y1="40" x2="14" y2="40"/>' +
+      '<line x1="75" y1="30" x2="90" y2="30"/></svg>' },
+    { name: 'NOT Gate', note: 'Inverter', svg:
+      '<svg viewBox="0 0 90 60"><polygon points="10,12 10,48 60,30"/>' +
+      '<circle cx="65" cy="30" r="4"/>' +
+      '<line x1="0" y1="30" x2="10" y2="30"/>' +
+      '<line x1="69" y1="30" x2="90" y2="30"/></svg>' },
+    { name: 'NAND Gate', note: 'AND with inversion', svg:
+      '<svg viewBox="0 0 90 60"><path d="M 10 8 L 40 8 A 25 22 0 0 1 40 52 L 10 52 Z"/>' +
+      '<circle cx="70" cy="30" r="4"/>' +
+      '<line x1="0" y1="20" x2="10" y2="20"/>' +
+      '<line x1="0" y1="40" x2="10" y2="40"/>' +
+      '<line x1="74" y1="30" x2="90" y2="30"/></svg>' },
+    { name: 'NOR Gate', note: 'OR with inversion', svg:
+      '<svg viewBox="0 0 90 60"><path d="M 8 8 Q 25 30 8 52 L 35 52 Q 60 52 75 30 Q 60 8 35 8 Z"/>' +
+      '<circle cx="80" cy="30" r="4"/>' +
+      '<line x1="0" y1="20" x2="14" y2="20"/>' +
+      '<line x1="0" y1="40" x2="14" y2="40"/>' +
+      '<line x1="84" y1="30" x2="90" y2="30"/></svg>' },
+    { name: 'XOR Gate', note: 'Exclusive OR', svg:
+      '<svg viewBox="0 0 90 60"><path d="M 8 8 Q 25 30 8 52 L 35 52 Q 60 52 75 30 Q 60 8 35 8 Z"/>' +
+      '<path d="M 2 8 Q 19 30 2 52"/>' +
+      '<line x1="0" y1="20" x2="14" y2="20"/>' +
+      '<line x1="0" y1="40" x2="14" y2="40"/>' +
+      '<line x1="75" y1="30" x2="90" y2="30"/></svg>' }
+  ],
+  sources: [
+    { name: 'DC Voltage Source', note: 'Constant V', svg:
+      '<svg viewBox="0 0 60 70"><circle cx="30" cy="35" r="18"/>' +
+      '<line x1="30" y1="0" x2="30" y2="17"/>' +
+      '<line x1="30" y1="53" x2="30" y2="70"/>' +
+      '<text x="26" y="30">+</text>' +
+      '<text x="27" y="48">−</text></svg>' },
+    { name: 'AC Voltage Source', note: 'Sinusoidal', svg:
+      '<svg viewBox="0 0 60 70"><circle cx="30" cy="35" r="18"/>' +
+      '<line x1="30" y1="0" x2="30" y2="17"/>' +
+      '<line x1="30" y1="53" x2="30" y2="70"/>' +
+      '<path d="M 18 35 Q 24 25 30 35 Q 36 45 42 35"/></svg>' },
+    { name: 'Battery', note: 'Multi-cell, + long', svg:
+      '<svg viewBox="0 0 90 40"><line x1="0" y1="20" x2="20" y2="20"/>' +
+      '<line x1="20" y1="6" x2="20" y2="34"/>' +
+      '<line x1="28" y1="12" x2="28" y2="28"/>' +
+      '<line x1="36" y1="6" x2="36" y2="34"/>' +
+      '<line x1="44" y1="12" x2="44" y2="28"/>' +
+      '<line x1="52" y1="6" x2="52" y2="34"/>' +
+      '<line x1="60" y1="12" x2="60" y2="28"/>' +
+      '<line x1="60" y1="20" x2="90" y2="20"/>' +
+      '<text x="48" y="6">+</text></svg>' },
+    { name: 'Current Source', note: 'Constant I', svg:
+      '<svg viewBox="0 0 60 70"><circle cx="30" cy="35" r="18"/>' +
+      '<line x1="30" y1="0" x2="30" y2="17"/>' +
+      '<line x1="30" y1="53" x2="30" y2="70"/>' +
+      '<line x1="30" y1="46" x2="30" y2="24"/>' +
+      '<polyline class="fill-ink" points="30,24 26,30 34,30"/></svg>' },
+    { name: 'Earth Ground', note: 'True earth reference', svg:
+      '<svg viewBox="0 0 60 60"><line x1="30" y1="0" x2="30" y2="28"/>' +
+      '<line x1="12" y1="30" x2="48" y2="30"/>' +
+      '<line x1="18" y1="38" x2="42" y2="38"/>' +
+      '<line x1="24" y1="46" x2="36" y2="46"/></svg>' },
+    { name: 'Signal Ground', note: 'Circuit common', svg:
+      '<svg viewBox="0 0 60 60"><line x1="30" y1="0" x2="30" y2="28"/>' +
+      '<polygon class="fill-ink" points="14,28 46,28 30,50"/></svg>' }
+  ],
+  misc: [
+    { name: 'SPST Switch', note: 'Single-pole, single-throw', svg:
+      '<svg viewBox="0 0 90 40"><line x1="0" y1="25" x2="25" y2="25"/>' +
+      '<line x1="25" y1="25" x2="55" y2="6"/>' +
+      '<circle cx="25" cy="25" r="2.5" class="fill-ink"/>' +
+      '<circle cx="60" cy="25" r="2.5" class="fill-ink"/>' +
+      '<line x1="60" y1="25" x2="90" y2="25"/></svg>' },
+    { name: 'SPDT Switch', note: 'Single-pole, double-throw', svg:
+      '<svg viewBox="0 0 90 50"><line x1="0" y1="25" x2="25" y2="25"/>' +
+      '<line x1="25" y1="25" x2="55" y2="10"/>' +
+      '<circle cx="25" cy="25" r="2.5" class="fill-ink"/>' +
+      '<circle cx="60" cy="10" r="2.5" class="fill-ink"/>' +
+      '<circle cx="60" cy="40" r="2.5" class="fill-ink"/>' +
+      '<line x1="60" y1="10" x2="90" y2="10"/>' +
+      '<line x1="60" y1="40" x2="90" y2="40"/></svg>' },
+    { name: 'Push-Button (NO)', note: 'Momentary, normally open', svg:
+      '<svg viewBox="0 0 90 50"><line x1="0" y1="30" x2="25" y2="30"/>' +
+      '<line x1="65" y1="30" x2="90" y2="30"/>' +
+      '<circle cx="25" cy="30" r="2.5" class="fill-ink"/>' +
+      '<circle cx="65" cy="30" r="2.5" class="fill-ink"/>' +
+      '<line x1="20" y1="20" x2="70" y2="20"/>' +
+      '<line x1="45" y1="5" x2="45" y2="20"/></svg>' },
+    { name: 'Transformer', note: 'Iron-core, isolated', svg:
+      '<svg viewBox="0 0 100 60"><line x1="0" y1="15" x2="20" y2="15"/>' +
+      '<line x1="0" y1="45" x2="20" y2="45"/>' +
+      '<path d="M 20 15 A 7 7 0 0 0 20 29 A 7 7 0 0 0 20 43 L 20 45"/>' +
+      '<line x1="48" y1="6" x2="48" y2="54"/>' +
+      '<line x1="52" y1="6" x2="52" y2="54"/>' +
+      '<path d="M 80 15 A 7 7 0 0 1 80 29 A 7 7 0 0 1 80 43 L 80 45"/>' +
+      '<line x1="80" y1="15" x2="100" y2="15"/>' +
+      '<line x1="80" y1="45" x2="100" y2="45"/></svg>' },
+    { name: 'Antenna', note: 'Dipole / generic', svg:
+      '<svg viewBox="0 0 60 60"><line x1="30" y1="60" x2="30" y2="30"/>' +
+      '<line x1="30" y1="30" x2="14" y2="6"/>' +
+      '<line x1="30" y1="30" x2="46" y2="6"/></svg>' },
+    { name: 'Relay (SPST)', note: 'Electromagnetic switch', svg:
+      '<svg viewBox="0 0 110 70"><rect x="8" y="20" width="22" height="30"/>' +
+      '<line x1="0" y1="25" x2="8" y2="25"/>' +
+      '<line x1="0" y1="45" x2="8" y2="45"/>' +
+      '<line x1="30" y1="35" x2="55" y2="35" stroke-dasharray="3 3"/>' +
+      '<line x1="55" y1="35" x2="80" y2="20"/>' +
+      '<circle cx="55" cy="35" r="2.5" class="fill-ink"/>' +
+      '<circle cx="85" cy="35" r="2.5" class="fill-ink"/>' +
+      '<line x1="85" y1="35" x2="110" y2="35"/></svg>' }
+  ]
+};
+
+function renderSchematicSymbols() {
+  Object.entries(SCHEMATIC_SYMBOLS).forEach(([cat, items]) => {
+    const grid = document.getElementById('symbols-' + cat);
+    if (!grid) return;
+    grid.innerHTML = items.map(s =>
+      '<div class="symbol-card">' +
+        '<div class="sym-svg">' + s.svg + '</div>' +
+        '<div class="sym-name">' + escHtml(s.name) + '</div>' +
+        '<div class="sym-note">' + escHtml(s.note) + '</div>' +
+      '</div>'
+    ).join('');
+  });
+}
+
 
 // ====================== 1N · BATTERY REFERENCE ======================
 const BATTERY_CHEMISTRIES = [
@@ -15820,6 +17722,7 @@ function calcBearingLife() {
 
 
 // Init all new sections
+renderSchematicSymbols();
 renderBatteryChemistries();
 calcBattery();
 calcFOV();
