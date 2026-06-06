@@ -11035,11 +11035,13 @@ const byName = n => COLORS.find(c => c.name === n);
 
 function fmtOhms(v) {
   if (v === null || isNaN(v)) return '—';
-  if (v >= 1e9) return (v/1e9).toPrecision(3).replace(/\.?0+$/,'') + ' GΩ';
-  if (v >= 1e6) return (v/1e6).toPrecision(3).replace(/\.?0+$/,'') + ' MΩ';
-  if (v >= 1e3) return (v/1e3).toPrecision(3).replace(/\.?0+$/,'') + ' kΩ';
-  if (v >= 1)   return v.toPrecision(3).replace(/\.?0+$/,'') + ' Ω';
-  return v.toPrecision(2) + ' Ω';
+  // Trim trailing zeros only after a decimal point (so 220 stays 220, but 22.0 becomes 22)
+  const trim = (s) => s.indexOf('.') === -1 ? s : s.replace(/0+$/, '').replace(/\.$/, '');
+  if (v >= 1e9) return trim((v/1e9).toPrecision(3)) + ' GΩ';
+  if (v >= 1e6) return trim((v/1e6).toPrecision(3)) + ' MΩ';
+  if (v >= 1e3) return trim((v/1e3).toPrecision(3)) + ' kΩ';
+  if (v >= 1)   return trim(v.toPrecision(3)) + ' Ω';
+  return trim(v.toPrecision(2)) + ' Ω';
 }
 
 // ====================== RESISTOR DECODER ======================
