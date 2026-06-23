@@ -2355,6 +2355,8 @@ code {
       <li><button data-tab="pullup"><span class="ref">1S</span><span>Pull-up &amp; Pull-down</span></button></li>
       <li><button data-tab="connectors"><span class="ref">1T</span><span>Connector Reference</span></button></li>
       <li><button data-tab="emi"><span class="ref">1U</span><span>EMI Mitigation</span></button></li>
+      <li><button data-tab="compliance"><span class="ref">1V</span><span>Compliance &amp; FCC Part 15</span></button></li>
+      <li><button data-tab="solder"><span class="ref">1W</span><span>Solder Bench Reference</span></button></li>
     </ul>
 
     <div class="category">
@@ -2388,6 +2390,10 @@ code {
       <li><button data-tab="adhesives"><span class="ref">2X</span><span>Adhesives</span></button></li>
       <li><button data-tab="finishes"><span class="ref">2Y</span><span>Finishes</span></button></li>
       <li><button data-tab="composites"><span class="ref">2Z</span><span>Composites</span></button></li>
+      <li><button data-tab="patinas"><span class="ref">2AA</span><span>Patinas &amp; Finish Schedules</span></button></li>
+      <li><button data-tab="kiln"><span class="ref">2BB</span><span>Kiln &amp; Firing</span></button></li>
+      <li><button data-tab="marlinspike"><span class="ref">2CC</span><span>Marlinspike Rigging</span></button></li>
+      <li><button data-tab="feedrate"><span class="ref">2DD</span><span>Cross-Process Material Library</span></button></li>
     </ul>
 
     <div class="category">
@@ -2428,6 +2434,7 @@ code {
       <li><button data-tab="parts"><span class="ref">4H</span><span>Parts Sourcing</span></button></li>
       <li><button data-tab="optics"><span class="ref">4I</span><span>Optics</span></button></li>
       <li><button data-tab="infra"><span class="ref">4J</span><span>Shop Infrastructure</span></button></li>
+      <li><button data-tab="fieldcon"><span class="ref">4K</span><span>Field Construction</span></button></li>
     </ul>
 
     <div class="category">
@@ -6383,6 +6390,342 @@ output = "dist/"</div>
       </table>
       <div class="note">The cheap insurance order: layout first (free), then bulk caps and ferrite beads (cents), then common-mode chokes (dollar each), then shielding (tens of dollars), then redesign (weeks). Most EMC failures are caught at step 1 if the layout is done right; the rest of the list is for when step 1 was rushed or constrained. If you have any choice, do EMC pre-compliance scans at a local lab or buy a near-field probe ($50-200 used) before committing to a chamber-quality test ($5000+).</div>
     </div>
+
+    <div class="see-also-card">
+      <div class="label">See also</div>
+      <div class="body">For the regulatory side (Part 15 emission limit tables, Class A vs B distinction, certification paths, EU CE / EN 55032 comparison, ISM bands), see <strong>1V Compliance &amp; FCC Part 15</strong>. This section gives design-side mitigation; 1V gives the regulatory targets to mitigate against.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1V · COMPLIANCE & FCC PART 15 ============ -->
+  <section id="compliance" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1V <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Compliance &amp; FCC Part 15</h2>
+      <div class="page-desc">Regulatory reference for unintentional and intentional radio-frequency emissions. Covers FCC Part 15 subparts, Class A vs Class B emission limits, certification paths (SDoC and Certification), EU CE / EN 55032 comparison, worldwide ISM bands, and pre-compliance test setup. For design-side EMI mitigation see 1U; for connector-level ESD considerations see 1T.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>FCC Part 15 Subparts Map</span><span class="fig">TAB. 1V-1</span></div>
+      <table>
+        <thead><tr><th>Subpart</th><th>Scope</th><th>Applies To</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">A</td><td>General provisions and definitions</td><td>Definitions of radiator types, marketing rules, equipment authorization framework</td></tr>
+          <tr><td class="hi">B</td><td>Unintentional radiators</td><td>Digital devices, computers, microcontroller products, switching power supplies; the catch-all for anything with a clock above 9 kHz that isn't intentionally radiating</td></tr>
+          <tr><td class="hi">C</td><td>Intentional radiators</td><td>Bluetooth, Wi-Fi, Zigbee, LoRa, garage door openers, key fobs, anything in license-exempt bands transmitting RF on purpose</td></tr>
+          <tr><td class="hi">D</td><td>Unlicensed personal communications (UPCS)</td><td>Specific 1910-1930 MHz allocations; rare in maker context</td></tr>
+          <tr><td class="hi">E</td><td>UNII (Unlicensed National Information Infrastructure)</td><td>5 GHz Wi-Fi, point-to-point microwave; specific power and channel rules</td></tr>
+          <tr><td class="hi">F</td><td>Ultra-Wideband (UWB)</td><td>UWB radar, ranging, indoor positioning</td></tr>
+          <tr><td class="hi">G</td><td>Broadband over Power Line (BPL)</td><td>Specialized; communications across AC mains wiring</td></tr>
+          <tr><td class="hi">H</td><td>White space devices</td><td>TV-band sharing devices; geolocation database required</td></tr>
+        </tbody>
+      </table>
+      <div class="note">For most maker and small-product work the relevant subparts are <strong>B</strong> (any digital product) and <strong>C</strong> (any product with a transmitter, including pre-certified modules). A device with a Wi-Fi module needs both: B compliance for the rest of the digital circuitry and C compliance for the Wi-Fi (typically inherited via the module's existing FCC ID through "modular approval").</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Class A vs Class B Distinction</span><span class="fig">TAB. 1V-2</span></div>
+      <table>
+        <thead><tr><th>Class</th><th>Intended Environment</th><th>Limits</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Class A</td><td>Industrial / commercial only</td><td>Less strict (typically 10 dB higher than Class B)</td><td>Industrial controllers, factory automation, server-room equipment; cannot be marketed for home use</td></tr>
+          <tr><td class="hi">Class B</td><td>Residential (and by extension everywhere)</td><td>Stricter limits</td><td>Consumer electronics, any device that could end up in a home; the default target for most products</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Class B is the safer target. A product certified Class A and sold for industrial use can be reclassified into a residential setting by a customer (knowingly or not) and create interference complaints. Class B testing is more demanding but the product has broader market reach. Standard measurement distance: Class B at 3 m, Class A at 10 m. Conversion between distances follows the inverse-square law for the far-field: 20 × log₁₀(d₂ / d₁) dB. Going from 3 m to 10 m adds 20·log(10/3) ≈ 10.5 dB to the limit; so Class A at 10 m and Class B at 3 m aren't directly comparable until normalized.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Radiated Emission Limits (Part 15.109)</span><span class="fig">TAB. 1V-3</span></div>
+      <table>
+        <thead><tr><th>Frequency Range</th><th>Class B (at 3 m, dBµV/m)</th><th>Class A (at 10 m, dBµV/m)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">30 - 88 MHz</td><td class="num">40 (quasi-peak)</td><td class="num">39 (quasi-peak)</td></tr>
+          <tr><td class="hi">88 - 216 MHz</td><td class="num">43.5 (quasi-peak)</td><td class="num">43.5 (quasi-peak)</td></tr>
+          <tr><td class="hi">216 - 960 MHz</td><td class="num">46 (quasi-peak)</td><td class="num">46.4 (quasi-peak)</td></tr>
+          <tr><td class="hi">Above 960 MHz</td><td class="num">54 (average) / 74 (peak)</td><td class="num">49.5 (average) / 69.5 (peak)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Class A limits look numerically similar to Class B but are measured at 10 m versus 3 m; normalizing to a common distance shows Class A allows roughly 10 dB more emission. The quasi-peak detector weights repetitive impulses; switching regulator harmonics and digital clock harmonics typically show up as quasi-peak-dominated content. Above 1 GHz both average and peak detectors apply; products with high-speed serial (USB 3, HDMI, GbE) need attention here. The 30 MHz lower bound matches the upper limit of conducted emissions; below 30 MHz, conducted emissions through the AC line dominate.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Conducted Emission Limits (Part 15.107)</span><span class="fig">TAB. 1V-4</span></div>
+      <table>
+        <thead><tr><th>Frequency Range</th><th>Class B Quasi-Peak (dBµV)</th><th>Class B Average (dBµV)</th><th>Class A Quasi-Peak (dBµV)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">150 - 500 kHz</td><td class="num">66 to 56 (decreases with log freq)</td><td class="num">56 to 46</td><td class="num">79</td></tr>
+          <tr><td class="hi">500 kHz - 5 MHz</td><td class="num">56</td><td class="num">46</td><td class="num">73</td></tr>
+          <tr><td class="hi">5 - 30 MHz</td><td class="num">60</td><td class="num">50</td><td class="num">73</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Conducted emissions measure the RF on the AC power input, picked up via a LISN (Line Impedance Stabilization Network) that presents a defined 50 Ω impedance to the device and provides a measurement tap. Switching power supplies are the primary source: switching at 50-200 kHz with steep edges generates wide-spectrum noise. Mitigation is the input filter (common-mode choke + Y caps + X caps). Both quasi-peak and average detectors must pass; the average limit is 10 dB stricter than QP, which is the gap between switching noise (continuous-wave-like, so QP and avg are similar) and impulsive noise (where QP is much higher than avg).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Intentional vs Unintentional Radiator</span><span class="fig">TAB. 1V-5</span></div>
+      <table>
+        <thead><tr><th>Classification</th><th>Definition</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Unintentional radiator</td><td>Device that intentionally generates RF for use within itself but does not intentionally emit it</td><td>Microcontrollers, computers, USB hubs, switching power supplies, digital TVs, LED drivers, motor controllers</td></tr>
+          <tr><td class="hi">Intentional radiator</td><td>Device that intentionally emits RF by radiation or conduction</td><td>Wi-Fi, Bluetooth, Zigbee, LoRa, garage door openers, RFID, wireless mice, cellular modems</td></tr>
+          <tr><td class="hi">Incidental radiator</td><td>Generates no RF intentionally but produces emissions as a side effect (covered under Part 15.13)</td><td>DC motors, mechanical light switches, AC motor brushes; not subject to Part 15 limits but must comply with Part 15.5 (no harmful interference)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The Part 15 universe maps cleanly: unintentional radiators go to Subpart B, intentional to Subpart C, incidental to general provisions. A product with both digital electronics and a transmitter (e.g., an IoT sensor with Wi-Fi) is governed by both Subpart B for the digital portion and Subpart C for the Wi-Fi portion. Using a pre-certified Wi-Fi or BLE module (with its own FCC ID) lets the host product inherit Subpart C compliance for that module, dramatically reducing test scope. The host still needs Subpart B testing for its own digital circuitry plus an "intentional radiator host" evaluation to confirm the module operates within its approved conditions.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Certification Paths</span><span class="fig">TAB. 1V-6</span></div>
+      <table>
+        <thead><tr><th>Path</th><th>What It Requires</th><th>Applies To</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SDoC (Supplier's Declaration of Conformity)</td><td>Test report from accredited lab (or self-test); compliance documentation kept on file; FCC label statement; no FCC ID required</td><td>Most unintentional radiators (Subpart B); replaced the older "Verification" and original "DoC" paths in 2017</td></tr>
+          <tr><td class="hi">Certification</td><td>Test report from FCC-recognized TCB (Telecommunication Certification Body); FCC ID grant issued; product info published in FCC database</td><td>All intentional radiators (Subpart C, E, F); UPCS (D); some specialized unintentional radiators</td></tr>
+          <tr><td class="hi">Modular approval (inherited)</td><td>Use a Certification-grant module per its integration conditions; host product inherits the module's FCC ID</td><td>Most products using Wi-Fi, BLE, cellular, or other pre-certified RF modules; the standard approach for IoT products</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Stage</th><th>Typical Cost</th><th>Typical Timeline</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">SDoC only (digital product)</td><td class="num">$3,000 - $10,000</td><td class="num">2-6 weeks</td></tr>
+          <tr><td class="hi">Certification (small intentional radiator)</td><td class="num">$8,000 - $25,000</td><td class="num">6-12 weeks</td></tr>
+          <tr><td class="hi">Certification (complex product)</td><td class="num">$25,000 - $100,000+</td><td class="num">3-6 months</td></tr>
+          <tr><td class="hi">Pre-compliance scan (lab, single visit)</td><td class="num">$1,500 - $5,000</td><td class="num">1-3 days</td></tr>
+        </tbody>
+      </table>
+      <div class="note">SDoC ranges cover the test cost; the documentation is generally minimal (a label statement and a test report on file). Certification adds FCC fees and TCB review fees on top of testing. The wisest spend in product development is a pre-compliance lab visit before formal testing; finding a fail at the formal lab is expensive (full re-test fees), but finding it at pre-comp costs only a single visit and shop time to fix. Many makers and small companies use OnFILTER, Liberty Labs, or local university EMC chambers for affordable pre-compliance.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>EU CE / EN 55032 Comparison</span><span class="fig">TAB. 1V-7</span></div>
+      <table>
+        <thead><tr><th>Property</th><th>FCC (US)</th><th>EU CE</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Standard for digital devices</td><td>FCC Part 15 Subpart B</td><td>EN 55032 (CISPR 32) for emissions; EN 55035 for immunity</td></tr>
+          <tr><td class="hi">Standard for intentional radiators</td><td>FCC Part 15 Subpart C (and others)</td><td>EN 300 328 (2.4 GHz), EN 301 893 (5 GHz), EN 300 220 (sub-GHz); plus RED 2014/53/EU</td></tr>
+          <tr><td class="hi">Measurement distance</td><td>3 m (Class B) or 10 m (Class A)</td><td>10 m (Class A and B both)</td></tr>
+          <tr><td class="hi">Class A vs B</td><td>Defined per environment, similar to FCC</td><td>Same A/B distinction; Class B for residential, Class A for industrial</td></tr>
+          <tr><td class="hi">Mark required on product</td><td>FCC ID (for Certification) or compliance statement (SDoC)</td><td>CE mark (no number), plus declaration of conformity (DoC)</td></tr>
+          <tr><td class="hi">Conducted limits frequency range</td><td>150 kHz - 30 MHz</td><td>150 kHz - 30 MHz (same)</td></tr>
+          <tr><td class="hi">Radiated limits frequency range</td><td>30 MHz - 1 GHz (above 1 GHz for some)</td><td>30 MHz - 6 GHz (or higher for SRD intentional radiators)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Most products targeting both US and EU can use the same chamber test session: emissions are measured once and reported against both standards, with the test lab applying the appropriate distance correction and limit table. Immunity testing (ESD, surge, RF immunity) is required for CE but not FCC; this adds chamber time and equipment. UKCA replaced CE in Great Britain (not Northern Ireland) post-Brexit but in practice accepts equivalent EU testing; verify against current UK Statutory Instruments. CE is self-declared with a Declaration of Conformity; no government grant is issued.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>ISM Bands (Worldwide)</span><span class="fig">TAB. 1V-8</span></div>
+      <table>
+        <thead><tr><th>Center Frequency</th><th>Band Range</th><th>Regions</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">6.78 MHz</td><td class="num">6.765 - 6.795 MHz</td><td>Worldwide</td><td>RFID, induction heating</td></tr>
+          <tr><td class="hi">13.56 MHz</td><td class="num">13.553 - 13.567 MHz</td><td>Worldwide</td><td>RFID (NFC), wireless charging (Qi at this nominal frequency)</td></tr>
+          <tr><td class="hi">27.12 MHz</td><td class="num">26.957 - 27.283 MHz</td><td>Worldwide</td><td>Medical diathermy, CB radio adjacent, RC vehicles</td></tr>
+          <tr><td class="hi">40.68 MHz</td><td class="num">40.66 - 40.70 MHz</td><td>Worldwide</td><td>Medical, industrial</td></tr>
+          <tr><td class="hi">433.92 MHz</td><td class="num">433.05 - 434.79 MHz</td><td>Region 1 (Europe, Africa, Middle East)</td><td>Garage doors, remote keys, low-power telemetry (EU)</td></tr>
+          <tr><td class="hi">915 MHz</td><td class="num">902 - 928 MHz</td><td>Region 2 (Americas)</td><td>LoRa, low-power telemetry, IoT (US, Canada, Brazil)</td></tr>
+          <tr><td class="hi">2.45 GHz</td><td class="num">2.400 - 2.500 GHz</td><td>Worldwide</td><td>Wi-Fi (2.4 GHz), Bluetooth, Zigbee, microwave ovens, baby monitors</td></tr>
+          <tr><td class="hi">5.8 GHz</td><td class="num">5.725 - 5.875 GHz</td><td>Worldwide</td><td>Wi-Fi (5 GHz, UNII bands), some ISM use</td></tr>
+          <tr><td class="hi">24.125 GHz</td><td class="num">24.000 - 24.250 GHz</td><td>Worldwide</td><td>Doppler radar (motion sensors), automotive radar, K-band</td></tr>
+          <tr><td class="hi">61.25 GHz</td><td class="num">61.0 - 61.5 GHz</td><td>Worldwide</td><td>Specialized millimeter-wave</td></tr>
+          <tr><td class="hi">122.5 GHz</td><td class="num">122 - 123 GHz</td><td>Worldwide</td><td>Research, specialized millimeter-wave</td></tr>
+          <tr><td class="hi">245 GHz</td><td class="num">244 - 246 GHz</td><td>Worldwide</td><td>Research</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The 433 MHz vs 915 MHz split is a key design decision for sub-GHz IoT: products targeting Europe pick 433, products targeting US/Canada pick 915, products targeting both either dual-band or pick by primary market. The 2.4 GHz band is worldwide and the basis for nearly all consumer wireless; it's also the most crowded, with Wi-Fi, BT, Zigbee, microwave ovens, baby monitors, and cordless phones competing. Power limits within each ISM band vary by region; check 47 CFR §15.247 (US) and ETSI EN 300 328 (EU) for current values.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Country-Specific Compliance Marks</span><span class="fig">TAB. 1V-9</span></div>
+      <table>
+        <thead><tr><th>Region</th><th>Authority</th><th>Mark</th><th>Path</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">United States</td><td>FCC</td><td>FCC ID (Certification) or "Contains FCC ID: ..." (SDoC)</td><td>SDoC or Certification per device class</td></tr>
+          <tr><td class="hi">Canada</td><td>ISED (formerly Industry Canada)</td><td>IC ID (often paired with FCC ID on same label)</td><td>RSP-100 / RSS-Gen; often tested simultaneously with FCC</td></tr>
+          <tr><td class="hi">European Union</td><td>Self-declared under EU directives</td><td>CE mark; Declaration of Conformity</td><td>Radio Equipment Directive (RED) for intentional radiators; EMC Directive for unintentional</td></tr>
+          <tr><td class="hi">United Kingdom</td><td>OPSS (Office for Product Safety and Standards)</td><td>UKCA mark</td><td>UK Statutory Instruments mirror EU directives; CE accepted indefinitely under current policy</td></tr>
+          <tr><td class="hi">Japan</td><td>MIC (Ministry of Internal Affairs and Communications)</td><td>Giteki mark (technical conformity certificate)</td><td>Type approval via registered certification body</td></tr>
+          <tr><td class="hi">Korea</td><td>RRA (Radio Research Agency)</td><td>KC mark</td><td>Mandatory pre-market certification</td></tr>
+          <tr><td class="hi">China</td><td>SRRC (State Radio Regulation Committee)</td><td>CMIIT ID for radio devices</td><td>SRRC approval required for transmitters; ROHS adjacent</td></tr>
+          <tr><td class="hi">Australia / New Zealand</td><td>ACMA</td><td>RCM (Regulatory Compliance Mark)</td><td>Self-declaration with supplier registration</td></tr>
+          <tr><td class="hi">Brazil</td><td>ANATEL</td><td>ANATEL ID label</td><td>Mandatory homologation for transmitters</td></tr>
+          <tr><td class="hi">Mexico</td><td>IFT (Instituto Federal de Telecomunicaciones)</td><td>IFT certification</td><td>Mandatory for transmitters; FCC test reports often accepted</td></tr>
+          <tr><td class="hi">India</td><td>BIS / WPC</td><td>BIS registration; WPC ETA for radio</td><td>Mandatory; can take months</td></tr>
+        </tbody>
+      </table>
+      <div class="note">For global products, the typical sequence is FCC + IC (often the same test session) → CE → then country-by-country as market demand justifies the per-country cost. Pre-certified modules often come with multiple grants (FCC, IC, CE, Giteki, KC) which dramatically simplifies global launch. Each region has its own labeling rules; the label real estate on small products is a real design constraint. e-Labeling (showing the marks via the product's display or web interface) is increasingly accepted but not universally.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>dBµV/m to V/m Converter</span><span class="fig">TOOL 1V-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Field Strength (dBµV/m)</label><input type="number" id="cmpl-dbuvm" step="any" value="40"></div>
+          <div class="field"><label>Measurement Distance (m)</label><input type="number" id="cmpl-dist-from" step="any" value="3"></div>
+          <div class="field"><label>Reference Distance (m)<br><small>distance to normalize to</small></label><input type="number" id="cmpl-dist-to" step="any" value="10"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">µV/m (linear)</span><span class="val" id="cmpl-uvm">—</span></div>
+            <div class="calc-row"><span class="lbl">V/m (linear)</span><span class="val" id="cmpl-vm">—</span></div>
+            <div class="calc-row"><span class="lbl">mV/m (linear)</span><span class="val" id="cmpl-mvm">—</span></div>
+            <div class="calc-row"><span class="lbl">Distance Correction</span><span class="val" id="cmpl-distcorr">—</span></div>
+            <div class="calc-row"><span class="lbl">Normalized (at ref distance)</span><span class="val" id="cmpl-norm">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">dBµV/m is dB relative to 1 microvolt per meter. Linear value = 10^(dBµV/m / 20) µV/m. Distance correction uses inverse-square in the far field: ΔdB = 20 × log₁₀(d₁ / d₂). Going from 3 m to 10 m of measurement distance subtracts 10.46 dB (the same emission looks 10.46 dB lower at the farther distance). Use this to normalize FCC Class B (3 m) and Class A (10 m) limits to the same distance for direct comparison, or to translate a measurement taken at one distance to another. Near-field corrections (within λ/2π of the source) are more complicated; this converter assumes far-field conditions.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Pre-Compliance Test Setup</span><span class="fig">TAB. 1V-10</span></div>
+      <table>
+        <thead><tr><th>Stage</th><th>Tool / Configuration</th><th>What It Catches</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Near-field probe sweep</td><td>Small H-field or E-field probe + spectrum analyzer; pass over the board surface</td><td>Local hot spots: switching regulator harmonics, clock radiators, slot antennas in the layout</td></tr>
+          <tr><td class="hi">Spectrum analyzer settings (radiated)</td><td>RBW: 120 kHz (30 MHz - 1 GHz), 1 MHz (above 1 GHz); detector: peak or quasi-peak; max-hold</td><td>Discrete frequency emissions and their levels</td></tr>
+          <tr><td class="hi">Spectrum analyzer settings (conducted)</td><td>RBW: 9 kHz (150 kHz - 30 MHz); quasi-peak and average detectors</td><td>Switching power supply noise on the mains</td></tr>
+          <tr><td class="hi">LISN (line impedance stabilization)</td><td>50 Ω || 50 µH + 5 Ω; required for conducted measurement</td><td>Conducted emissions on power input</td></tr>
+          <tr><td class="hi">Open area test site (OATS) or chamber</td><td>Conductive ground plane; antenna at 3 m or 10 m; turntable for rotation</td><td>Worst-case radiated emission across all orientations</td></tr>
+          <tr><td class="hi">Antenna types</td><td>Biconical (30-300 MHz), log-periodic (300 MHz - 3 GHz), horn (above 1 GHz)</td><td>Frequency-appropriate field strength measurement</td></tr>
+          <tr><td class="hi">Antenna factor correction</td><td>AF (dB/m) added to receiver reading; varies with antenna and frequency</td><td>Converting receiver voltage to field strength at the antenna location</td></tr>
+        </tbody>
+      </table>
+      <div class="note">For practical pre-compliance at home or in a small lab: a $50-200 used near-field probe set, a $500-2000 entry spectrum analyzer (TinySA, RSA306, used Rigol or Siglent), and patience get you 90% of the way. The remaining 10% requires a real chamber with quiet RF environment, calibrated antennas, and antenna-factor correction; that's what the certification lab provides. The near-field probe is the most valuable single instrument: sweeping the board surface tells you immediately where the loudest emitters are, and most problems are visible there before they're visible at 3 m or 10 m.</div>
+    </div>
+  </section>
+
+  <!-- ============ 1W · SOLDER BENCH REFERENCE ============ -->
+  <section id="solder" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 1W <span class="dot"></span> Electrical &amp; Electronics</div>
+      <h2>Solder Bench Reference</h2>
+      <div class="page-desc">The bench wallchart, made an object. Curated subset of the most-used electrical-bench data: resistor color decode, SMD codes, common package sizes, AWG ampacity, solder alloys with iron temperatures, and PCB trace width quick reference. Designed to print as a single page. For depth on any topic see the cross-reference card at the bottom or jump directly to the listed deep section.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Bench Wallchart</span><span class="fig">REF. 1W-1</span></div>
+      <div class="row" style="gap: 16px;">
+
+        <div class="col" style="flex: 1 1 0; min-width: 280px;">
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px; margin-top: 0;">Resistor Color Code</div>
+          <table style="margin-bottom: 14px;">
+            <thead><tr><th>Color</th><th>Digit</th><th>Multiplier</th><th>Tolerance</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">Black</td><td class="num">0</td><td class="num">×1</td><td class="num">—</td></tr>
+              <tr><td class="hi">Brown</td><td class="num">1</td><td class="num">×10</td><td class="num">±1%</td></tr>
+              <tr><td class="hi">Red</td><td class="num">2</td><td class="num">×100</td><td class="num">±2%</td></tr>
+              <tr><td class="hi">Orange</td><td class="num">3</td><td class="num">×1k</td><td class="num">—</td></tr>
+              <tr><td class="hi">Yellow</td><td class="num">4</td><td class="num">×10k</td><td class="num">—</td></tr>
+              <tr><td class="hi">Green</td><td class="num">5</td><td class="num">×100k</td><td class="num">±0.5%</td></tr>
+              <tr><td class="hi">Blue</td><td class="num">6</td><td class="num">×1M</td><td class="num">±0.25%</td></tr>
+              <tr><td class="hi">Violet</td><td class="num">7</td><td class="num">×10M</td><td class="num">±0.1%</td></tr>
+              <tr><td class="hi">Grey</td><td class="num">8</td><td class="num">—</td><td class="num">±0.05%</td></tr>
+              <tr><td class="hi">White</td><td class="num">9</td><td class="num">—</td><td class="num">—</td></tr>
+              <tr><td class="hi">Gold</td><td class="num">—</td><td class="num">×0.1</td><td class="num">±5%</td></tr>
+              <tr><td class="hi">Silver</td><td class="num">—</td><td class="num">×0.01</td><td class="num">±10%</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px;">SMD Resistor Codes</div>
+          <table style="margin-bottom: 14px;">
+            <thead><tr><th>Format</th><th>Read As</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">3-digit</td><td>XY × 10^Z</td><td class="num">472 = 4.7 kΩ</td></tr>
+              <tr><td class="hi">4-digit (1%)</td><td>WXY × 10^Z</td><td class="num">4701 = 4.7 kΩ</td></tr>
+              <tr><td class="hi">R-notation</td><td>R = decimal point</td><td class="num">4R7 = 4.7 Ω</td></tr>
+              <tr><td class="hi">EIA-96</td><td>2-digit value + letter mult</td><td class="num">03A = 100 Ω × 1</td></tr>
+              <tr><td class="hi">Zero ohm</td><td>jumper, no resistance</td><td class="num">000 or 0R or just 0</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px;">AWG Ampacity (Chassis Wiring)</div>
+          <table style="margin-bottom: 0;">
+            <thead><tr><th>AWG</th><th>Diameter</th><th>Chassis (A)</th><th>Power Xmit (A)</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">10</td><td class="num">2.59 mm</td><td class="num">55</td><td class="num">15</td></tr>
+              <tr><td class="hi">12</td><td class="num">2.05 mm</td><td class="num">41</td><td class="num">9.3</td></tr>
+              <tr><td class="hi">14</td><td class="num">1.63 mm</td><td class="num">32</td><td class="num">5.9</td></tr>
+              <tr><td class="hi">16</td><td class="num">1.29 mm</td><td class="num">22</td><td class="num">3.7</td></tr>
+              <tr><td class="hi">18</td><td class="num">1.02 mm</td><td class="num">16</td><td class="num">2.3</td></tr>
+              <tr><td class="hi">20</td><td class="num">0.81 mm</td><td class="num">11</td><td class="num">1.5</td></tr>
+              <tr><td class="hi">22</td><td class="num">0.64 mm</td><td class="num">7.0</td><td class="num">0.92</td></tr>
+              <tr><td class="hi">24</td><td class="num">0.51 mm</td><td class="num">3.5</td><td class="num">0.58</td></tr>
+              <tr><td class="hi">26</td><td class="num">0.40 mm</td><td class="num">2.2</td><td class="num">0.37</td></tr>
+              <tr><td class="hi">28</td><td class="num">0.32 mm</td><td class="num">1.4</td><td class="num">0.23</td></tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="col" style="flex: 1 1 0; min-width: 280px;">
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px; margin-top: 0;">Common SMD Packages</div>
+          <table style="margin-bottom: 14px;">
+            <thead><tr><th>Code</th><th>L × W (mm)</th><th>L × W (inch)</th><th>Power</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">0201</td><td class="num">0.6 × 0.3</td><td class="num">0.024 × 0.012</td><td class="num">50 mW</td></tr>
+              <tr><td class="hi">0402</td><td class="num">1.0 × 0.5</td><td class="num">0.040 × 0.020</td><td class="num">63 mW</td></tr>
+              <tr><td class="hi">0603</td><td class="num">1.6 × 0.8</td><td class="num">0.063 × 0.031</td><td class="num">100 mW</td></tr>
+              <tr><td class="hi">0805</td><td class="num">2.0 × 1.25</td><td class="num">0.080 × 0.050</td><td class="num">125 mW</td></tr>
+              <tr><td class="hi">1206</td><td class="num">3.2 × 1.6</td><td class="num">0.126 × 0.063</td><td class="num">250 mW</td></tr>
+              <tr><td class="hi">1210</td><td class="num">3.2 × 2.5</td><td class="num">0.126 × 0.100</td><td class="num">500 mW</td></tr>
+              <tr><td class="hi">2010</td><td class="num">5.0 × 2.5</td><td class="num">0.200 × 0.100</td><td class="num">750 mW</td></tr>
+              <tr><td class="hi">2512</td><td class="num">6.3 × 3.2</td><td class="num">0.250 × 0.125</td><td class="num">1 W</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px;">Solder Alloys &amp; Iron Temps</div>
+          <table style="margin-bottom: 14px;">
+            <thead><tr><th>Alloy</th><th>Melt Temp</th><th>Iron Tip</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">Sn63/Pb37 (eutectic)</td><td class="num">183 °C / 361 °F</td><td class="num">350-400 °C</td></tr>
+              <tr><td class="hi">Sn60/Pb40</td><td class="num">183-190 °C</td><td class="num">350-400 °C</td></tr>
+              <tr><td class="hi">SAC305 (lead-free)</td><td class="num">217-220 °C / 423 °F</td><td class="num">380-420 °C</td></tr>
+              <tr><td class="hi">Sn96.5/Ag3/Cu0.5</td><td class="num">217-220 °C</td><td class="num">380-420 °C</td></tr>
+              <tr><td class="hi">Bi58/Sn42 (low-temp)</td><td class="num">138 °C / 280 °F</td><td class="num">240-260 °C</td></tr>
+              <tr><td class="hi">Sn96/Ag3.5 (silver)</td><td class="num">221 °C / 430 °F</td><td class="num">380-420 °C</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; border-bottom: 1px solid var(--rule-2); padding-bottom: 2px;">Trace Width (1 oz Cu, 10 °C rise)</div>
+          <table style="margin-bottom: 0;">
+            <thead><tr><th>Current</th><th>External</th><th>Internal</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">0.5 A</td><td class="num">0.012"</td><td class="num">0.020"</td></tr>
+              <tr><td class="hi">1.0 A</td><td class="num">0.025"</td><td class="num">0.046"</td></tr>
+              <tr><td class="hi">2.0 A</td><td class="num">0.055"</td><td class="num">0.105"</td></tr>
+              <tr><td class="hi">3.0 A</td><td class="num">0.085"</td><td class="num">0.170"</td></tr>
+              <tr><td class="hi">5.0 A</td><td class="num">0.165"</td><td class="num">0.350"</td></tr>
+              <tr><td class="hi">10 A</td><td class="num">0.420"</td><td class="num">0.950"</td></tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+      <div class="note" style="margin-top: 14px;">Quick-reference subset of the most-used bench data. AWG ampacity is for free-air chassis wiring; derate roughly 50% in conduit or cable bundles. Trace width is IPC-2221 nominal at 1 oz copper, 10 °C rise above ambient; for inner-layer or higher temperature rise scale per the deep reference. Iron tip temperatures shown are for typical work; thin gauge wire or small SMD pads tolerate lower (cooler tip extends working time without damaging components), and heavy gauge or ground planes need higher (or a higher-wattage iron). For depth on any column, see the cross-references below.</div>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <div class="card-title"><span>Cross-Reference Index</span><span class="fig">REF. 1W-2</span></div>
+      <table>
+        <thead><tr><th>Wallchart Topic</th><th>Deep Reference</th><th>Adds</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Resistor color code (quick decode)</td><td>1A Resistor Color Bands</td><td>Live decoder + reverse encoder; 5- and 6-band variants; color legend</td></tr>
+          <tr><td class="hi">SMD resistor codes</td><td>1B SMD Resistor Codes</td><td>Full EIA-96 lookup; ceramic capacitor markings; dielectric letter codes</td></tr>
+          <tr><td class="hi">AWG ampacity (quick)</td><td>1D Wire &amp; Ampacity</td><td>Voltage drop calculator; mm² conversion; UL / NEC vs free-air values; insulation types</td></tr>
+          <tr><td class="hi">Common SMD packages</td><td>1Q SMD Land Patterns</td><td>Pad dimensions; courtyard sizing; QFN, BGA, SOIC, SOT pinout reference; hand-soldering vs reflow recommendations</td></tr>
+          <tr><td class="hi">Solder alloys &amp; iron temps</td><td>1P PCB Stackup &amp; Fabrication</td><td>Reflow profiles per alloy (preheat / soak / reflow / cool); flux types; paste storage</td></tr>
+          <tr><td class="hi">Trace width (quick)</td><td>1L PCB Layout Tools</td><td>Full IPC-2221 calculator with copper weight selection, internal vs external, temperature rise; via current capacity; differential pair and stripline impedance</td></tr>
+          <tr><td class="hi">Connector pinouts</td><td>1T Connector Reference</td><td>USB / USB-C / RJ45 / JST family / programming headers (SWD, JTAG, FTDI) with full pin-by-pin reference</td></tr>
+          <tr><td class="hi">Component selection (op-amps, transistors)</td><td>1J Op-Amp Configurations, 1K MOSFET / BJT Selection</td><td>Topology library, gain math, parameter selection guides</td></tr>
+        </tbody>
+      </table>
+      <div class="note">This section is the wall-taped subset; the deep references are the source of truth and the design tools. The wallchart is what a competent maker keeps in muscle memory or arm's reach during typical board work; the deep sections are where you go when something is unusual (high current, dense layout, lead-free reflow, fine-pitch QFN, etc.) or when the math actually matters. To print just the wallchart: navigate to this section (1W) and use the browser's standard Print (or Cmd/Ctrl+P); the existing print CSS handles single-section printing cleanly.</div>
+    </div>
   </section>
 
   <!-- ============ 2F · FASTENER TORQUE ============ -->
@@ -9108,6 +9451,831 @@ output = "dist/"</div>
     </div>
   </section>
 
+  <!-- ====================== 2AA · PATINAS & FINISH SCHEDULES ====================== -->
+  <section id="patinas" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2AA <span class="dot"></span> Mechanical</div>
+      <h2>Patinas &amp; Finish Schedules</h2>
+      <div class="page-desc">Metal coloring recipes (copper, brass, bronze, ferrous, silver), wood finish schedules with cure-time math, solvent compatibility, and chemical safety reference. For surface prep grit progression by tool see 4C; for general adhesives and finish material properties see 2X and 2Y; for tempering colors on bright steel see 2N.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Metal Patinas (Copper, Brass, Bronze)</span><span class="fig">TAB. 2AA-1</span></div>
+      <table>
+        <thead><tr><th>Recipe</th><th>Solution / Method</th><th>Color</th><th>Application &amp; Time</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Liver of sulfur (LOS)</td><td>~1 tsp dry LOS per quart hot water; brush, dip, or fume</td><td>Brown to black through purple, blue, grey depending on dilution and dwell</td><td>Brush on, watch color develop, rinse to stop; 30 seconds to 5 minutes</td></tr>
+          <tr><td class="hi">Cupric nitrate (green)</td><td>50-100 g Cu(NO₃)₂ per liter water; brush hot</td><td>Soft verdigris green with brown undertones</td><td>Heat metal with torch between coats; build over 3-5 cycles</td></tr>
+          <tr><td class="hi">Ferric nitrate (brown/red)</td><td>50-100 g Fe(NO₃)₃ per liter; brush on warm metal</td><td>Red-brown to dark brown depending on heat and dwell</td><td>Heat with torch to drive in color; multiple passes</td></tr>
+          <tr><td class="hi">Ammonia fuming</td><td>Concentrated household ammonia in sealed container with part suspended above</td><td>Blue-green oxidation; classic Stickley-era brass and copper</td><td>12-48 hours; sealed; outdoors or with serious ventilation</td></tr>
+          <tr><td class="hi">Vinegar + salt verdigris</td><td>Saturate salt in white vinegar; spray on copper / brass; air-dry</td><td>Soft verdigris green, irregular and natural-looking</td><td>1-7 days outdoors; misted periodically; rinse to stop</td></tr>
+          <tr><td class="hi">Ammonia + salt + sawdust</td><td>Cover part with damp sawdust soaked in ammonia + salt solution; seal in plastic bag</td><td>Mottled blue-green and brown</td><td>3-7 days; check daily; rinse and seal</td></tr>
+          <tr><td class="hi">Hot Birchwood Casey M24 / M20</td><td>Commercial copper / brass solution; brush or dip warm</td><td>Antique black-brown</td><td>Immediate; rinse and dry; consistent results</td></tr>
+          <tr><td class="hi">Black patina (sulfides)</td><td>Sodium sulfide solution (~30 g/L); dip or brush</td><td>Deep matte black</td><td>30 seconds to 2 minutes; very aggressive; rinse thoroughly</td></tr>
+        </tbody>
+      </table>
+      <div class="note">All copper-family patinas need clean bare metal: oxide skins, plating residues, and finger oils block patina chemistry. Final prep with 400-600 grit, then degrease with acetone or alcohol immediately before applying. Patina chemistry attacks the alloy differently than the pure metal: yellow brass darkens more readily than bronze, which darkens more readily than pure copper. Always test on scrap of the actual stock before committing to a piece. Seal the cured patina with carnauba paste wax, Renaissance Wax, or a clear lacquer (rattle-can Krylon Crystal Clear or Mohawk No-Blush) to prevent further oxidation.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Metal Patinas (Ferrous: Steel, Iron)</span><span class="fig">TAB. 2AA-2</span></div>
+      <table>
+        <thead><tr><th>Recipe</th><th>Solution / Method</th><th>Color</th><th>Application &amp; Time</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Cold blue (selenium dioxide)</td><td>Birchwood Casey Super Blue, Brownells Oxpho-Blue, Van's Instant Blue; swab on degreased steel</td><td>Blue-black; matte to slight sheen</td><td>30 seconds to 5 minutes per pass; rinse, dry, oil between coats; 2-4 passes for depth</td></tr>
+          <tr><td class="hi">Rust blue</td><td>Nitric acid + ferric chloride solution; apply, let rust form, boil in distilled water, card with steel wool; repeat</td><td>Dense blue-black; deeper than cold blue</td><td>10-20 cycles over 1-2 weeks; the traditional firearms finish</td></tr>
+          <tr><td class="hi">Hot blue (hot caustic)</td><td>Sodium hydroxide + nitrate salt at ~140°C; commercial dip tank</td><td>Deep glossy black-blue</td><td>15-30 minutes immersion; industrial process; not DIY safe</td></tr>
+          <tr><td class="hi">Plum Brown</td><td>Birchwood Casey Plum Brown; brush hot (steel at 275-300°F) until brown develops</td><td>Plum-brown to chocolate</td><td>Heat steel with torch; brush solution on; rinse, oil; 2-3 passes</td></tr>
+          <tr><td class="hi">Walnut hull (traditional)</td><td>Boiled green walnut hulls in water for hours; iron tannate forms; brush on steel</td><td>Soft brown to grey-brown</td><td>Slow build over hours of brushing; old-world finish</td></tr>
+          <tr><td class="hi">Vinegar &amp; salt etch</td><td>White vinegar + table salt; brush or wipe; air-dry to rust</td><td>Active rust; orange-brown with texture</td><td>30 minutes to several hours; controlled rust for distressed look</td></tr>
+          <tr><td class="hi">Iron acetate (steel + vinegar)</td><td>Steel wool dissolved in white vinegar for 24-48 hours; strain</td><td>Greys oak and walnut; greys / darkens steel</td><td>Brush on; reacts immediately on tannin-rich wood; on steel produces grey-black patina</td></tr>
+          <tr><td class="hi">Parkerizing</td><td>Manganese or zinc phosphate solution at 180-200°F</td><td>Matte grey to dark grey</td><td>20-30 minutes immersion; military and tactical finish; absorbs oil for corrosion resistance</td></tr>
+          <tr><td class="hi">Case color (emulation)</td><td>Acid stain + heat; "color case hardening" via heat tinting after carburizing; or chemical emulation with Birchwood Casey color case</td><td>Mottled blue, purple, straw, brown</td><td>True case-color is heat-driven during quench; chemical emulation is brush-applied</td></tr>
+        </tbody>
+      </table>
+      <div class="note">All ferrous bluing and browning requires absolute degreasing: any oil contamination produces blotchy results or no color at all. Use acetone, then handle with cotton gloves. After patina, displace water with WD-40 or 3-in-1 oil, then seal with a clear oil (Ballistol, Frog Lube, or a thin coat of carnauba wax). Cold blue is by far the easiest entry; Birchwood Casey Super Blue with 4-5 careful passes produces a passable finish for small parts. Rust blue is the highest-quality home finish but takes patience. For large surfaces and pro-quality finish, send out to a Parkerizing or hot-blue shop.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Metal Patinas (Silver, Pewter, Stainless, Aluminum)</span><span class="fig">TAB. 2AA-3</span></div>
+      <table>
+        <thead><tr><th>Recipe</th><th>Metal</th><th>Color</th><th>Application</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Liver of sulfur (dilute)</td><td>Sterling silver, fine silver</td><td>Bronze through purple, blue, black, grey depending on dwell</td><td>Warm dilute LOS; dip, watch color shift; rinse to fix; the rainbow comes from interference film thickness</td></tr>
+          <tr><td class="hi">Egg sulfide (kitchen)</td><td>Sterling silver</td><td>Soft black; antiqued look</td><td>Place silver next to hard-boiled eggs in sealed bag overnight; sulfur compounds from egg attack silver gently</td></tr>
+          <tr><td class="hi">Antiquing solution (commercial)</td><td>Sterling, fine silver, pewter</td><td>Black recesses, polished highs</td><td>Brush in recesses; rub highlights clean with rouge cloth or polish; the classic jewelry "darken-and-relieve" technique</td></tr>
+          <tr><td class="hi">Heat tinting (stainless)</td><td>Stainless steel</td><td>Straw, brown, purple, blue, grey through full spectrum</td><td>Heat with torch evenly; colors progress as oxide film thickens; same physics as carbon-steel tempering colors (see 2N) but applied here for finish, not hardness</td></tr>
+          <tr><td class="hi">Anodizing</td><td>Aluminum</td><td>Any dye color after sulfuric acid anodizing</td><td>Electrolytic; sulfuric acid bath at controlled current; specialized setup; commercial service preferred</td></tr>
+          <tr><td class="hi">Caustic etch (aluminum)</td><td>Aluminum</td><td>Matte satin grey</td><td>Sodium hydroxide solution; immerse 1-3 minutes; rinse and neutralize; preparation step for anodizing</td></tr>
+          <tr><td class="hi">Lye + ferrous sulfate (pewter)</td><td>Pewter</td><td>Antique dark grey-brown</td><td>Brush on dilute solution; rinse; pewter is soft so don't over-react</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Silver patinas using LOS are the basis of nearly all antiqued jewelry. The color progression on silver runs: warm bronze → purple → deep blue → dense black → matte grey, in roughly that order as dwell time increases. To get a specific color, watch closely and rinse the instant it appears. Stainless heat tinting is the same physics as carbon-steel tempering color (oxide film thickness creates thin-film interference), but stainless holds the colors more stably and doesn't soften the metal. Aluminum anodizing is electrolytic, not chemical; it builds a porous oxide layer that accepts dye and then seals.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Wood Finish Schedules</span><span class="fig">TAB. 2AA-4</span></div>
+      <table>
+        <thead><tr><th>Finish</th><th>Schedule (in order)</th><th>Cure Time per Coat</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Boiled Linseed Oil (BLO) — pure</td><td>Sand to 220; flood; wipe at 15 min; cure 24h; repeat 3-6 coats; buff with #0000 steel wool between</td><td>24 hours (longer in cold or high humidity)</td><td>Cures by oxidation; never accelerated by heat (fire hazard with oily rags); deepens with each coat</td></tr>
+          <tr><td class="hi">Tung oil (pure)</td><td>Sand to 220; thin first coat 50% with mineral spirits; subsequent coats less thinned; 5-7 coats</td><td>2-7 days for full cure per coat</td><td>Slower than BLO but more water-resistant; food-safe when fully cured</td></tr>
+          <tr><td class="hi">Oil/varnish blend (e.g., Tried &amp; True, Watco, Minwax Antique Oil)</td><td>Sand to 220; flood, wipe back at 15-30 min; 24h cure; 3-5 coats</td><td>24 hours minimum; full cure 1-2 weeks</td><td>Combines oil penetration with varnish build; the maker's default</td></tr>
+          <tr><td class="hi">Shellac (dewaxed, 2-lb cut)</td><td>Sand to 220; thin to 1.5-2 lb cut; brush or pad on; 1-2h dry; light scuff with 320; 4-8 coats</td><td>1-2 hours recoat; 12-24h before heavy use</td><td>Dissolves in alcohol; reversible; the universal sealer-and-finish under everything else</td></tr>
+          <tr><td class="hi">Nitrocellulose lacquer</td><td>Sand to 220; sealer coat (thinned); 4-8 build coats sprayed; rub out at 600+ grit + wax</td><td>20-30 min flash; 24h recoat; weeks to full cure</td><td>Fast drying; spray only; flammable; classic furniture finish</td></tr>
+          <tr><td class="hi">Pre-catalyzed lacquer</td><td>Same as nitro but harder, more durable; pot life limited</td><td>Same as nitro</td><td>Modern improvement over nitro; tougher film; pot life is typically 6-12 months after activation</td></tr>
+          <tr><td class="hi">Oil-based polyurethane</td><td>Sand to 220; first coat thinned 25% with mineral spirits; brush 2-4 coats; light sand between with 320</td><td>4-6 hours recoat; 24-48h before heavy use</td><td>Tough, amber tone; brush marks possible; the workhorse for floors and table tops</td></tr>
+          <tr><td class="hi">Water-based polyurethane</td><td>Sand to 220; raise grain with water first, sand again 320; 3-4 coats with 1-2h between; sand 320 between</td><td>1-2 hours recoat; 24h before heavy use</td><td>Non-yellowing; low odor; easier cleanup; less durable than oil-based</td></tr>
+          <tr><td class="hi">Waterlox Original</td><td>Sand to 220; flood-and-wipe 3-5 coats; 24h between; final coat unwiped for higher sheen</td><td>24 hours per coat; full cure 30 days</td><td>Tung-oil + phenolic varnish blend; very water-resistant when cured; classic countertop finish</td></tr>
+          <tr><td class="hi">Osmo Polyx-Oil</td><td>Sand to 150-180 (don't go finer); apply thin with white pad; wait 10 min; buff with white pad; 8-12h dry; 2 coats only</td><td>8-12 hours per coat</td><td>Hardwax oil blend; European furniture standard; over-application is the #1 failure mode</td></tr>
+          <tr><td class="hi">Hardwax oil (Rubio Monocoat)</td><td>Sand to 180; apply Part A + Part B mixed; spread thin; buff at 10-15 min; ONE COAT ONLY</td><td>24 hours surface dry; 5-7 days full</td><td>One-coat finish; over-application causes white haze and tackiness</td></tr>
+        </tbody>
+      </table>
+      <div class="note">BLO is the canonical maker's oil: a few flood-and-wipe coats with 24h between, no special equipment, gentle improvement with age. Shellac is the universal compatibility layer: it seals against contamination, accepts almost any topcoat (water-based, lacquer, polyurethane), and dissolves with alcohol when you want to start over. For tabletops that see liquids, polyurethane or Waterlox are the practical choices; for hand-rubbed final pieces, oil/varnish blends or hardwax oils. Oily rags from any oil-based finish auto-ignite if balled up; spread flat on a metal tray or submerge in water before disposal.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Wood Stains, Dyes, &amp; Chemical Treatments</span><span class="fig">TAB. 2AA-5</span></div>
+      <table>
+        <thead><tr><th>Treatment</th><th>Mechanism</th><th>Best On</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Pigment stain (Minwax, etc.)</td><td>Pigment particles settle in pores</td><td>Open-pore wood (oak, ash, walnut)</td><td>Settles in pores; can muddy on tight grain; wipe off excess</td></tr>
+          <tr><td class="hi">Aniline dye (TransTint, Lockwood)</td><td>Dye molecules penetrate fiber</td><td>Any species; especially good on maple, cherry, birch</td><td>Highly transparent; doesn't obscure grain; mix water- or alcohol-soluble</td></tr>
+          <tr><td class="hi">NGR (non-grain-raising) dye</td><td>Solvent-based dye; doesn't lift grain</td><td>Production finishing; spray application</td><td>Alcohol or ketone solvent; fast drying</td></tr>
+          <tr><td class="hi">Gel stain</td><td>Thickened pigment stain</td><td>Vertical surfaces, blotch-prone woods (pine, cherry)</td><td>Doesn't run; sits more on surface than penetrating</td></tr>
+          <tr><td class="hi">Iron acetate (vinegar + steel wool)</td><td>Reacts with tannins in wood</td><td>Oak, walnut, chestnut (high-tannin species)</td><td>Brush on; turns oak grey-black instantly; rinses neutral</td></tr>
+          <tr><td class="hi">Tea / coffee pre-stain</td><td>Adds tannin to low-tannin woods</td><td>Pine, maple, poplar (low-tannin)</td><td>Brew strong, brush on, let dry; then iron acetate produces black</td></tr>
+          <tr><td class="hi">Ammonia fuming (white oak)</td><td>Reacts with tannin; produces deep brown</td><td>White oak (the classic Stickley finish)</td><td>Sealed container with concentrated ammonia; 12-48h; outdoors or full ventilation</td></tr>
+          <tr><td class="hi">Lye (sodium hydroxide)</td><td>Darkens cherry, walnut, oak; lifts grain</td><td>Cherry (rapid amber-brown), oak (warm brown)</td><td>Caustic; full PPE; neutralize with diluted vinegar after color develops</td></tr>
+          <tr><td class="hi">Bleach (two-part wood bleach)</td><td>Removes natural color</td><td>Oak, walnut, mahogany when going lighter</td><td>Part A (lye) then Part B (peroxide); rinse thoroughly; raises grain</td></tr>
+          <tr><td class="hi">Ebonizing (iron acetate + tannin)</td><td>Black tannate complex</td><td>Any tannin-bearing wood (or pre-tannin treated)</td><td>The classic deep-black finish; doesn't sit on surface like paint</td></tr>
+          <tr><td class="hi">Heat treatment (charring, Shou Sugi Ban)</td><td>Carbonizes surface</td><td>Cedar, cypress, pine</td><td>Torch surface to char; wire-brush, oil; weatherproofs exterior wood</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Aniline dye gives the cleanest color while showing grain; pigment stain is for filling pore variation and easier hand-application. Chemical treatments (iron acetate, ammonia, lye) produce richer, more permanent colors because they react with the wood rather than coating it. Ebonizing via tannin + iron acetate is far more beautiful than black stain or paint because the color is in the wood itself. For consistent dye color across mixed woods, pre-condition with shellac (1 lb cut) to even absorption; for sharp color variation between heartwood and sapwood, no pre-conditioner is needed.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Surface Prep for Finish</span><span class="fig">TAB. 2AA-6</span></div>
+      <table>
+        <thead><tr><th>Finish Type</th><th>Final Grit</th><th>Pre-Stain Steps</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Oil finishes (BLO, tung, blends)</td><td class="num">220 grit</td><td>Sand to 220; no need to raise grain</td><td>Higher grit (320+) burnishes wood and reduces oil uptake; counterproductive</td></tr>
+          <tr><td class="hi">Shellac</td><td class="num">220 grit</td><td>Sand to 220; light de-nib at 320 between coats</td><td>Forgiving; light scuff is enough between coats</td></tr>
+          <tr><td class="hi">Lacquer (nitro, pre-cat)</td><td class="num">180-220 grit</td><td>Sand to 220; sealer coat helps fill grain</td><td>Don't over-sand; lacquer fills minor scratches</td></tr>
+          <tr><td class="hi">Oil-based polyurethane</td><td class="num">180-220 grit</td><td>Sand to 220; tack-rag</td><td>De-nib with 320 between coats; final coat needs no further sanding</td></tr>
+          <tr><td class="hi">Water-based polyurethane</td><td class="num">220 grit + raise grain</td><td>Sand to 220; wipe with damp cloth; let dry; resand at 320 to remove raised fibers; final 320 or 400</td><td>Water raises grain dramatically; pre-raise or accept rough first coat</td></tr>
+          <tr><td class="hi">Hardwax oil (Osmo, Rubio)</td><td class="num">150-180 grit</td><td>Sand to 150 or 180 max; don't go finer</td><td>Finer than 180 closes the pores and prevents penetration; over-prep is the failure mode</td></tr>
+          <tr><td class="hi">Stains (water-based dye, gel stain)</td><td class="num">180-220 grit</td><td>Raise grain with water; sand at 220 after drying</td><td>Even sanding is critical or stain takes unevenly</td></tr>
+          <tr><td class="hi">Stains (oil-based)</td><td class="num">220 grit</td><td>No pre-raise needed; tack-rag</td><td>Oil doesn't raise grain; less critical</td></tr>
+          <tr><td class="hi">Paint</td><td class="num">120-150 grit</td><td>Sand to 150 max; prime with sandable filler primer</td><td>Higher grit reduces primer adhesion</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Sanding Progression</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">60-80 grit</td><td>Heavy stock removal; never for finish prep</td></tr>
+          <tr><td class="hi">100-120 grit</td><td>Initial dimensioning; rough leveling after planer marks</td></tr>
+          <tr><td class="hi">150-180 grit</td><td>Pre-finish for oil-based and hardwax finishes</td></tr>
+          <tr><td class="hi">220 grit</td><td>Standard finish prep for most clear coatings</td></tr>
+          <tr><td class="hi">320-400 grit</td><td>Between-coat sanding for film finishes; final on lacquer/shellac</td></tr>
+          <tr><td class="hi">600-2000 grit</td><td>Rub-out of cured film finishes; matte to gloss</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Three common over-prep mistakes: (1) Going past 220 before oil finishes, which burnishes the wood and reduces oil uptake. (2) Sanding past 180 before hardwax oils, which closes pores and causes white haze. (3) Sanding cross-grain at any stage; always sand with the grain for the final two grit steps. Vacuum thoroughly between grits to prevent grit transfer; tack-rag immediately before applying finish. For figured woods (curly maple, quilted maple, burl), reduce one grit step from these recommendations; figured wood reflects scratches across the grain.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Solvent &amp; Thinner Compatibility</span><span class="fig">TAB. 2AA-7</span></div>
+      <table>
+        <thead><tr><th>Solvent</th><th>Dissolves</th><th>Common Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Water</td><td>Water-based finishes; aniline dyes</td><td>Thin water-based polyurethane; clean brushes; mix dyes</td></tr>
+          <tr><td class="hi">Denatured alcohol / methanol</td><td>Shellac (flakes or premixed); alcohol-soluble dyes</td><td>Cut shellac; clean shellac brushes; thin certain stains</td></tr>
+          <tr><td class="hi">Mineral spirits (Stoddard solvent)</td><td>Oil-based paints, varnishes, polyurethane; thinning oil finishes</td><td>Thin oil-based products; clean brushes; degrease before finishing</td></tr>
+          <tr><td class="hi">VM&amp;P Naphtha</td><td>Same as mineral spirits but faster-evaporating</td><td>Wipe-off oil before finishing; spray-thin lacquer; faster-flash mineral spirits</td></tr>
+          <tr><td class="hi">Acetone</td><td>Lacquer, fiberglass resin, many paints; uncured cyanoacrylate</td><td>Strong degreaser; uncured CA glue; lacquer thinner (in blends); not safe on most plastics</td></tr>
+          <tr><td class="hi">Lacquer thinner (blend)</td><td>Lacquer, shellac, many paints; epoxy hardener residue</td><td>Thinning lacquer for spray; cleaning spray guns; aggressive; toxic vapors</td></tr>
+          <tr><td class="hi">Xylene / Toluene</td><td>Stubborn paint, road tar, asphalt, some inks</td><td>Stripping; degreasing where milder solvents fail; very toxic vapors</td></tr>
+          <tr><td class="hi">MEK (methyl ethyl ketone)</td><td>Same as acetone but slower-flash; aggressive on plastics</td><td>Industrial degreasing; bonding ABS plastic; rapidly being phased out due to toxicity</td></tr>
+          <tr><td class="hi">Isopropyl alcohol</td><td>Mild dissolution; degreasing; cleaning electronics</td><td>Cleaning before patina chemistry; PCB and bench cleanup; not strong enough for most finishes</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Solvent compatibility matters in two directions: (1) thinning, where you want to reduce a finish's viscosity without disrupting its chemistry, and (2) cleanup, where you need to dissolve cured or uncured finish to remove from brushes and rags. The standard pairings: water-based with water, shellac with alcohol, lacquer with lacquer thinner, oil-based with mineral spirits. Acetone is the universal degreaser before patina chemistry; isopropyl alcohol is the gentle cousin for electronics and final wipe. Always use a respirator with organic vapor cartridges (typically 3M 60923 or P100/OV) for lacquer thinner, xylene, MEK, and acetone in poorly ventilated spaces.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Cure Time Calculator</span><span class="fig">TOOL 2AA-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field">
+            <label>Finish Type</label>
+            <select id="cure-finish">
+              <option value="blo,12,168,720,oxidation">Boiled Linseed Oil (BLO)</option>
+              <option value="tung,24,168,720,oxidation">Tung Oil (pure)</option>
+              <option value="oilvarnish,8,24,336,oxidation" selected>Oil/Varnish Blend (Watco, Tried &amp; True)</option>
+              <option value="shellac,1,2,24,solvent">Shellac (2-lb cut)</option>
+              <option value="lacquer,0.5,24,720,solvent">Nitrocellulose Lacquer</option>
+              <option value="precat,0.5,24,720,solvent">Pre-Catalyzed Lacquer</option>
+              <option value="poly_oil,6,24,168,oxidation">Oil-Based Polyurethane</option>
+              <option value="poly_water,2,8,24,water">Water-Based Polyurethane</option>
+              <option value="waterlox,24,72,720,oxidation">Waterlox Original</option>
+              <option value="osmo,10,24,168,oxidation">Osmo Polyx-Oil</option>
+              <option value="hardwax,24,72,168,oxidation">Hardwax Oil (Rubio Monocoat)</option>
+            </select>
+          </div>
+          <div class="field"><label>Ambient Temperature (°F)</label><input type="number" id="cure-temp" step="1" value="70"></div>
+          <div class="field"><label>Relative Humidity (%)</label><input type="number" id="cure-rh" step="1" value="50"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Cure Type</span><span class="val" id="cure-type">—</span></div>
+            <div class="calc-row"><span class="lbl">Temperature Factor</span><span class="val" id="cure-tf">—</span></div>
+            <div class="calc-row"><span class="lbl">Humidity Factor</span><span class="val" id="cure-rhf">—</span></div>
+            <div class="calc-row"><span class="lbl">Dry to Touch</span><span class="val" id="cure-touch">—</span></div>
+            <div class="calc-row"><span class="lbl">Recoat Window</span><span class="val" id="cure-recoat">—</span></div>
+            <div class="calc-row"><span class="lbl">Full Cure</span><span class="val" id="cure-full">—</span></div>
+            <div class="calc-row"><span class="lbl">Assessment</span><span class="val" id="cure-assess">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Reference conditions: 70°F (21°C), 50% RH. Temperature effect: roughly 2× slower per 18°F (10°C) below reference; 1.5× faster per 18°F above. Humidity effect depends on cure mechanism: oxidation finishes (oil, polyurethane) slow in very high humidity (above ~70% RH); solvent-flash finishes (shellac, lacquer) slow because solvent can't evaporate; water-based finishes slow most dramatically because water itself can't evaporate. These estimates are guidance; check the actual datasheet for any specific product, and always test on scrap with the actual conditions before committing to a piece.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Chemical Safety Notes</span><span class="fig">TAB. 2AA-8</span></div>
+      <table>
+        <thead><tr><th>Chemical</th><th>Hazards</th><th>PPE</th><th>Disposal</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Liver of Sulfur (potassium sulfide)</td><td>Eye and skin irritant; releases H₂S (rotten-egg gas); flammable solid</td><td>Nitrile gloves; safety glasses; ventilation</td><td>Neutralize with hydrogen peroxide; dilute and drain</td></tr>
+          <tr><td class="hi">Ferric chloride</td><td>Acid burns on skin; stains permanently; toxic to aquatic life</td><td>Nitrile or rubber gloves; full face shield; ventilation</td><td>Neutralize with sodium carbonate; precipitate iron; hazardous waste</td></tr>
+          <tr><td class="hi">Sodium hydroxide (lye)</td><td>Severe alkali burns; aerosol attacks lungs; reacts with aluminum</td><td>Heavy nitrile or rubber gloves; full face shield; apron; ventilation</td><td>Neutralize with vinegar / dilute acid; dilute heavily before drain disposal</td></tr>
+          <tr><td class="hi">Concentrated ammonia (28%+)</td><td>Severe respiratory irritant; eye injury at low concentrations; reacts with bleach to form chloramine gas</td><td>Acid-gas cartridge respirator (not P100 alone); chemical splash goggles; nitrile gloves</td><td>Outdoor only; dilute with copious water before drain</td></tr>
+          <tr><td class="hi">Selenium dioxide (cold blue solutions)</td><td>Acute toxicity; suspected carcinogen; can cause garlic-breath syndrome</td><td>Nitrile gloves; safety glasses; ventilation; wash hands thoroughly</td><td>Hazardous waste; never drain</td></tr>
+          <tr><td class="hi">Nitric acid</td><td>Severe burns; yellow staining of skin; oxidizer; releases NOₓ gas</td><td>Acid-resistant gloves (butyl rubber); face shield; apron; fume hood mandatory</td><td>Carefully neutralize with sodium carbonate; precipitate; hazardous waste</td></tr>
+          <tr><td class="hi">Oxalic acid</td><td>Skin and eye irritant; nephrotoxic if ingested</td><td>Nitrile gloves; safety glasses; ventilation</td><td>Neutralize and drain dispose at low concentration</td></tr>
+          <tr><td class="hi">Sodium sulfide</td><td>Releases H₂S in acid; eye and skin irritant; flammable</td><td>Nitrile gloves; safety glasses; ventilation</td><td>Neutralize carefully; never mix with acid</td></tr>
+          <tr><td class="hi">Lacquer thinner / acetone / MEK</td><td>Flammable; CNS depressant; suspected reproductive toxin (MEK)</td><td>Organic vapor cartridge respirator; nitrile gloves (chemical resistance varies; check chart); no ignition sources</td><td>Allow to evaporate outdoors in approved container; or hazardous waste</td></tr>
+          <tr><td class="hi">Boiled Linseed Oil (rags)</td><td>Auto-ignition: oily rags balled up self-heat and combust within hours</td><td>Standard finish PPE</td><td>Spread flat on metal tray until dry, or fully submerge in water; never trash compress wet rags</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Standing PPE rules for any patina or finish chemistry: (1) Eye protection always (splash goggles, not just safety glasses, for liquid chemistry). (2) Gloves rated for the specific solvent or chemical; the standard glove-compatibility chart from Ansell or Mapa tells you which to use for what. Nitrile is the workhorse for most lab chemistry; butyl rubber for solvents that dissolve nitrile; neoprene for acids. (3) Ventilation: outdoor work for ammonia, nitric acid; a fume hood for anything that produces gas; at minimum a cross-flow fan and open windows for solvent work. (4) Never combine bleach with ammonia (chloramine gas) or acid with sulfide (H₂S gas) or hydrogen peroxide with anything energetic. (5) BLO rag fires: the most common shop fire cause. Spread flat or submerge; never ball up and trash.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2BB · KILN & FIRING ====================== -->
+  <section id="kiln" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2BB <span class="dot"></span> Mechanical</div>
+      <h2>Kiln &amp; Firing</h2>
+      <div class="page-desc">Ceramic firing reference. Orton cone equivalents at standard heat rates, common firing schedules (bisque, glaze, cone 6, cone 10, Raku, crystalline), clay body maturity by temperature range, Seger unity formula basics, glaze material function table, atmosphere effects (oxidation vs reduction), defect troubleshooting, kiln furniture and safety. For clay body preparation and craft technique see 2S Ceramics &amp; Wood Ash; for chemical safety in glaze materials see 2AA.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Orton Cone Equivalents (Self-Supporting, Standard Heat Rates)</span><span class="fig">TAB. 2BB-1</span></div>
+      <table>
+        <thead><tr><th>Cone</th><th>Temp at 27°C/h<br>(°F / °C)</th><th>Temp at 108°C/h<br>(°F / °C)</th><th>Temp at 270°C/h<br>(°F / °C)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">022</td><td class="num">1058 / 570</td><td class="num">1112 / 600</td><td class="num">1157 / 625</td><td>Lustres, decals, china paint</td></tr>
+          <tr><td class="hi">020</td><td class="num">1175 / 635</td><td class="num">1216 / 658</td><td class="num">1247 / 675</td><td>Lustres, low-fire overglaze</td></tr>
+          <tr><td class="hi">018</td><td class="num">1323 / 717</td><td class="num">1346 / 730</td><td class="num">1375 / 746</td><td>Decals, soft enamels</td></tr>
+          <tr><td class="hi">015</td><td class="num">1481 / 805</td><td class="num">1517 / 825</td><td class="num">1571 / 855</td><td>China paint, enamels on metal</td></tr>
+          <tr><td class="hi">012</td><td class="num">1623 / 884</td><td class="num">1652 / 900</td><td class="num">1684 / 918</td><td>Low-fire glazes</td></tr>
+          <tr><td class="hi">010</td><td class="num">1675 / 913</td><td class="num">1693 / 923</td><td class="num">1746 / 952</td><td>Raku, low-fire glaze (commercial)</td></tr>
+          <tr><td class="hi">08</td><td class="num">1742 / 950</td><td class="num">1773 / 967</td><td class="num">1815 / 991</td><td>Low-fire glazes (some)</td></tr>
+          <tr><td class="hi">06</td><td class="num">1830 / 999</td><td class="num">1855 / 1013</td><td class="num">1899 / 1037</td><td>Bisque firing for cone 6 glaze work; low-fire glaze</td></tr>
+          <tr><td class="hi">04</td><td class="num">1922 / 1050</td><td class="num">1945 / 1063</td><td class="num">1971 / 1077</td><td>Bisque for high-fire work; low-fire majolica</td></tr>
+          <tr><td class="hi">02</td><td class="num">1994 / 1090</td><td class="num">2014 / 1101</td><td class="num">2052 / 1122</td><td>Mid-range earthenware glazes</td></tr>
+          <tr><td class="hi">1</td><td class="num">2079 / 1137</td><td class="num">2109 / 1154</td><td class="num">2152 / 1178</td><td>Low-mid stoneware</td></tr>
+          <tr><td class="hi">3</td><td class="num">2106 / 1152</td><td class="num">2134 / 1168</td><td class="num">2174 / 1190</td><td>Mid-range stoneware glazes</td></tr>
+          <tr><td class="hi">5</td><td class="num">2167 / 1186</td><td class="num">2205 / 1207</td><td class="num">2244 / 1229</td><td>Mid-range stoneware (close to 6)</td></tr>
+          <tr><td class="hi">6</td><td class="num">2194 / 1201</td><td class="num">2232 / 1222</td><td class="num">2269 / 1243</td><td>The mid-fire standard; modern hobby and studio default</td></tr>
+          <tr><td class="hi">8</td><td class="num">2255 / 1235</td><td class="num">2280 / 1249</td><td class="num">2320 / 1271</td><td>Heading toward high-fire</td></tr>
+          <tr><td class="hi">9</td><td class="num">2295 / 1257</td><td class="num">2318 / 1270</td><td class="num">2336 / 1280</td><td>High-fire stoneware</td></tr>
+          <tr><td class="hi">10</td><td class="num">2336 / 1280</td><td class="num">2345 / 1285</td><td class="num">2381 / 1305</td><td>Classic high-fire stoneware and porcelain; the cone 10 reduction tradition</td></tr>
+          <tr><td class="hi">11</td><td class="num">2361 / 1294</td><td class="num">2381 / 1305</td><td class="num">2399 / 1315</td><td>High-fire porcelain (specific bodies)</td></tr>
+          <tr><td class="hi">12</td><td class="num">2383 / 1306</td><td class="num">2419 / 1326</td><td class="num">2437 / 1336</td><td>High-fire specialty</td></tr>
+          <tr><td class="hi">13</td><td class="num">2410 / 1321</td><td class="num">2455 / 1346</td><td class="num">2469 / 1354</td><td>Specialty (industrial / refractory)</td></tr>
+          <tr><td class="hi">14</td><td class="num">2530 / 1388</td><td class="num">2548 / 1366</td><td class="num">2606 / 1430</td><td>Refractory; rarely used in pottery</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Pyrometric cones measure heatwork: the combined effect of time and temperature. Two firings reaching the same peak temperature with different ramp rates produce different cone-bend results. The 108°C/h column is the most commonly cited; modern electric kilns with controllers often run faster (around 150°C/h for the final ramp), which shifts the cone slightly. "Cone 06" with the leading zero is colder than "cone 6"; this reverse numbering is the standard convention. Self-supporting cones are placed on the kiln shelf; small "witness cones" go on a kiln cone pack. The cone bend at 90° from vertical indicates the target heatwork was reached.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Firing Schedules</span><span class="fig">TAB. 2BB-2</span></div>
+      <table>
+        <thead><tr><th>Schedule</th><th>Segments (ramp °F/h → target °F, hold)</th><th>Approx. Total Time</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Slow Bisque (Cone 04)</td><td>80 → 250, 30 min hold (drive off water)<br>200 → 1000, no hold<br>400 → 1945 (cone 04), 10 min hold</td><td class="num">10-12 hours</td><td>The safe default; preserves work through quartz inversion at 1063°F</td></tr>
+          <tr><td class="hi">Fast Bisque (Cone 04)</td><td>250 → 250, 1 hr hold<br>400 → 1945 (cone 04), 10 min hold</td><td class="num">6-8 hours</td><td>For repeat work that you trust; less safe for thick or complex pieces</td></tr>
+          <tr><td class="hi">Slow Glaze (Cone 6)</td><td>250 → 250, no hold (just water drive-off)<br>400 → 2000, no hold<br>108 → 2232 (cone 6), 15 min hold</td><td class="num">9-11 hours</td><td>Standard mid-fire glaze schedule; promotes good melt &amp; chemistry</td></tr>
+          <tr><td class="hi">Slow Cool Glaze (Cone 6)</td><td>Same as Slow Glaze, then add:<br>150 cool → 1900<br>50 cool → 1500 (controlled cool)</td><td class="num">12-14 hours</td><td>For glaze chemistries that benefit from slow cool: matte glazes, micro-crystalline effects, color development</td></tr>
+          <tr><td class="hi">Cone 10 Reduction (Gas)</td><td>Preheat 1 hr; ramp ~250/h to ~1700 (oxidation); body reduction; ramp to cone 10; final body reduction; cool</td><td class="num">8-12 hours</td><td>Traditional high-fire reduction; gas kiln; the classic Cone 10 tradition (celadon, Tenmoku, Shino)</td></tr>
+          <tr><td class="hi">Raku</td><td>Preheat slowly; ramp 400-800/h to cone 06-010 (glazes vary)</td><td class="num">1-3 hours</td><td>Glazes mature fast; pieces removed red-hot for post-fire reduction in sawdust or other combustibles</td></tr>
+          <tr><td class="hi">Crystalline Glaze</td><td>Fast ramp to cone 10 (1800-2300/h), then controlled cool down through 2100-1900 with multiple holds</td><td class="num">14-20 hours</td><td>Hold temperatures during cool grow zinc-silicate crystals; specialty technique</td></tr>
+          <tr><td class="hi">Soda / Salt Firing</td><td>Similar to cone 10 reduction; introduce sodium during peak temperature</td><td class="num">10-14 hours</td><td>Atmospheric firing; sodium creates flashed surface; specialized kilns only</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Quartz inversion at 1063°F (573°C) is the critical zone in any firing schedule: the silica in clay undergoes a phase change that causes a small but rapid expansion (going up) or contraction (going down). Cracking risk is highest here. Slow through this temperature in both directions, especially during cooling. The 108°C/h (~200°F/h) standard heat rate is a compromise between firing time and crack risk; faster requires more confidence in the body and forms.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Clay Body Reference</span><span class="fig">TAB. 2BB-3</span></div>
+      <table>
+        <thead><tr><th>Clay Body</th><th>Maturity Cone</th><th>Vitrification</th><th>Color (Oxidation / Reduction)</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Low-fire white earthenware</td><td class="num">04 - 06</td><td>Porous (5-15% absorption)</td><td>White / off-white</td><td>Sculpture, terra sigillata, school work</td></tr>
+          <tr><td class="hi">Terra cotta / red earthenware</td><td class="num">06 - 04</td><td>Porous (8-15%)</td><td>Brick red to terra cotta</td><td>Garden pots, traditional vessels; high iron clay</td></tr>
+          <tr><td class="hi">Mid-fire white stoneware</td><td class="num">5 - 6</td><td>Vitrified (1-3% absorption)</td><td>White / cream</td><td>Modern hobby and studio standard; great glaze compatibility</td></tr>
+          <tr><td class="hi">Mid-fire brown stoneware</td><td class="num">5 - 6</td><td>Vitrified (1-3%)</td><td>Tan to brown</td><td>Iron-bearing stoneware; rich with reduction-effect glazes</td></tr>
+          <tr><td class="hi">High-fire stoneware (cone 10)</td><td class="num">9 - 11</td><td>Fully vitrified (0-2%)</td><td>White, tan, or red depending on body / Same body shows brown in reduction</td><td>Traditional functional pottery; high temperature aesthetic</td></tr>
+          <tr><td class="hi">Porcelain (cone 10)</td><td class="num">9 - 11</td><td>Fully vitrified, translucent if thin (0-0.5%)</td><td>White (cool), white-blue in reduction</td><td>Fine wares, tableware, sculpture</td></tr>
+          <tr><td class="hi">Mid-fire porcelain</td><td class="num">5 - 6</td><td>Vitrified (1-2%)</td><td>White</td><td>Hobbyist alternative to cone 10 porcelain</td></tr>
+          <tr><td class="hi">Raku body</td><td class="num">06 - 04</td><td>Underfired by design; high thermal shock resistance</td><td>Light tan</td><td>Specifically formulated to survive Raku thermal cycling; coarse grog content</td></tr>
+          <tr><td class="hi">Sculpture / grogged body</td><td>Variable (3 - 10)</td><td>Variable</td><td>Variable; often dark</td><td>Coarse grog or sand added for large pieces; resists slumping</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Property</th><th>Earthenware</th><th>Mid-fire Stoneware</th><th>Porcelain</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Total shrinkage (wet to fired)</td><td class="num">5-9%</td><td class="num">10-13%</td><td class="num">12-15%</td></tr>
+          <tr><td class="hi">Absorption (cured)</td><td class="num">5-15%</td><td class="num">1-3%</td><td class="num">0-0.5%</td></tr>
+          <tr><td class="hi">Strength</td><td>Low</td><td>Medium-high</td><td>High</td></tr>
+          <tr><td class="hi">Translucency</td><td>Opaque</td><td>Opaque</td><td>Translucent if thin</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The maturity cone is the temperature at which the body is fully fired (vitrified to its design density). Firing above maturity causes slumping, bloating, or melting; firing below leaves an underfired, weak, more porous piece. Pick a clay body to match the glaze cone, not the other way around. Modern cone 6 stoneware bodies have largely replaced cone 10 reduction for hobby and small-studio work; the energy savings and electric-kiln compatibility are decisive.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Glaze Chemistry — Unity (Seger) Formula</span><span class="fig">TAB. 2BB-4</span></div>
+      <table>
+        <thead><tr><th>Group</th><th>Role</th><th>Common Oxides</th><th>Function in Glaze</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">RO + R₂O (fluxes)</td><td>Lower melting point of silica</td><td>Na₂O, K₂O, Li₂O (alkali); CaO, MgO, BaO, ZnO (alkaline earth)</td><td>Bring glaze into melt; alkalis melt fastest, alkaline earth are mattes and produce surface effects</td></tr>
+          <tr><td class="hi">R₂O₃ (amphoterics)</td><td>Stabilize the glaze; control viscosity</td><td>Al₂O₃ (alumina), B₂O₃ (boric)</td><td>Alumina raises melt temperature and stops over-flow; boric is a low-temp flux</td></tr>
+          <tr><td class="hi">RO₂ (glass former)</td><td>Form the silicate network</td><td>SiO₂ (silica), ZrO₂ (zircon)</td><td>Silica is the backbone; zircon adds opacity</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Unity Ratio Guide (mol fraction, RO + R₂O = 1.0)</th><th>Typical Range</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Al₂O₃ / RO+R₂O</td><td class="num">0.2 - 0.6</td><td>Lower = glossy, more fluid; higher = matte, more stable</td></tr>
+          <tr><td class="hi">SiO₂ / RO+R₂O</td><td class="num">2.0 - 5.0</td><td>Lower = more fluid, less durable; higher = stiffer, more durable</td></tr>
+          <tr><td class="hi">SiO₂ / Al₂O₃</td><td class="num">5 - 10 (gloss); 3 - 6 (matte)</td><td>The glass-to-stabilizer ratio; defines the surface character</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The unity formula normalizes a glaze recipe so the RO + R₂O column sums to 1.0 mol, making it easy to compare glazes across recipes. The "Limit Formulas" published by Hesselberth &amp; Roy and by Linda Arbuckle give safe ranges for cone 6 and cone 10 glazes; staying within those bounds yields glazes that fit standard clay bodies, fuse properly, and pass leach testing. Software like Glazy.org and HyperGlaze does the molar conversion from recipe weight percent; the math is standard but tedious by hand.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Common Glaze Materials</span><span class="fig">TAB. 2BB-5</span></div>
+      <table>
+        <thead><tr><th>Category</th><th>Material</th><th>Function</th><th>Typical Range</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Feldspar (potash)</td><td>Custer, G-200</td><td>Flux + alumina + silica source; melts above cone 7</td><td class="num">15-40%</td></tr>
+          <tr><td class="hi">Feldspar (soda)</td><td>Nepheline Syenite, Minspar 200</td><td>Lower-melt flux; soda content; alkali flux</td><td class="num">15-40%</td></tr>
+          <tr><td class="hi">Silica source</td><td>Silica (Flint, SiO₂), Kaolin (Al₂Si₂O₅(OH)₄)</td><td>Silica adds glass; kaolin adds Al₂O₃ + SiO₂</td><td class="num">5-30%</td></tr>
+          <tr><td class="hi">Calcium flux</td><td>Whiting (CaCO₃), Wollastonite (CaSiO₃)</td><td>Calcium for melt; wollastonite gives CaO + SiO₂ pre-combined</td><td class="num">5-20%</td></tr>
+          <tr><td class="hi">Magnesium flux</td><td>Dolomite (CaMg(CO₃)₂), Talc (Mg₃Si₄O₁₀(OH)₂)</td><td>MgO matting effect; satin surfaces</td><td class="num">2-15%</td></tr>
+          <tr><td class="hi">Boric flux</td><td>Gerstley Borate, Frit (Ferro 3134, 3110)</td><td>Low-temp flux; widens firing range; Gerstley deprecated, replaced by Gillespie Borate or frits</td><td class="num">5-25%</td></tr>
+          <tr><td class="hi">Lithium flux</td><td>Spodumene, Lithium Carbonate</td><td>Aggressive low-temp flux; expensive</td><td class="num">2-10%</td></tr>
+          <tr><td class="hi">Zinc flux</td><td>Zinc Oxide</td><td>Glossy fluxer; crystal nucleus for crystalline glazes</td><td class="num">1-15%</td></tr>
+          <tr><td class="hi">Opacifier</td><td>Tin Oxide, Zircon, Zirconium Silicate</td><td>Makes glaze opaque white; tin is highest quality, zircon is more economical</td><td class="num">5-15%</td></tr>
+          <tr><td class="hi">Colorant — iron</td><td>Red Iron Oxide, Yellow Iron Oxide, Iron Chromate</td><td>Tan, amber, brown (oxidation); celadon green, Tenmoku black (reduction)</td><td class="num">1-10%</td></tr>
+          <tr><td class="hi">Colorant — copper</td><td>Copper Carbonate, Copper Oxide</td><td>Green (oxidation); deep red (reduction); volatile in reduction</td><td class="num">0.5-5%</td></tr>
+          <tr><td class="hi">Colorant — cobalt</td><td>Cobalt Carbonate, Cobalt Oxide</td><td>Blue at very low percentages; aggressive colorant</td><td class="num">0.25-2%</td></tr>
+          <tr><td class="hi">Colorant — manganese</td><td>Manganese Carbonate, Manganese Dioxide</td><td>Purple-brown to black; can produce specks</td><td class="num">1-6%</td></tr>
+          <tr><td class="hi">Colorant — chromium</td><td>Chromium Oxide, Chrome-Tin pink</td><td>Green; produces pink with tin opacifier; toxic dust</td><td class="num">0.25-3%</td></tr>
+          <tr><td class="hi">Colorant — rutile</td><td>Rutile (TiO₂ with iron)</td><td>Tan to gold; produces variegation and surface effects</td><td class="num">2-10%</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Glaze recipes are written by weight percent in most published collections; molar conversion gives the unity formula. Many traditional materials (Gerstley Borate, Albany Slip) have been discontinued; substitutes are published on Digitalfire.com and Glazy.org. Always wet-test new recipes on the actual clay body before committing to a piece; the same recipe behaves differently on different clay bodies because of the interface between body and glaze. Lead frits and lead bisilicate were historically used for low-fire glazes; modern practice avoids lead entirely for food-contact ware.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Atmosphere (Oxidation, Reduction, Neutral)</span><span class="fig">TAB. 2BB-6</span></div>
+      <table>
+        <thead><tr><th>Atmosphere</th><th>How It's Created</th><th>Effect on Iron</th><th>Effect on Copper</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Oxidation</td><td>Electric kiln (default) or gas kiln with excess air; oxygen present throughout</td><td>Iron stays as Fe³⁺ (red, amber, brown)</td><td>Copper stays as CuO (green)</td></tr>
+          <tr><td class="hi">Neutral</td><td>Gas kiln with stoichiometric mixture; rare; the transition between oxidation and reduction</td><td>Mixed Fe²⁺/Fe³⁺; in-between colors</td><td>Mixed; transitional</td></tr>
+          <tr><td class="hi">Reduction</td><td>Gas kiln with reduced air supply; CO and free carbon present; oxygen-starved</td><td>Iron reduces to Fe²⁺ (celadon green, Tenmoku black at higher load)</td><td>Copper reduces to Cu₂O / metallic Cu (oxblood red, copper red, copper flash)</td></tr>
+          <tr><td class="hi">Heavy reduction</td><td>Aggressive air starvation; sometimes specific reduction periods (body reduction, glaze reduction)</td><td>Pure Fe²⁺; deep colors; metallic effects</td><td>Pure metallic; copper rubies; difficult to maintain</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Reduction firing requires a fuel-burning kiln (gas, wood, soda). Electric kilns produce only oxidation; you can fake reduction with carbon mat insertion or organic material in the kiln, but it's a poor substitute. Reduction changes both the body and glaze: an iron-bearing stoneware body that's tan in oxidation becomes red-brown in reduction; the iron in a glaze that's amber in oxidation becomes celadon green in reduction. The cone 10 reduction tradition (Mingei, Bernard Leach, Warren MacKenzie) is built around this transformation; cone 6 reduction is possible but less common.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Defect Troubleshooting</span><span class="fig">TAB. 2BB-7</span></div>
+      <table>
+        <thead><tr><th>Defect</th><th>Appearance</th><th>Causes</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Crawling</td><td>Glaze pulls away from body, leaving bare spots</td><td>Greasy bisque; thick glaze application; high clay content in glaze (kaolin shrinks during drying)</td><td>Clean bisque; thinner application; reduce kaolin in glaze recipe</td></tr>
+          <tr><td class="hi">Pinholing</td><td>Small craters or pinholes in surface</td><td>Bisque too cold; gas bubbles from body or glaze; over-fast firing through 1100-1500°F range</td><td>Bisque hotter; slow firing through this range; soak at peak</td></tr>
+          <tr><td class="hi">Crazing</td><td>Fine network of cracks in glaze</td><td>Glaze contracts more than body on cooling; glaze coefficient of thermal expansion too high</td><td>Adjust glaze with less alkali and more silica/alumina; or fire body to higher maturity</td></tr>
+          <tr><td class="hi">Shivering</td><td>Glaze flakes off (opposite of crazing)</td><td>Body shrinks more than glaze on cooling; rare but serious</td><td>Adjust glaze with more alkali (Na₂O, K₂O) or less alumina</td></tr>
+          <tr><td class="hi">Blistering / bloating</td><td>Bubbles in glaze or body</td><td>Overfiring; gases from body unable to escape; sulfur in clay</td><td>Lower peak temperature; slow firing; longer bisque to drive off volatiles</td></tr>
+          <tr><td class="hi">Pitting</td><td>Tiny pits visible in glaze surface</td><td>Underfired glaze; insufficient melt</td><td>Fire slightly hotter; longer hold at peak</td></tr>
+          <tr><td class="hi">Crawling on rims</td><td>Glaze runs off thin edges leaving bare metal-like rim</td><td>Glaze too fluid at peak; insufficient alumina</td><td>Add 2-5% kaolin or alumina to recipe</td></tr>
+          <tr><td class="hi">Color flat / muddy</td><td>Glaze color dull, lacks depth</td><td>Underfired; insufficient flux melt; cooling too fast through development zone</td><td>Hotter peak; controlled cool with hold at color-development temperature</td></tr>
+          <tr><td class="hi">Specking</td><td>Iron specks across glaze</td><td>Iron-rich body bleeding through; iron contamination in glaze materials</td><td>Either embrace it (deliberate effect) or use cleaner glaze materials and whiter body</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Crazing and shivering are the two glaze-fit defects you must understand. They come from the body and glaze having different coefficients of thermal expansion (CTE). Crazing (most common) means the glaze has a higher CTE; it shrinks more on cooling, putting itself in tension and cracking. Shivering (rare but dangerous) means the body has higher CTE; the glaze ends up in compression and flakes off, sometimes explosively. The fix is in the recipe: more silica and alumina lower the glaze CTE; more alkali raises it. Test fit on the actual body before committing.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Kiln Furniture &amp; Safety</span><span class="fig">TAB. 2BB-8</span></div>
+      <table>
+        <thead><tr><th>Item</th><th>Material / Spec</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Kiln posts</td><td>Cordierite or silicon carbide; 1, 2, 3, 4, 6 inch heights</td><td>Hold shelves apart; tall stacks need wider posts at base for stability</td></tr>
+          <tr><td class="hi">Kiln shelves</td><td>Cordierite (lower fire) or silicon carbide (high fire); 1/2 to 5/8 in thick</td><td>SiC shelves last longer at cone 10 reduction; cordierite warps over many firings</td></tr>
+          <tr><td class="hi">Kiln wash recipe (1)</td><td>50% calcined kaolin (EPK or grolleg) + 50% alumina hydrate (by weight); add water to brush consistency</td><td>Standard recipe; brush on shelves, let dry, fire to cone 10 to set</td></tr>
+          <tr><td class="hi">Kiln wash recipe (2)</td><td>Equal parts kaolin, alumina hydrate, and silica</td><td>Slightly more workable; same application</td></tr>
+          <tr><td class="hi">Cone packs</td><td>Self-supporting cones (one row of 3 for visual; one cone is target, one safety low, one safety high)</td><td>Place visible through peephole; check at peak; small cones (witness cones) on each shelf</td></tr>
+          <tr><td class="hi">Stilts / posts (low-fire only)</td><td>Cone 06 stilts for fully-glazed bottoms</td><td>NEVER use stilts at high-fire; the body slumps</td></tr>
+          <tr><td class="hi">Pyrometer (digital)</td><td>Type K thermocouple in stainless or Inconel sheath</td><td>Reads temperature in real-time; protected with sacrificial bead sheath for high-fire</td></tr>
+          <tr><td class="hi">Wax resist</td><td>For glazing bottoms and footrings; commercial pink or melted paraffin</td><td>Apply before glazing; burns off in firing; keeps glaze off contact zones</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Safety Issue</th><th>Hazard</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Silica dust</td><td>Silicosis (irreversible lung damage) from inhaling free crystalline silica during clay mixing, glaze prep, dry sweeping</td><td>Wet methods always; HEPA vacuum (never sweep); P100 or R/P95 respirator for any dust generation; wash work clothes separately</td></tr>
+          <tr><td class="hi">Lead glazes</td><td>Lead leaches into food contact; bioaccumulative neurotoxin</td><td>Don't use lead in functional / food-contact ware; for decorative pieces, label and segregate; even decorative lead-glaze work needs full PPE during prep</td></tr>
+          <tr><td class="hi">Cadmium, chromium, barium</td><td>All toxic; some leach from glazes; some dust hazards during glaze prep</td><td>Full PPE for prep; leach testing for any food-contact ware using these colorants</td></tr>
+          <tr><td class="hi">Kiln ventilation</td><td>CO from gas kilns; fluorine and chlorine from glazes; sulfur from clay; metal oxide vapors</td><td>Vent-a-Kiln (downdraft) or roof vent for electric; well-ventilated room for gas kiln (purpose-built kiln room with combustion air supply)</td></tr>
+          <tr><td class="hi">Kiln surface temperatures</td><td>Outside of operating kiln reaches 200-500°F; serious burn risk</td><td>Stay back; no flammables within 18 in; cool fully before unloading; tongs for hot pieces</td></tr>
+          <tr><td class="hi">Electrical (electric kiln)</td><td>240V, 30-50A circuits; element replacement requires power-off discipline</td><td>Dedicated circuit; lockout/tagout before service; replace elements with kiln cold and unplugged</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Silica dust is the long-term killer in pottery. Crystalline silica is in clay bodies, glaze materials (especially silica and flint), and kiln wash. The cumulative dose matters; a few minutes of dry mixing without PPE today is a couple of dollars in your dust account, and the account closes at silicosis. Use wet techniques where possible (mixing glaze, cleaning the studio), HEPA vacuum (never broom-sweep), and a P100 respirator for any dust-generating operation. The other big safety issue is kiln ventilation: gas kilns produce CO and need real combustion air; electric kilns produce fluorine and sulfur from glaze burn-out and need a downdraft vent for any volume of work.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2CC · MARLINSPIKE RIGGING ====================== -->
+  <section id="marlinspike" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2CC <span class="dot"></span> Mechanical</div>
+      <h2>Marlinspike Rigging</h2>
+      <div class="page-desc">Rope and chain engineering reference. Rope construction and fiber properties, working load limits and the knot-strength penalty, chain grades, block-and-tackle mechanical advantage math, whipping and splicing technique, and inspection-and-retirement criteria. For the knots themselves see 2T Fibers &amp; Weaving; for hardness and material properties of chain steels see 2I and 2N.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Rope Construction Types</span><span class="fig">TAB. 2CC-1</span></div>
+      <table>
+        <thead><tr><th>Construction</th><th>Description</th><th>Stretch</th><th>Splice Difficulty</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">3-strand twist (laid)</td><td>Three yarn bundles twisted in opposite direction from the bundle's internal twist</td><td>Moderate to high (energy-absorbing)</td><td>Easiest: classic eye splice in 5-10 minutes once learned</td><td>Mooring lines, anchor rode, general utility; the traditional rope</td></tr>
+          <tr><td class="hi">8-strand plait (square)</td><td>Eight strands plaited in a square pattern; four-pair construction</td><td>Low to moderate; high strength</td><td>Moderate; requires the plait splice technique</td><td>Mooring lines on larger vessels; nylon plait is the standard heavy-duty mooring rope</td></tr>
+          <tr><td class="hi">12-strand single braid</td><td>Twelve strands braided in one layer; no core</td><td>Very low (HMPE) to low (polyester)</td><td>Moderate; the brummel splice or class II splice</td><td>HMPE / Dyneema applications; rigging, winch lines, sail control</td></tr>
+          <tr><td class="hi">Double braid (braid-on-braid)</td><td>Braided core inside a braided cover; both contribute to strength</td><td>Low; very predictable</td><td>Hardest: requires fid set and the double braid splice procedure</td><td>Sail control lines, halyards, climbing static lines, dock lines for cleaner appearance</td></tr>
+          <tr><td class="hi">Kernmantle</td><td>Core (kern) carries strength; tightly woven sheath (mantle) protects</td><td>Low (static) to moderate (dynamic, climbing)</td><td>Specialized; usually terminated with rated end fittings, not field splices</td><td>Climbing, rescue, fall protection, arborist work</td></tr>
+          <tr><td class="hi">Parallel-fiber sleeved</td><td>Straight (unbraided) high-modulus fiber core inside protective cover</td><td>Very low; essentially no stretch</td><td>Specialized terminations only; not field-spliceable in the traditional sense</td><td>Standing rigging, racing yacht stays, specialty lifting</td></tr>
+        </tbody>
+      </table>
+      <div class="note">3-strand is the rope that taught most riggers how to splice; it's still the cheapest and most versatile for general use. Double braid is the modern standard for marine sheets and halyards because it handles well in cleats and clutches without snagging. Kernmantle is the only construction certified for life-safety applications: the core carries the load, the mantle protects it. Stretch matters in different applications: high-stretch (3-strand nylon) absorbs shock for anchor rode; low-stretch (HMPE single-braid) is needed when precise positioning matters.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Rope Fiber Properties</span><span class="fig">TAB. 2CC-2</span></div>
+      <table>
+        <thead><tr><th>Fiber</th><th>Specific Gravity</th><th>Wet Strength</th><th>UV Resistance</th><th>Stretch at Break</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Manila (natural)</td><td class="num">1.38 (sinks)</td><td>Decreases ~25%</td><td>Poor (rots)</td><td class="num">10-15%</td><td>Traditional natural fiber; rotting and stretching mean it's mostly replaced by synthetics; still used for ornamental and decorative work</td></tr>
+          <tr><td class="hi">Sisal / Hemp (natural)</td><td class="num">1.20-1.45 (sinks)</td><td>Decreases significantly</td><td>Poor</td><td class="num">10-15%</td><td>Similar to manila but lower-grade; agricultural and packaging use</td></tr>
+          <tr><td class="hi">Cotton (natural)</td><td class="num">1.54 (sinks)</td><td>Increases ~10% (unusual)</td><td>Fair</td><td class="num">8-12%</td><td>Soft hand; clothesline, decorative; cotton actually gains wet strength</td></tr>
+          <tr><td class="hi">Polypropylene</td><td class="num">0.91 (floats)</td><td>No change</td><td>Poor (degrades fast)</td><td class="num">15-22%</td><td>Cheapest synthetic; floats; great for water work (rescue lines, lifelines) but degrades quickly in sunlight</td></tr>
+          <tr><td class="hi">Polyester (Dacron, Terylene)</td><td class="num">1.38 (sinks)</td><td>No change</td><td>Excellent</td><td class="num">10-15%</td><td>Workhorse marine fiber; minimal stretch when wet; the standard for sheets, halyards, mooring</td></tr>
+          <tr><td class="hi">Nylon (Polyamide)</td><td class="num">1.14 (sinks)</td><td>Decreases ~10-15%</td><td>Good</td><td class="num">20-30%</td><td>Highest stretch; energy-absorbing; standard for anchor rode and shock-load applications</td></tr>
+          <tr><td class="hi">HMPE / UHMWPE (Dyneema, Spectra)</td><td class="num">0.97 (floats)</td><td>No change</td><td>Excellent</td><td class="num">3-4%</td><td>Very high strength-to-weight; 15× stronger than steel by weight; slippery (special splicing knots); creeps under sustained load</td></tr>
+          <tr><td class="hi">Aramid (Kevlar, Technora)</td><td class="num">1.44 (sinks)</td><td>No change</td><td>Fair (degrades in UV)</td><td class="num">2-3%</td><td>Higher temperature tolerance than HMPE; abrasion-sensitive; needs cover sheath</td></tr>
+          <tr><td class="hi">LCP (Vectran)</td><td class="num">1.40 (sinks)</td><td>No change</td><td>Good (with cover)</td><td class="num">2-3%</td><td>Highest strength among low-stretch fibers; expensive; specialty racing</td></tr>
+          <tr><td class="hi">PBO (Zylon)</td><td class="num">1.56</td><td>No change</td><td>Very poor (rapid UV degradation)</td><td class="num">3-4%</td><td>Highest-strength common fiber; must be sleeved against light; aerospace and racing only</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Specific gravity below 1.0 means the rope floats; this matters for water rescue (polypro, HMPE float), anchor rode (you want it to sink in the right position), and general marine use. Wet strength loss matters for natural fibers and nylon; synthetic ropes are mostly stable wet vs dry. UV is the most common cause of rope retirement in outdoor service: polyester resists, polypropylene fails fast (months of full sun), nylon falls in the middle. For long-term outdoor use, polyester is the standard fiber; for shock-load absorbing applications, nylon; for any high-strength minimal-stretch application, HMPE.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Rope Working Load Limit Reference</span><span class="fig">TAB. 2CC-3</span></div>
+      <table>
+        <thead><tr><th>Diameter</th><th>3-Strand Nylon MBS</th><th>3-Strand Polyester MBS</th><th>Double-Braid Polyester MBS</th><th>12-Strand HMPE MBS</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1/4 in (6 mm)</td><td class="num">2,000 lb</td><td class="num">1,650 lb</td><td class="num">2,500 lb</td><td class="num">8,500 lb</td></tr>
+          <tr><td class="hi">5/16 in (8 mm)</td><td class="num">3,000 lb</td><td class="num">2,500 lb</td><td class="num">3,800 lb</td><td class="num">12,500 lb</td></tr>
+          <tr><td class="hi">3/8 in (10 mm)</td><td class="num">4,400 lb</td><td class="num">3,600 lb</td><td class="num">5,800 lb</td><td class="num">18,500 lb</td></tr>
+          <tr><td class="hi">7/16 in (11 mm)</td><td class="num">5,900 lb</td><td class="num">4,850 lb</td><td class="num">7,500 lb</td><td class="num">24,000 lb</td></tr>
+          <tr><td class="hi">1/2 in (13 mm)</td><td class="num">7,500 lb</td><td class="num">6,200 lb</td><td class="num">9,500 lb</td><td class="num">32,000 lb</td></tr>
+          <tr><td class="hi">9/16 in (14 mm)</td><td class="num">9,400 lb</td><td class="num">7,800 lb</td><td class="num">12,000 lb</td><td class="num">39,000 lb</td></tr>
+          <tr><td class="hi">5/8 in (16 mm)</td><td class="num">11,500 lb</td><td class="num">9,500 lb</td><td class="num">14,500 lb</td><td class="num">49,000 lb</td></tr>
+          <tr><td class="hi">3/4 in (19 mm)</td><td class="num">16,200 lb</td><td class="num">13,400 lb</td><td class="num">20,500 lb</td><td class="num">68,000 lb</td></tr>
+          <tr><td class="hi">7/8 in (22 mm)</td><td class="num">21,800 lb</td><td class="num">18,200 lb</td><td class="num">27,500 lb</td><td class="num">91,000 lb</td></tr>
+          <tr><td class="hi">1 in (25 mm)</td><td class="num">28,500 lb</td><td class="num">23,800 lb</td><td class="num">36,000 lb</td><td class="num">119,000 lb</td></tr>
+          <tr><td class="hi">1-1/4 in (32 mm)</td><td class="num">44,000 lb</td><td class="num">36,500 lb</td><td class="num">55,500 lb</td><td class="num">181,000 lb</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Application</th><th>Safety Factor (MBS / WLL)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">General industrial / utility</td><td class="num">5 : 1</td></tr>
+          <tr><td class="hi">Marine mooring / dock lines</td><td class="num">5 : 1 to 7 : 1</td></tr>
+          <tr><td class="hi">Overhead lifting (rigging slings)</td><td class="num">5 : 1 (single use); 7 : 1 (continuous)</td></tr>
+          <tr><td class="hi">Personnel rigging / climbing fall protection</td><td class="num">10 : 1</td></tr>
+          <tr><td class="hi">Life safety / rescue</td><td class="num">15 : 1</td></tr>
+          <tr><td class="hi">Aerial circus / theater rigging</td><td class="num">10 : 1 to 15 : 1</td></tr>
+        </tbody>
+      </table>
+      <div class="note">MBS (Minimum Breaking Strength) is the manufacturer's spec for new, unspliced, straight-pull rope at standard test conditions. WLL (Working Load Limit) is what the rope is rated for in service, found by dividing MBS by a safety factor. The 5:1 general factor is the OSHA default; it accounts for normal wear, age, knots, and dynamic loading. The 10:1 factor for personnel work and 15:1 for life safety reflect the consequences of failure. Values shown are typical for industrial-grade rope; always verify against the specific manufacturer's datasheet for engineered applications.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Working Load Limit Calculator</span><span class="fig">TOOL 2CC-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 280px;">
+          <div class="field">
+            <label>Rope Type</label>
+            <select id="wll-type">
+              <option value="50000,nylon3">3-Strand Nylon</option>
+              <option value="41000,poly3" selected>3-Strand Polyester</option>
+              <option value="63000,polydb">Double-Braid Polyester</option>
+              <option value="210000,hmpe">12-Strand HMPE (Dyneema)</option>
+              <option value="33000,polypro">3-Strand Polypropylene</option>
+              <option value="80000,aramid">Aramid (Kevlar/Technora)</option>
+              <option value="20000,manila">3-Strand Manila</option>
+            </select>
+            <small>(MBS in psi-equivalent breaking strength per in² of rope cross-section)</small>
+          </div>
+          <div class="field"><label>Diameter (inches)</label><input type="number" id="wll-dia" step="0.0625" value="0.5"></div>
+          <div class="field">
+            <label>Rope Condition</label>
+            <select id="wll-cond">
+              <option value="1.0" selected>New, unused, dry</option>
+              <option value="0.95">New, wet (synthetic)</option>
+              <option value="0.85">Used, good condition</option>
+              <option value="0.75">Used, moderate wear / UV exposure</option>
+              <option value="0.60">Used, significant wear / fraying</option>
+              <option value="0.85">Wet (natural fiber)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Safety Factor</label>
+            <select id="wll-sf">
+              <option value="5" selected>5 : 1 (general industrial)</option>
+              <option value="7">7 : 1 (continuous lifting)</option>
+              <option value="10">10 : 1 (personnel / climbing)</option>
+              <option value="15">15 : 1 (life safety / aerial)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Rope Cross-Section Area</span><span class="val" id="wll-area">—</span></div>
+            <div class="calc-row"><span class="lbl">Theoretical MBS (new, dry)</span><span class="val" id="wll-mbs">—</span></div>
+            <div class="calc-row"><span class="lbl">Adjusted MBS (condition)</span><span class="val" id="wll-mbsadj">—</span></div>
+            <div class="calc-row"><span class="lbl">Working Load Limit (WLL)</span><span class="val" id="wll-wll">—</span></div>
+            <div class="calc-row"><span class="lbl">WLL with Bowline (~65%)</span><span class="val" id="wll-bowline">—</span></div>
+            <div class="calc-row"><span class="lbl">WLL with Figure-8 (~80%)</span><span class="val" id="wll-fig8">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Knots reduce rope strength because they create localized bend stress and friction. Common reductions: square knot 45%, sheet bend 55%, clove hitch 60%, bowline 60-70%, figure-eight 75-85%, double fisherman's bend 65-75%. A properly executed splice keeps 85-95% of MBS, making spliced eyes much stronger than knotted loops. For any critical application (overhead lift, climbing, rescue), use spliced terminations rather than knots. The values shown here are estimates using a generic strength-per-area model; for engineered applications always use the manufacturer's published MBS for the specific rope and diameter.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Chain Grade Reference</span><span class="fig">TAB. 2CC-4</span></div>
+      <table>
+        <thead><tr><th>Grade</th><th>Material</th><th>Tensile Strength</th><th>Approx. WLL (×10⁻³ × d²)</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">G30 (Proof Coil)</td><td>Mild steel</td><td class="num">~50,000 psi</td><td class="num">d²×400</td><td>General utility, light tow, marine deck; widely available at hardware stores; for marking out or non-rated work only</td></tr>
+          <tr><td class="hi">G40 (High Test)</td><td>Carbon steel</td><td class="num">~70,000 psi</td><td class="num">d²×600</td><td>Tie-down, towing, logging chain; common transport application</td></tr>
+          <tr><td class="hi">G43 (High Test, hot-dip galv)</td><td>Carbon steel</td><td class="num">~70,000 psi</td><td class="num">d²×600</td><td>Same as G40 but galvanized; marine and outdoor use</td></tr>
+          <tr><td class="hi">G70 (Transport / Binder)</td><td>Heat-treated alloy steel</td><td class="num">~100,000 psi</td><td class="num">d²×1000</td><td>Vehicle / cargo tie-down; DOT-rated for transport; gold-color zinc plating typical</td></tr>
+          <tr><td class="hi">G80 (Alloy)</td><td>Heat-treated alloy steel</td><td class="num">~115,000 psi</td><td class="num">d²×1100</td><td>Overhead lifting; rated alloy chain sling; black or self-color finish</td></tr>
+          <tr><td class="hi">G100 (Alloy)</td><td>Heat-treated alloy steel</td><td class="num">~135,000 psi</td><td class="num">d²×1300</td><td>Highest commonly available grade; overhead lifting; more capacity per weight than G80</td></tr>
+          <tr><td class="hi">G120 (Premium)</td><td>Heat-treated alloy steel</td><td class="num">~155,000 psi</td><td class="num">d²×1500</td><td>Premium overhead lifting; not all hardware available; specialized</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Chain Size</th><th>G30 WLL</th><th>G70 WLL</th><th>G80 WLL</th><th>G100 WLL</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1/4 in (6 mm)</td><td class="num">1,300 lb</td><td class="num">3,150 lb</td><td class="num">3,500 lb</td><td class="num">4,300 lb</td></tr>
+          <tr><td class="hi">5/16 in (8 mm)</td><td class="num">1,900 lb</td><td class="num">4,700 lb</td><td class="num">5,700 lb</td><td class="num">7,100 lb</td></tr>
+          <tr><td class="hi">3/8 in (10 mm)</td><td class="num">2,650 lb</td><td class="num">6,600 lb</td><td class="num">8,800 lb</td><td class="num">10,000 lb</td></tr>
+          <tr><td class="hi">1/2 in (13 mm)</td><td class="num">4,500 lb</td><td class="num">11,300 lb</td><td class="num">15,000 lb</td><td class="num">18,100 lb</td></tr>
+          <tr><td class="hi">5/8 in (16 mm)</td><td class="num">6,900 lb</td><td class="num">15,800 lb</td><td class="num">22,600 lb</td><td class="num">28,300 lb</td></tr>
+          <tr><td class="hi">3/4 in (20 mm)</td><td class="num">10,600 lb</td><td class="num">24,700 lb</td><td class="num">35,300 lb</td><td class="num">44,000 lb</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Only G80, G100, and G120 are rated for overhead lifting. G30 and G43 are explicitly NOT for overhead lifting; they have no certification for the application and the failure mode is brittle (no warning). G70 is for transport / tie-down only despite its higher strength than G43. Always verify the grade stamp on the chain link itself (G80 chains have "80" or "8" stamped on every link or so); chains without grade marking are presumed unrated. Inspect chain before each lift: any cracked, bent, twisted, gouged, or stretched link retires the entire length.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Block &amp; Tackle Mechanical Advantage</span><span class="fig">TAB. 2CC-5</span></div>
+      <table>
+        <thead><tr><th>Configuration</th><th>Theoretical MA</th><th>Common Name</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Single fixed block</td><td class="num">1 : 1</td><td>Snatch block</td><td>Changes direction only; no mechanical advantage; equal force, equal distance</td></tr>
+          <tr><td class="hi">Single movable block</td><td class="num">2 : 1</td><td>Runner</td><td>Two rope parts supporting the load; half the force, twice the distance</td></tr>
+          <tr><td class="hi">Single + single (one of each)</td><td class="num">2 : 1</td><td>Gun tackle</td><td>Most common small-scale rig; one fixed + one movable block</td></tr>
+          <tr><td class="hi">Double + single</td><td class="num">3 : 1</td><td>Luff tackle</td><td>Three parts supporting load; the standard small-boat tackle</td></tr>
+          <tr><td class="hi">Double + double</td><td class="num">4 : 1</td><td>Double luff (sometimes "two-fold purchase")</td><td>Four parts; traditional ship's tackle</td></tr>
+          <tr><td class="hi">Triple + double</td><td class="num">5 : 1</td><td>Threefold purchase</td><td>Five parts; large rigging</td></tr>
+          <tr><td class="hi">Triple + triple</td><td class="num">6 : 1</td><td>Threefold purchase (variant)</td><td>Six parts; heavy rigging</td></tr>
+          <tr><td class="hi">Z-rig (climbing rescue)</td><td class="num">3 : 1</td><td>Z-drag</td><td>Mechanical advantage system built from rope, carabiners, and prusiks; no fixed blocks needed</td></tr>
+          <tr><td class="hi">5:1 piggyback / pulley system</td><td class="num">5 : 1</td><td>Compound MA</td><td>3:1 system pulling on the haul side of a 2:1 system; 6:1 compound also common</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Theoretical mechanical advantage equals the number of rope parts supporting the load (count the parts pulling up on the moving block, including the haul line if it's on the moving side). Actual mechanical advantage is always lower due to sheave friction: ~5% loss per sheave for typical roller-bearing blocks, up to 15% for plain-bearing or worn sheaves. So a 4:1 system with four sheaves and 7% friction per sheave actually provides about 4 × (0.93)⁴ = 2.96, or 3.0:1 actual. Always plan the haul force calculation with this efficiency loss; the load doesn't lift if the calculation was theoretical-only.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Mechanical Advantage Calculator</span><span class="fig">TOOL 2CC-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 280px;">
+          <div class="field"><label>Load to Lift (lb)</label><input type="number" id="ma-load" step="1" value="500"></div>
+          <div class="field"><label>Number of Rope Parts (Theoretical MA)<br><small>Count parts supporting the load</small></label><input type="number" id="ma-parts" step="1" value="3" min="1" max="20"></div>
+          <div class="field">
+            <label>Friction Loss per Sheave (%)</label>
+            <select id="ma-friction">
+              <option value="0">0% (idealized / theoretical)</option>
+              <option value="5" selected>5% (good roller bearing block)</option>
+              <option value="7">7% (typical service block)</option>
+              <option value="10">10% (plain bearing or worn)</option>
+              <option value="15">15% (heavily worn, dirty)</option>
+            </select>
+          </div>
+          <div class="field"><label>Number of Sheaves in System</label><input type="number" id="ma-sheaves" step="1" value="3" min="0" max="20"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Theoretical MA</span><span class="val" id="ma-tma">—</span></div>
+            <div class="calc-row"><span class="lbl">Sheave Efficiency Factor</span><span class="val" id="ma-eff">—</span></div>
+            <div class="calc-row"><span class="lbl">Actual MA</span><span class="val" id="ma-ama">—</span></div>
+            <div class="calc-row"><span class="lbl">Theoretical Haul Force</span><span class="val" id="ma-thaul">—</span></div>
+            <div class="calc-row"><span class="lbl">Actual Haul Force</span><span class="val" id="ma-ahaul">—</span></div>
+            <div class="calc-row"><span class="lbl">Haul Distance (per ft load lift)</span><span class="val" id="ma-dist">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Haul distance equals theoretical MA (not actual). To lift the load by 1 ft, you pull haul-line by (theoretical MA) ft regardless of friction losses. The friction shows up as extra force, not extra distance. For long lifts with high friction, the rope you're pulling can grow surprisingly long: a 6:1 system lifting 10 ft of load requires 60 ft of haul. Plan the haul space and rope length accordingly. For rescue and recovery work, the standard rigs are 2:1 (basic), 3:1 (Z-rig with prusiks, the workhorse), 4:1 (more force, harder to manage), and 6:1 (compound; for heavy loads or weak rescuers).</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Whipping &amp; Splicing Reference</span><span class="fig">TAB. 2CC-6</span></div>
+      <table>
+        <thead><tr><th>Technique</th><th>Use</th><th>Difficulty</th><th>Holds (% of MBS)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Plain whipping (common)</td><td>Prevent rope-end fraying</td><td>Easy</td><td>Securing only (no load contribution)</td></tr>
+          <tr><td class="hi">Sailmaker's whipping</td><td>Long-lasting end whipping; classic look</td><td>Moderate</td><td>Securing only</td></tr>
+          <tr><td class="hi">West Country whipping</td><td>Quick, secure, looks knotted</td><td>Easy</td><td>Securing only</td></tr>
+          <tr><td class="hi">Palm-and-needle whipping</td><td>Highest-quality whipping; sewn through rope</td><td>Moderate-Hard (needs palm and needle)</td><td>Securing only</td></tr>
+          <tr><td class="hi">Heat seal (synthetic only)</td><td>Quick end-seal for nylon, polyester, polypro</td><td>Easy</td><td>Securing only; for cosmetic use combine with whipping</td></tr>
+          <tr><td class="hi">Eye splice (3-strand)</td><td>Permanent loop in 3-strand rope</td><td>Easy once learned (3 tucks each strand)</td><td class="num">85-95%</td></tr>
+          <tr><td class="hi">Eye splice (double braid)</td><td>Permanent loop in double-braided rope</td><td>Hard; needs fid set and patience</td><td class="num">85-90%</td></tr>
+          <tr><td class="hi">Eye splice (12-strand single braid)</td><td>Permanent loop in single-braid HMPE / polyester</td><td>Moderate (Brummel or Class II)</td><td class="num">80-90%</td></tr>
+          <tr><td class="hi">Back splice</td><td>Decorative end finish; alternative to whipping</td><td>Easy</td><td>Cosmetic; thickens rope end</td></tr>
+          <tr><td class="hi">Short splice</td><td>Join two pieces of 3-strand rope of similar size</td><td>Easy (interweave strands then tuck)</td><td class="num">80-90% of weaker rope</td></tr>
+          <tr><td class="hi">Long splice</td><td>Join two ropes without diameter increase</td><td>Hard</td><td class="num">70-80% (the splice that fits through blocks)</td></tr>
+          <tr><td class="hi">End-for-end splice (double braid)</td><td>Join two double-braid lines</td><td>Very hard</td><td class="num">85-90%</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Splicing keeps rope strength dramatically better than knotting: a spliced eye holds 85-95% of MBS, while a bowline holds 60-70%. For any termination that's permanent and load-bearing, splice it. The 3-strand eye splice is the rite of passage for any rigger; once learned, the procedure is universal and works on any 3-strand rope from twine to ship's hawser. Double-braid splicing is technically harder but well-documented in Samson and New England Ropes splice manuals (both available online as PDFs). For HMPE single-braid, the Brummel splice is the standard technique. Always taper splices to avoid hard transitions; "lock stitching" with sailmaker's twine after splicing prevents working loose under cyclic load.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Inspection &amp; Retirement Criteria</span><span class="fig">TAB. 2CC-7</span></div>
+      <table>
+        <thead><tr><th>Inspection Item</th><th>Frequency</th><th>Retire If</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Visual inspection (rope)</td><td>Before each critical use; full inspection monthly for active rigging</td><td>Cuts, broken strands, glazing/hard spots, severe abrasion, distortion, chemical contamination, melted fibers</td></tr>
+          <tr><td class="hi">Visual inspection (chain)</td><td>Before each lift; full inspection per OSHA / ASME requirements (typically monthly to annually)</td><td>Bent / twisted links; gouges, nicks, cracks; pitting from corrosion; wear over 10% of original link diameter; stretched links</td></tr>
+          <tr><td class="hi">Visual inspection (hardware)</td><td>Before each use; replace per manufacturer schedule</td><td>Bent or deformed; safety latch on hooks not seating; pin retention systems damaged; corrosion penetrating surface</td></tr>
+          <tr><td class="hi">Rope: yarn breakage</td><td>Periodic close inspection</td><td>10% or more of yarns broken in any section; varying threshold for different applications</td></tr>
+          <tr><td class="hi">Rope: glazing / hardness</td><td>Periodic; check by hand and flexion</td><td>Heat damage indicated; hard, stiff sections that resist flexing; usually from friction or chemical exposure</td></tr>
+          <tr><td class="hi">Rope: UV degradation</td><td>Annual or by hours of exposure</td><td>Fading, fiber dustiness when touched, surface fuzziness with brittle feel; polypro fails fastest, polyester slowest</td></tr>
+          <tr><td class="hi">Service age</td><td>Track from manufacture or first use</td><td>Personal climbing rope: 5-10 years from manufacture even unused; commercial use rope: per company policy (often 3-5 years)</td></tr>
+          <tr><td class="hi">Shock load history</td><td>Documented use</td><td>Climbing rope after any factor-1+ fall; rigging rope after any shock load near MBS</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Hazard</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Snap-back zone</td><td>Stand outside the bight when rope is under tension; if it parts, the elastic energy returns the rope toward both ends with lethal force on synthetics with high stretch (nylon)</td></tr>
+          <tr><td class="hi">Shock loading</td><td>Slow, smooth tension changes; avoid drop-loading; nylon absorbs shock better than polyester (use nylon for anchor rode, snub lines); never shock-load HMPE (low stretch means no absorption)</td></tr>
+          <tr><td class="hi">Heat / friction</td><td>Avoid running synthetic rope at high speed over fixed objects; synthetic rope melts before breaking when overheated</td></tr>
+          <tr><td class="hi">Chemical exposure</td><td>Identify chemicals near rigging; UV protectants vary by fiber; battery acid, bleach, and many solvents degrade specific fibers; quarantine and inspect after any contamination</td></tr>
+          <tr><td class="hi">Dynamic vs static</td><td>Climbing dynamic rope stretches to absorb fall energy; static (or low-stretch) rope is for rigging, hauling, and ascent — never for fall arrest</td></tr>
+        </tbody>
+      </table>
+      <div class="note">When in doubt, retire the rope. The cost of replacing a length of rope is trivial compared to the cost of failure. For any safety-critical application, document the rope's history (purchase date, hours of use, environments, incidents); keep retired rope clearly marked and segregate from active rope. Snap-back is the underappreciated hazard: a parted nylon mooring line can return at hundreds of feet per second and has killed deckhands. The basic rule is to never stand in the bight (the U-shape between the load and the anchor point); if it parts, the rope returns toward both ends.</div>
+    </div>
+  </section>
+
+  <!-- ====================== 2DD · CROSS-PROCESS MATERIAL LIBRARY ====================== -->
+  <section id="feedrate" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 2DD <span class="dot"></span> Mechanical</div>
+      <h2>Cross-Process Material Library</h2>
+      <div class="page-desc">One material, every process. Mill, laser, 3D print, and hand-tool parameters for the same material in a single lookup. Plus shrinkage cross-reference, tolerance and resolution by process, and a process selection matrix for choosing the right method given a part's requirements. For deeper process-specific reference see 2B Feeds &amp; Speeds (mill), 2C Laser Cutter Settings, and 2D 3D Printer Settings.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Material Library — Metals</span><span class="fig">TAB. 2DD-1</span></div>
+      <table>
+        <thead><tr><th>Material</th><th>Mill (SFM / Tooling)</th><th>Laser</th><th>3D Print</th><th>Hand</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Aluminum 6061-T6</td><td class="num">250-400 SFM carbide; 2-flute uncoated or TiAlN; flood or mist coolant</td><td>Fiber only (not CO₂); ~1 kW for 1/8" sheet</td><td>SLM / DMLS only (industrial)</td><td>Hacksaw 18-24 TPI; mill bastard file; sand to 320 for finish</td></tr>
+          <tr><td class="hi">Aluminum 7075-T6</td><td class="num">200-350 SFM carbide; 3-flute; flood coolant; harder than 6061</td><td>Fiber only</td><td>Specialty SLM</td><td>Bimetal hacksaw 18 TPI; harder than 6061; precision file</td></tr>
+          <tr><td class="hi">Mild Steel (1018, A36)</td><td class="num">80-120 SFM HSS, 250-400 carbide; flood coolant; sulfurized for tapping</td><td>Fiber (best) or industrial CO₂ ≥150W for thin sheet</td><td>SLM industrial</td><td>Hacksaw 18 TPI; angle grinder for stock removal; file 8" mill</td></tr>
+          <tr><td class="hi">Stainless 304</td><td class="num">50-80 SFM HSS, 200-350 carbide; positive rake; aggressive feed (avoid work hardening)</td><td>Fiber laser with assist gas (N₂ or O₂)</td><td>SLM specialty</td><td>Bimetal hacksaw 24 TPI; very tough; file fast to avoid glazing</td></tr>
+          <tr><td class="hi">Stainless 316</td><td class="num">40-70 SFM HSS, 180-300 carbide; same handling as 304 plus more gummy</td><td>Fiber laser</td><td>SLM specialty</td><td>Same as 304; even tougher</td></tr>
+          <tr><td class="hi">Brass C360 (free-machining)</td><td class="num">200-400 SFM HSS, 400-800 carbide; very machinable; no coolant required (some prefer light oil)</td><td>Fiber only</td><td>Specialty</td><td>Hacksaw 24 TPI; very file-friendly; polish easy</td></tr>
+          <tr><td class="hi">Copper (C110, C145)</td><td class="num">200-400 SFM; gummy; sharp tooling; aggressive feed; light oil if any</td><td>Fiber only (reflective; need wavelength match)</td><td>Specialty SLM</td><td>Hacksaw 24 TPI; soft; saw clogs; file lubricated</td></tr>
+          <tr><td class="hi">Titanium (Grade 5, 6Al-4V)</td><td class="num">80-150 SFM carbide; flood coolant; sharp positive-rake tooling; work-hardens</td><td>Fiber with assist gas</td><td>SLM / EBM (the killer app for titanium)</td><td>Very challenging hand work; carbide bits; slow patient cuts</td></tr>
+          <tr><td class="hi">Tool Steel (O1, A2)</td><td>Annealed: 30-80 SFM HSS, 100-200 carbide; hardened: grinding only</td><td>Fiber laser pre-hardening</td><td>Specialty</td><td>Hacksaw 24 TPI (annealed only); files glaze; precision grinding for hardened</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Almost no metals are practical to laser-cut on maker-shop equipment; both CO₂ and diode lasers under 1 kW can engrave metals (with marking spray for diode, raw metal for fiber) but not cut them. Plasma cutters fill this niche for steel; waterjet for stainless and aluminum; bandsaw for stock cut-off. SFM (surface feet per minute) values shown are for solid material; thin sheet and tubing typically run 20-30% higher; thick stock runs 20-30% lower with reduced depth of cut.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Material Library — Wood &amp; Wood Products</span><span class="fig">TAB. 2DD-2</span></div>
+      <table>
+        <thead><tr><th>Material</th><th>CNC Router / Mill</th><th>CO₂ Laser (40-60W maker)</th><th>Diode Laser (10W maker)</th><th>Hand</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Birch Plywood, 1/8" (3mm)</td><td>1500-2000 SFM compression bit; 60-100 ipm; 1-2 passes full depth</td><td>50-60% power, 15-20 mm/s; kerf 0.15-0.20 mm; clean cut</td><td>80-100% power, 5-8 mm/s; kerf 0.30-0.40 mm; char visible</td><td>Coping saw 15 TPI; sand 120 → 220</td></tr>
+          <tr><td class="hi">Birch Plywood, 1/4" (6mm)</td><td>1500-2000 SFM compression; 40-80 ipm; 2 passes</td><td>70-85% power, 8-12 mm/s; kerf 0.20-0.30 mm</td><td>Not practical (5+ passes; heavy char)</td><td>Crosscut saw 10-12 TPI</td></tr>
+          <tr><td class="hi">MDF, 1/4" (6mm)</td><td>2000-2500 SFM straight bit; 60-100 ipm; clean dust collection critical</td><td>60-75% power, 12-15 mm/s; smelly smoke; ventilation mandatory</td><td>~90% power, 4-6 mm/s; very smoky</td><td>Crosscut saw; very dusty</td></tr>
+          <tr><td class="hi">Oak (1/2", solid hardwood)</td><td>1000-1500 SFM straight or spiral bit; 30-50 ipm; small depth of cut</td><td>Engrave only; not for cutting at hobby power</td><td>Engrave only</td><td>Crosscut 10 TPI; rip 6-8 TPI; chisel and plane traditional</td></tr>
+          <tr><td class="hi">Maple (1/2", solid hardwood)</td><td>1000-1500 SFM; sharp tooling; tear-out prone, use climb cut last pass</td><td>Engrave only</td><td>Engrave only</td><td>Crosscut 10 TPI; very hard; sharp tools essential</td></tr>
+          <tr><td class="hi">Walnut (1/2", solid hardwood)</td><td>1200-1700 SFM; softer than maple, cleaner cut</td><td>Engrave only</td><td>Engrave only (creates deep dark engraving)</td><td>Crosscut 10 TPI; very file-friendly</td></tr>
+          <tr><td class="hi">Pine (3/4", solid softwood)</td><td>1500-2500 SFM; aggressive feed; minimal char</td><td>Engrave only at hobby power</td><td>Engrave only</td><td>Crosscut 8 TPI; easy hand work; rip 5-6 TPI</td></tr>
+          <tr><td class="hi">Baltic Birch (1/8", 3mm)</td><td>Same as standard birch ply but cleaner edge (more plies per inch)</td><td>50% power, 18-22 mm/s; the laser-cutting gold standard</td><td>75-95% power, 6-10 mm/s</td><td>Coping saw</td></tr>
+          <tr><td class="hi">OSB</td><td>1500-2000 SFM; chipping risk; not finish material</td><td>Inconsistent burning (resin pockets); not recommended</td><td>Not recommended</td><td>Circular saw with carbide blade</td></tr>
+          <tr><td class="hi">Particle Board</td><td>1500-2000 SFM; very dusty; sharp tooling required</td><td>Variable density; inconsistent cuts</td><td>Not recommended</td><td>Carbide-tipped saw; veneer edge for visible cuts</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Baltic birch (multi-ply, void-free) is the gold standard for laser cutting; it produces clean, char-controlled cuts with consistent kerf. Standard "birch plywood" from box stores is typically luan-core with birch veneer faces; the core voids cause laser cutting inconsistency. For CNC routing, compression bits (down-shear top, up-shear bottom) prevent both top splintering and bottom blowout simultaneously; straight bits work but require multiple passes for clean edges. CNC dust collection is non-negotiable for MDF and particle board; the fine dust is a serious lung hazard.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Material Library — Plastics &amp; Polymers</span><span class="fig">TAB. 2DD-3</span></div>
+      <table>
+        <thead><tr><th>Material</th><th>Mill</th><th>Laser (CO₂ maker)</th><th>3D Print (FDM)</th><th>3D Print (Resin)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Cast Acrylic (PMMA), 1/8"</td><td>800-1500 SFM O-flute single; 60-100 ipm; no coolant; chip evacuation critical</td><td>~75% power, 10-12 mm/s; clean flame-polished edge</td><td>N/A (cast material)</td><td>N/A</td></tr>
+          <tr><td class="hi">Extruded Acrylic</td><td>Same as cast but more brittle</td><td>~75% power but rougher edge than cast; can stress-crack</td><td>N/A</td><td>N/A</td></tr>
+          <tr><td class="hi">Polycarbonate (Lexan)</td><td>500-1000 SFM; high heat; sharp tools; chip melting risk</td><td>NOT a laser material; melts/burns/yellow edge; toxic chlorine smoke</td><td>250-280°C nozzle, 110°C bed, enclosed; difficult</td><td>N/A</td></tr>
+          <tr><td class="hi">ABS sheet (1/8")</td><td>600-1000 SFM; melting risk; HSS or carbide</td><td>Not recommended; toxic HCN smoke</td><td>240-260°C nozzle, 100-110°C bed; enclosed printer required; warping</td><td>N/A</td></tr>
+          <tr><td class="hi">HDPE</td><td>400-800 SFM; very soft; sharp tools</td><td>NOT recommended; melts without cutting</td><td>220-240°C nozzle; specialty surfaces (no PEI / glass)</td><td>N/A</td></tr>
+          <tr><td class="hi">PLA filament</td><td>Possible but melts at feed-rate; carbide bits</td><td>NOT recommended (toxic)</td><td>200-220°C nozzle, 60°C bed, 40-60 mm/s; the FDM default</td><td>N/A</td></tr>
+          <tr><td class="hi">PETG filament</td><td>Not recommended (gummy)</td><td>NOT recommended</td><td>230-245°C nozzle, 70-80°C bed, 40-60 mm/s; layer adhesion strong</td><td>N/A</td></tr>
+          <tr><td class="hi">TPU (95A or 85A)</td><td>N/A (rubber-like)</td><td>NOT recommended</td><td>220-235°C nozzle, 50-60°C bed, 20-30 mm/s slow; direct-drive extruder preferred</td><td>N/A</td></tr>
+          <tr><td class="hi">Nylon (PA, PA-CF)</td><td>500-1000 SFM; absorbs moisture; dry before machining</td><td>NOT recommended</td><td>240-260°C nozzle, 80-110°C bed, enclosed; hygroscopic (dry filament before use)</td><td>N/A</td></tr>
+          <tr><td class="hi">ASA filament</td><td>Same as ABS</td><td>NOT recommended</td><td>240-260°C nozzle, 100-110°C bed; UV-resistant alternative to ABS</td><td>N/A</td></tr>
+          <tr><td class="hi">PC (Polycarbonate) filament</td><td>See PC sheet</td><td>NOT recommended</td><td>270-300°C nozzle, 110°C bed; enclosed at &gt; 60°C ambient; very strong</td><td>N/A</td></tr>
+          <tr><td class="hi">PEEK filament</td><td>Specialty; carbide; coolant</td><td>NOT recommended</td><td>360-420°C nozzle, 120-150°C bed, chamber 80-120°C; engineering material</td><td>N/A</td></tr>
+          <tr><td class="hi">Standard Resin (SLA/MSLA)</td><td>Possible after cure but brittle</td><td>NOT recommended</td><td>N/A</td><td>50-100 µm layer, exposure ~2-4s @ 405nm per layer for MSLA; post-cure 5-15 min UV</td></tr>
+          <tr><td class="hi">Tough / ABS-like Resin</td><td>Possible; less brittle than standard</td><td>NOT recommended</td><td>N/A</td><td>50-100 µm layer; longer exposure (4-8s); higher viscosity</td></tr>
+          <tr><td class="hi">Flexible Resin</td><td>N/A</td><td>NOT recommended</td><td>N/A</td><td>50 µm layer typical; longer exposure; very specific support strategy</td></tr>
+          <tr><td class="hi">Castable Resin (wax-burnout)</td><td>N/A</td><td>NOT recommended</td><td>N/A</td><td>25-50 µm fine detail; burn-out without ash; jewelry application</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The laser column is sparse for plastics because most plastics are unsuitable for CO₂ laser cutting in maker shops: polycarbonate and ABS produce toxic smoke (HCN from ABS, HCl from PVC), HDPE and polypropylene melt without cleanly cutting, and only cast acrylic produces the satisfying flame-polished edge that defines laser-cut plastic. NEVER laser-cut PVC (vinyl); it produces hydrochloric acid that destroys the laser machine and is highly toxic. The 3D print columns show the canonical FDM settings; specific printer brands have different optimal values, and starter profiles in the slicer for the specific printer and material are the right entry point. Resin printing is wavelength-specific: 405nm is the standard for MSLA / DLP; 365nm and other wavelengths exist for industrial work.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Material Shrinkage Cross-Reference</span><span class="fig">TAB. 2DD-4</span></div>
+      <table>
+        <thead><tr><th>Process</th><th>Material / Stock</th><th>Typical Shrinkage</th><th>Compensation Method</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">CNC Mill</td><td>All materials</td><td class="num">0% (subtractive)</td><td>None; tooling deflection is the analog (typically 0.001-0.005" on cantilevered cuts)</td></tr>
+          <tr><td class="hi">CNC Laser</td><td>All materials</td><td class="num">~0% but kerf removes material</td><td>Compensate for kerf width: design at nominal, offset path inward by kerf/2 for inside contours, outward for outside</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>PLA</td><td class="num">0.2-0.3%</td><td>Slicer flow-rate / scale calibration; print and measure test cube; typically 100.2% scale</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>PETG</td><td class="num">0.3-0.5%</td><td>Slicer scale calibration; cooler bed helps</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>ABS</td><td class="num">0.7-0.8%</td><td>Major issue; enclosed printer + warping mitigation</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>ASA</td><td class="num">0.7%</td><td>Similar to ABS</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>Nylon (PA)</td><td class="num">1.5-2.0%</td><td>Highest shrinkage in FDM; dry filament; enclosed printer; design with shrinkage in mind</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>PC (Polycarbonate)</td><td class="num">0.6-0.8%</td><td>Enclosed; carbon-fiber filled variants reduce shrinkage</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>PEEK</td><td class="num">1.0-1.5%</td><td>High-temp chamber; engineering applications</td></tr>
+          <tr><td class="hi">FDM 3D Print</td><td>TPU 95A</td><td class="num">0.5-1.0%</td><td>Flexible material; less critical for fit</td></tr>
+          <tr><td class="hi">Resin 3D Print</td><td>Standard photopolymer</td><td class="num">0-1.0%</td><td>Post-cure consistency; some shrinkage during UV cure</td></tr>
+          <tr><td class="hi">Resin 3D Print</td><td>Engineering resin</td><td class="num">1.0-2.5%</td><td>Variable by resin; consult manufacturer datasheet</td></tr>
+          <tr><td class="hi">Investment Casting</td><td>Wax → metal</td><td class="num">1.0-2.0% per cycle; up to 3% for tricky cooling</td><td>Pattern oversize by total shrinkage; ring-mandrel calculations for jewelry</td></tr>
+          <tr><td class="hi">Sand Casting</td><td>Metal</td><td class="num">1.5-2.5%</td><td>Pattern allowance per cast metal: aluminum 1.0%, iron 1.0%, steel 2.0%</td></tr>
+          <tr><td class="hi">Injection Molding</td><td>PP / PE / PS</td><td class="num">1.0-3.0%</td><td>Mold designed oversize; per-resin tables</td></tr>
+          <tr><td class="hi">Slip Casting (clay)</td><td>Wet → bisque-fired</td><td class="num">8-12% per direction</td><td>Mold sized substantially oversize; varies by clay body</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Shrinkage is unidirectional in mold-based processes (the entire part shrinks uniformly toward the centroid), but anisotropic in FDM (different along X/Y vs Z because of the layered structure). For tight-fit assemblies, print and measure a test piece in the actual material on the actual machine; published shrinkage values are starting points, not specifications. CNC subtractive processes have no material shrinkage but tooling deflection during cuts produces a similar phenomenon; the part comes out 0.001-0.005" smaller than commanded depending on tool overhang, stiffness, and chip load.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Tolerance &amp; Resolution by Process</span><span class="fig">TAB. 2DD-5</span></div>
+      <table>
+        <thead><tr><th>Process</th><th>Typical Tolerance (routine)</th><th>Tight Tolerance (achievable)</th><th>Surface Finish</th><th>Smallest Feature</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">CNC Mill (small, hobby)</td><td class="num">±0.005" (0.13 mm)</td><td class="num">±0.001" (0.025 mm)</td><td>Tool-mark dependent; 32-125 Ra µin</td><td class="num">~1/32" (0.8 mm)</td></tr>
+          <tr><td class="hi">CNC Mill (production)</td><td class="num">±0.001" (0.025 mm)</td><td class="num">±0.0005" (0.013 mm) and tighter</td><td>16-63 Ra µin</td><td class="num">~1/64" (0.4 mm)</td></tr>
+          <tr><td class="hi">CNC Lathe</td><td class="num">±0.001" (0.025 mm)</td><td class="num">±0.0002" (0.005 mm)</td><td>16-63 Ra µin</td><td class="num">~1/64" (0.4 mm)</td></tr>
+          <tr><td class="hi">CO₂ Laser (maker)</td><td class="num">±0.005" (0.13 mm) + half kerf</td><td class="num">±0.003" (0.08 mm)</td><td>Char-edge or polished (cast acrylic)</td><td class="num">~0.020" (0.5 mm) feature</td></tr>
+          <tr><td class="hi">Diode Laser (maker)</td><td class="num">±0.010" (0.25 mm) + half kerf</td><td class="num">±0.005" (0.13 mm)</td><td>Char-heavy; rougher edges than CO₂</td><td class="num">~0.040" (1 mm)</td></tr>
+          <tr><td class="hi">FDM 3D Print (consumer)</td><td class="num">±0.008" (0.2 mm)</td><td class="num">±0.004" (0.1 mm) calibrated</td><td>Layer lines visible (50-300 µm)</td><td class="num">~1 mm wall, ~0.4 mm detail</td></tr>
+          <tr><td class="hi">FDM 3D Print (industrial)</td><td class="num">±0.004" (0.1 mm)</td><td class="num">±0.002" (0.05 mm)</td><td>Layer lines (50-150 µm)</td><td class="num">~0.5 mm</td></tr>
+          <tr><td class="hi">Resin 3D Print (MSLA)</td><td class="num">±0.002" (0.05 mm)</td><td class="num">±0.001" (0.025 mm)</td><td>Smooth; 25-100 µm layer; near-injection-mold finish</td><td class="num">~0.005" (0.1 mm)</td></tr>
+          <tr><td class="hi">Resin 3D Print (industrial SLA)</td><td class="num">±0.002" (0.05 mm)</td><td class="num">±0.0005" (0.013 mm)</td><td>Very smooth (25 µm or less)</td><td class="num">~0.004" (0.1 mm)</td></tr>
+          <tr><td class="hi">SLS (Selective Laser Sintering)</td><td class="num">±0.005" (0.13 mm)</td><td class="num">±0.002" (0.05 mm)</td><td>Slightly textured; nylon natural look</td><td class="num">~0.020" (0.5 mm)</td></tr>
+          <tr><td class="hi">Hand (router, jigs)</td><td class="num">±1/32" (0.8 mm)</td><td class="num">±1/64" (0.4 mm) with care</td><td>Tool-finish dependent</td><td class="num">~1/16" (1.6 mm)</td></tr>
+          <tr><td class="hi">Hand (chisel, plane, scrape)</td><td class="num">±1/64" (0.4 mm)</td><td class="num">±0.005" (0.13 mm) skilled</td><td>Polished/burnished if scraped</td><td>Edge-defined</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Process</th><th>Layer Height / Resolution</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">FDM (draft)</td><td class="num">200-300 µm</td><td>Rapid prototyping; rough form-fit; mockups</td></tr>
+          <tr><td class="hi">FDM (standard)</td><td class="num">150-200 µm</td><td>Functional prototypes; mechanical parts</td></tr>
+          <tr><td class="hi">FDM (fine)</td><td class="num">100 µm</td><td>Visible parts; surface-quality functional prints</td></tr>
+          <tr><td class="hi">FDM (ultra-fine)</td><td class="num">50 µm</td><td>Highest quality; long print times</td></tr>
+          <tr><td class="hi">Resin (standard)</td><td class="num">50-100 µm</td><td>General resin printing</td></tr>
+          <tr><td class="hi">Resin (fine)</td><td class="num">25-50 µm</td><td>Jewelry, dental, miniatures</td></tr>
+          <tr><td class="hi">Resin (ultra-fine)</td><td class="num">10-25 µm</td><td>Specialty industrial</td></tr>
+          <tr><td class="hi">CNC stepover (finish pass)</td><td class="num">10-30% of cutter diameter</td><td>Surface finish balance against time</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Layer height has an inverse-linear effect on print time: halving layer height roughly doubles print time. For most engineering parts, 100 µm FDM or 50 µm resin gives an excellent balance of detail and time. Going finer than 50 µm on FDM gives diminishing returns because the nozzle diameter (typically 0.4 mm) limits XY detail regardless of Z layer. Resin printing has much higher XY resolution because there's no nozzle limit, just laser/screen pixel size; that's why miniatures, jewelry, and dental models are resin's killer applications.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Process Selection Guide</span><span class="fig">TAB. 2DD-6</span></div>
+      <table>
+        <thead><tr><th>Requirement</th><th>Best Process</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Flat sheet parts in wood or acrylic, 2D shapes</td><td>CO₂ Laser</td><td>Fast, clean cuts; minimal setup; ideal for boxes, panels, signs, jigs</td></tr>
+          <tr><td class="hi">Flat sheet parts in metal or thick stock</td><td>CNC Mill (or waterjet / plasma)</td><td>Lasers don't cut metal at maker power; CNC handles material removal</td></tr>
+          <tr><td class="hi">Complex 3D geometry, fits in build volume</td><td>FDM 3D Print</td><td>Cheapest 3D, fastest for engineering parts; iteration cost low</td></tr>
+          <tr><td class="hi">Fine detail 3D, miniatures, jewelry</td><td>Resin 3D Print (MSLA / SLA)</td><td>XY resolution limited only by screen pixel size; smooth surfaces</td></tr>
+          <tr><td class="hi">Functional metal parts, low quantity</td><td>CNC Mill</td><td>Full strength of stock material; predictable tolerances; finishing options</td></tr>
+          <tr><td class="hi">Cylindrical or rotationally symmetric parts</td><td>CNC Lathe</td><td>Faster than milling for these geometries; better surface finish on round features</td></tr>
+          <tr><td class="hi">Large parts (over build volume)</td><td>CNC Router or assembly</td><td>Routers for large flat work; assembly of smaller prints for large 3D</td></tr>
+          <tr><td class="hi">High quantity, complex geometry</td><td>Injection molding (outsourced)</td><td>3D print is too slow per part; mold cost amortized over volume</td></tr>
+          <tr><td class="hi">One-off complex 3D in metal</td><td>SLM / DMLS (outsourced)</td><td>Direct metal printing; expensive but only viable approach for some geometries</td></tr>
+          <tr><td class="hi">Tight tolerance press fit</td><td>CNC Mill or Lathe</td><td>±0.001" or better; print + machine for hybrid workflow</td></tr>
+          <tr><td class="hi">Flexible parts (gaskets, dampers)</td><td>FDM with TPU</td><td>Direct printing; faster than mold-and-cast for prototypes</td></tr>
+          <tr><td class="hi">Heat-resistant functional parts</td><td>FDM with PEEK or CNC machined</td><td>Print for prototypes; machine for production quality</td></tr>
+          <tr><td class="hi">Optically clear parts</td><td>Cast acrylic + CNC or laser, or polished resin print</td><td>Print transparency is limited; cast acrylic is the clearest material</td></tr>
+          <tr><td class="hi">Boxes and enclosures</td><td>CO₂ Laser + finger-joint design</td><td>Standard maker output; quick, parametric design from box generators</td></tr>
+          <tr><td class="hi">Engraving and marking</td><td>CO₂ Laser (organic) or fiber (metal)</td><td>Fast, no consumables, excellent quality on appropriate materials</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The fastest production for any maker shop is to pick the right process before the design is finalized. Common mistake: designing a part for one process and trying to switch to another after time has been spent. CNC parts need draft only if cast; laser parts need flat sheet stock; FDM parts need print-orientation thought; resin parts need support strategy. The best designs are process-aware from the start. For hybrid workflows (the most common reality in maker shops), design with the strengths of each: 3D-print the inside structure, laser-cut the panels, CNC the precision interfaces, hand-finish the visible surfaces.</div>
+    </div>
+  </section>
+
   <!-- ====================== 4A · JIG DESIGN ====================== -->
   <section id="jigs" class="page">
     <div class="page-head">
@@ -10504,6 +11672,278 @@ output = "dist/"</div>
         </tbody>
       </table>
       <div class="note">Electrolysis is the standard for restoring old hand planes, vises, anvils: clean parts come out with intact surfaces (no etching), and the process is selective for iron oxide. After any acid bath, immediately rinse with water, neutralize with baking soda solution, dry thoroughly (compressed air or oven warm), and apply rust-preventive oil (3-in-1, light machine oil, or paste wax). Flash rust forms within minutes on bare iron in humid shops. For long-term storage, paste wax (Renaissance Wax for museum-quality) or a thin oil film prevents recurrence. Never use chlorine bleach on iron; it accelerates corrosion.</div>
+    </div>
+  </section>
+
+  <!-- ============ 4K · FIELD CONSTRUCTION ============ -->
+  <section id="fieldcon" class="page">
+    <div class="page-head">
+      <div class="page-ref">Section 4K <span class="dot"></span> Shop &amp; Studio</div>
+      <h2>Field Construction</h2>
+      <div class="page-desc">Civil and structural reference for site work, concrete, rebar, earthwork, and structural lumber spans. Mix ratios, cement types, aggregate gradation, cure schedules, cut and fill volumes, rebar standards, joist and beam capacity, slab-on-grade design, retaining wall basics. For site surveys see TRANSIT (Field Instrument, separate); for the math underlying volume and area see 2K Geometry &amp; Trig.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>Concrete Mix Ratios</span><span class="fig">TAB. 4K-1</span></div>
+      <table>
+        <thead><tr><th>Application</th><th>Cement : Sand : Aggregate</th><th>Water/Cement Ratio</th><th>Approx. Strength (28-day psi)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Footings, mass concrete</td><td class="num">1 : 3 : 6</td><td class="num">0.55-0.65</td><td class="num">2000</td></tr>
+          <tr><td class="hi">Slabs, foundations, walls (general)</td><td class="num">1 : 2 : 4</td><td class="num">0.50-0.55</td><td class="num">3000</td></tr>
+          <tr><td class="hi">Reinforced beams, columns, structural</td><td class="num">1 : 2 : 3</td><td class="num">0.45-0.50</td><td class="num">3500-4000</td></tr>
+          <tr><td class="hi">High-strength structural</td><td class="num">1 : 1.5 : 3</td><td class="num">0.40-0.45</td><td class="num">4500-5000</td></tr>
+          <tr><td class="hi">Watertight / heavily loaded</td><td class="num">1 : 1.5 : 2.5</td><td class="num">0.35-0.40</td><td class="num">5000-6000</td></tr>
+          <tr><td class="hi">Pre-bagged mix (Quikrete general)</td><td>Pre-blended</td><td class="num">~0.45 (per package)</td><td class="num">4000 (per package spec)</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Slump</th><th>Workability</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi" style="font-family:monospace;">1-2 in (25-50 mm)</td><td>Stiff; needs vibration</td><td>Mass concrete, pavements with mechanical placement</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">2-4 in (50-100 mm)</td><td>Plastic; standard</td><td>Most foundations, slabs, walls; hand or machine</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">4-6 in (100-150 mm)</td><td>Wet; flows easily</td><td>Reinforced sections with congested rebar</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">6-8 in (150-200 mm)</td><td>Very wet; self-leveling tendency</td><td>Special placement (self-consolidating mixes with proper admixtures)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Water/cement ratio is the dominant factor in concrete strength: lower w/c means stronger and denser concrete, but harder to work. Adding extra water on-site to improve workability is the most common cause of weak concrete; if more workability is needed, add a plasticizer admixture instead. The "1:2:3 mix" by volume is the workhorse maker mix for footings and pads; for any structural application call out engineered f'c (specified strength) in writing and order ready-mix.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Cement Types &amp; Aggregate Gradation</span><span class="fig">TAB. 4K-2</span></div>
+      <table>
+        <thead><tr><th>ASTM Type</th><th>Name</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Type I</td><td>General purpose</td><td>Standard for most work; what's in pre-bagged Quikrete</td></tr>
+          <tr><td class="hi">Type II</td><td>Moderate sulfate resistance</td><td>Soils or water with moderate sulfate; many coastal applications</td></tr>
+          <tr><td class="hi">Type III</td><td>High early strength</td><td>Fast strength gain (24-hour, 3-day strength); cold weather pours; precast</td></tr>
+          <tr><td class="hi">Type IV</td><td>Low heat of hydration</td><td>Mass concrete (dams, large footings); rarely used today (replaced by blended cements)</td></tr>
+          <tr><td class="hi">Type V</td><td>High sulfate resistance</td><td>Aggressive sulfate-bearing soils and groundwater</td></tr>
+          <tr><td class="hi">Blended (Type IL, IS, IP)</td><td>Portland-limestone, slag, pozzolan blend</td><td>Modern standard; reduced CO₂ footprint; comparable performance to Type I</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Aggregate Size (ASTM C33)</th><th>Nominal Size</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">#4</td><td class="num">1.5 in</td><td>Mass concrete, large footings, riprap</td></tr>
+          <tr><td class="hi">#57</td><td class="num">1 in to #4 sieve</td><td>Most common; driveways, slabs, drainage</td></tr>
+          <tr><td class="hi">#67</td><td class="num">3/4 in to #4 sieve</td><td>Structural concrete, ready-mix standard</td></tr>
+          <tr><td class="hi">#7</td><td class="num">1/2 in to #4 sieve</td><td>Pump mix, congested rebar areas</td></tr>
+          <tr><td class="hi">#8</td><td class="num">3/8 in to #8 sieve</td><td>Pea gravel; thin slabs, decorative</td></tr>
+          <tr><td class="hi">#89</td><td class="num">3/8 in to #16 sieve</td><td>Pump mix, fine-aggregate-rich applications</td></tr>
+          <tr><td class="hi">Sand (fine)</td><td>Passing #4, retained on #200</td><td>Mortar, fine aggregate for concrete</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Larger maximum aggregate size produces stronger and more economical concrete (less cement per cubic yard) but requires more clearance around rebar (typically 1.5× the max aggregate size, never less than the bar diameter). For most structural work with #4 to #6 rebar at standard spacing, #57 or #67 stone is right. For congested zones with #8+ rebar at close spacing, drop to #7 or #8. Air entrainment (4-7% by volume) is required for freeze-thaw resistance; not optional for any exterior concrete in cold climates.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Cure Schedules &amp; Strength Development</span><span class="fig">TAB. 4K-3</span></div>
+      <table>
+        <thead><tr><th>Age</th><th>Typical % of 28-day Strength</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">1 day</td><td class="num">15-25%</td><td>Forms can be removed from slabs and walls (with caution); not load-bearing</td></tr>
+          <tr><td class="hi">3 days</td><td class="num">40-45%</td><td>Light foot traffic on slabs; vertical forms can come off most walls</td></tr>
+          <tr><td class="hi">7 days</td><td class="num">65-70%</td><td>Vehicle traffic on slabs; minimum age before re-shoring beams</td></tr>
+          <tr><td class="hi">14 days</td><td class="num">85-90%</td><td>Most loads can be applied; full strength approaching</td></tr>
+          <tr><td class="hi">28 days</td><td class="num">100%</td><td>Specified strength reached (f'c); design strength for engineering</td></tr>
+          <tr><td class="hi">90 days +</td><td class="num">110-125%</td><td>Continued slow strength gain; the concrete is still curing</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Condition</th><th>Adjustment</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Cold weather (below 40°F / 4°C)</td><td>Cure rate roughly halves per 18°F (10°C) drop; protect with blankets, hoardings, heat; do not pour at &lt; 28°F (-2°C)</td></tr>
+          <tr><td class="hi">Hot weather (above 90°F / 32°C)</td><td>Faster initial set; risk of plastic shrinkage cracking; use curing compound or fog spray; cool aggregates and water before mixing</td></tr>
+          <tr><td class="hi">Wet curing (mat / pond / fog)</td><td>Strengthens concrete by 15-25% over air-cured equivalent; keep wet for first 7 days minimum</td></tr>
+          <tr><td class="hi">Accelerator (calcium chloride)</td><td>Strength at 1 day approximately doubled; corrosive to rebar; avoid in reinforced concrete</td></tr>
+          <tr><td class="hi">Retarder</td><td>Used in hot weather to slow set time; allows finishing</td></tr>
+          <tr><td class="hi">Type III cement</td><td>3-day strength comparable to Type I at 7 days; 28-day strength similar to Type I</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Concrete continues to gain strength for years if it stays moist; the 28-day value is a contractual reference, not a ceiling. Wet curing is the cheapest way to substantially improve concrete quality: covering a fresh pour with wet burlap or polyethylene for the first week increases final strength by 15-25%. Calcium chloride accelerators are forbidden in any reinforced or post-tensioned concrete because chloride attacks the rebar; use non-chloride accelerators (calcium nitrate, calcium nitrite) when acceleration is needed near steel.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Earthwork Volume &amp; Cut/Fill</span><span class="fig">TAB. 4K-4</span></div>
+      <table>
+        <thead><tr><th>Method</th><th>Formula</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Average end areas</td><td>V = L × (A₁ + A₂) / 2</td><td>Standard for trenches and linear cuts; A₁, A₂ are cross-section areas at the ends, L is distance</td></tr>
+          <tr><td class="hi">Prismoidal formula</td><td>V = L × (A₁ + 4Aₘ + A₂) / 6</td><td>More accurate; Aₘ is mid-section area; reduces to average end areas if A varies linearly</td></tr>
+          <tr><td class="hi">Grid method</td><td>V = Σ(h × A) per grid cell</td><td>Site grading; lay out grid, measure cut/fill depth at each node, sum cell volumes</td></tr>
+          <tr><td class="hi">Contour method</td><td>V = Σ((A₁ + A₂) / 2) × Δh between contours</td><td>From topographic map; area between contours times contour interval</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Soil State</th><th>Volume Ratio (vs Bank)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Bank (in place, undisturbed)</td><td class="num">1.00</td><td>Reference state; in-situ density</td></tr>
+          <tr><td class="hi">Loose (excavated, hauled)</td><td class="num">1.15 - 1.30</td><td>Swell; what truck volume actually carries; sand 12-15%, common soil 20-25%, clay 25-30%, rock 50-60%</td></tr>
+          <tr><td class="hi">Compacted (in fill)</td><td class="num">0.85 - 0.95</td><td>Shrinkage; engineered fill is denser than bank; 90-95% of standard Proctor for general fill, 95-100% for structural fill</td></tr>
+        </tbody>
+      </table>
+      <div class="note">When calculating cut and fill balance for a site, all three volumes matter and they're different. Cut quantities (taken from undisturbed soil) are bank volumes. Truck and hauling estimates are loose volumes. Fill placed and compacted is compacted volume. To balance cut and fill on a project: bank-cut volume × shrinkage factor (typically 0.85-0.90) = compacted-fill volume available. Always verify shrink/swell factors with site-specific geotechnical data for engineered projects; the values shown are rules of thumb only.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Rebar Sizes &amp; Grades</span><span class="fig">TAB. 4K-5</span></div>
+      <table>
+        <thead><tr><th>US Designation</th><th>Diameter (in)</th><th>Cross-Section (in²)</th><th>Weight (lb/ft)</th><th>Metric Equiv.</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">#3</td><td class="num">0.375</td><td class="num">0.11</td><td class="num">0.376</td><td class="num">#10 (10 mm)</td></tr>
+          <tr><td class="hi">#4</td><td class="num">0.500</td><td class="num">0.20</td><td class="num">0.668</td><td class="num">#13 (13 mm)</td></tr>
+          <tr><td class="hi">#5</td><td class="num">0.625</td><td class="num">0.31</td><td class="num">1.043</td><td class="num">#16 (16 mm)</td></tr>
+          <tr><td class="hi">#6</td><td class="num">0.750</td><td class="num">0.44</td><td class="num">1.502</td><td class="num">#19 (19 mm)</td></tr>
+          <tr><td class="hi">#7</td><td class="num">0.875</td><td class="num">0.60</td><td class="num">2.044</td><td class="num">#22 (22 mm)</td></tr>
+          <tr><td class="hi">#8</td><td class="num">1.000</td><td class="num">0.79</td><td class="num">2.670</td><td class="num">#25 (25 mm)</td></tr>
+          <tr><td class="hi">#9</td><td class="num">1.128</td><td class="num">1.00</td><td class="num">3.400</td><td class="num">#29 (29 mm)</td></tr>
+          <tr><td class="hi">#10</td><td class="num">1.270</td><td class="num">1.27</td><td class="num">4.303</td><td class="num">#32 (32 mm)</td></tr>
+          <tr><td class="hi">#11</td><td class="num">1.410</td><td class="num">1.56</td><td class="num">5.313</td><td class="num">#36 (36 mm)</td></tr>
+          <tr><td class="hi">#14</td><td class="num">1.693</td><td class="num">2.25</td><td class="num">7.65</td><td class="num">#43 (43 mm)</td></tr>
+          <tr><td class="hi">#18</td><td class="num">2.257</td><td class="num">4.00</td><td class="num">13.60</td><td class="num">#57 (57 mm)</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Grade (ASTM A615)</th><th>Yield Strength (ksi)</th><th>Common Use</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Grade 40</td><td class="num">40</td><td>Residential, light commercial (largely phased out)</td></tr>
+          <tr><td class="hi">Grade 60</td><td class="num">60</td><td>Standard for most structural applications; the modern default</td></tr>
+          <tr><td class="hi">Grade 75</td><td class="num">75</td><td>Heavy structural, columns; less common</td></tr>
+          <tr><td class="hi">Grade 80</td><td class="num">80</td><td>Increasing in commercial work; allows reduced steel area</td></tr>
+          <tr><td class="hi">Grade 100</td><td class="num">100</td><td>Specialty high-strength applications; very limited availability</td></tr>
+        </tbody>
+      </table>
+      <div class="note">The bar size number is approximately the diameter in eighths of an inch: #3 is 3/8", #4 is 1/2", #8 is 1.0" (8/8). Above #11, sizing departs from this rule. Grade 60 is the de facto residential and small-commercial standard; Grade 40 is rarely specified now. Epoxy-coated rebar (ECR, green color) is used in bridge decks and other chloride-exposed structures; galvanized rebar is an alternative. For corrosion-protected mild applications, stainless reinforcement (Type 304 or 316) is the high-cost option.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Rebar Placement &amp; Detailing</span><span class="fig">TAB. 4K-6</span></div>
+      <table>
+        <thead><tr><th>Condition</th><th>Minimum Concrete Cover</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Concrete cast against earth (no forms)</td><td class="num">3 in (76 mm)</td></tr>
+          <tr><td class="hi">Concrete exposed to earth or weather (formed, larger than #6 bar)</td><td class="num">2 in (51 mm)</td></tr>
+          <tr><td class="hi">Concrete exposed to earth or weather (#5 bar or smaller)</td><td class="num">1.5 in (38 mm)</td></tr>
+          <tr><td class="hi">Interior slabs, walls, joists (#11 bar or smaller)</td><td class="num">3/4 in (19 mm)</td></tr>
+          <tr><td class="hi">Interior beams, columns (primary reinforcement)</td><td class="num">1.5 in (38 mm)</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Hook / Bend</th><th>Standard Dimension</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">90° standard hook (#3 through #8)</td><td class="num">12 × db extension after bend</td></tr>
+          <tr><td class="hi">90° standard hook (#9 through #11)</td><td class="num">12 × db extension; 8 × db bend diameter inside</td></tr>
+          <tr><td class="hi">180° standard hook</td><td class="num">4 × db (min 2.5 in) extension</td></tr>
+          <tr><td class="hi">135° seismic hook</td><td class="num">6 × db (min 3 in) extension</td></tr>
+          <tr><td class="hi">Bend diameter inside (#3 - #8)</td><td class="num">6 × db</td></tr>
+          <tr><td class="hi">Bend diameter inside (#9 - #11)</td><td class="num">8 × db</td></tr>
+          <tr><td class="hi">Lap splice (tension, Class B, Grade 60)</td><td class="num">~40 × db (varies with concrete strength and bar size)</td></tr>
+          <tr><td class="hi">Maximum spacing (primary bars in flexural members)</td><td class="num">3 × slab thickness, or 18 in, whichever is less</td></tr>
+          <tr><td class="hi">Minimum spacing (clear between bars)</td><td>1 in, db, or 1.33 × max aggregate size, whichever is greater</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Rebar cover protects steel from corrosion and provides bond strength. The 3-inch cover for "concrete cast against earth" applies to footings poured directly on soil without a forming surface (the soil itself acts as the form on the bottom). Use chairs, dobies, or bolsters to hold rebar at the correct depth; never let rebar touch the soil. Lap splice lengths come from ACI 318 development length tables; the 40db rule of thumb works for typical Grade 60 #5 bar in 4000 psi concrete but should be verified for specific projects.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Joist &amp; Beam Span Reference</span><span class="fig">TAB. 4K-7</span></div>
+      <table>
+        <thead><tr><th>Joist Size</th><th>Spacing</th><th>Max Span (40 psf LL + 10 psf DL, SPF/HF #2)</th><th>Max Span (Floor)</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">2×6</td><td class="num">16 in OC</td><td class="num">9'-9"</td><td>Residential floor 30 psf live</td></tr>
+          <tr><td class="hi">2×8</td><td class="num">16 in OC</td><td class="num">12'-7"</td><td>Standard floor joist</td></tr>
+          <tr><td class="hi">2×8</td><td class="num">12 in OC</td><td class="num">13'-9"</td><td>Closer spacing, longer span</td></tr>
+          <tr><td class="hi">2×8</td><td class="num">24 in OC</td><td class="num">11'-0"</td><td>Wider spacing, shorter span</td></tr>
+          <tr><td class="hi">2×10</td><td class="num">16 in OC</td><td class="num">15'-5"</td><td>Standard residential floor</td></tr>
+          <tr><td class="hi">2×10</td><td class="num">12 in OC</td><td class="num">16'-10"</td><td>Closer spacing</td></tr>
+          <tr><td class="hi">2×12</td><td class="num">16 in OC</td><td class="num">17'-10"</td><td>Heavy residential, long spans</td></tr>
+          <tr><td class="hi">2×12</td><td class="num">12 in OC</td><td class="num">19'-5"</td><td>Maximum dimensional lumber spans</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Member Type</th><th>Typical Span Range</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Dimensional lumber joist (2× series)</td><td class="num">8 to 20 ft</td><td>SPF, HF, DF, SYP grades; values above are for SPF #2; SYP runs 15-25% longer at same size</td></tr>
+          <tr><td class="hi">I-joist (engineered TJI, BCI, GP-EWP)</td><td class="num">12 to 32 ft</td><td>Higher strength and stiffness per unit weight; manufacturer span charts</td></tr>
+          <tr><td class="hi">LVL beam (laminated veneer lumber)</td><td class="num">10 to 60 ft</td><td>1¾" thick plies; common depths 9¼" to 18"; up to 60' lengths</td></tr>
+          <tr><td class="hi">Glulam beam (glued laminated timber)</td><td class="num">10 to 100+ ft</td><td>Custom shop fabrication; large clear spans</td></tr>
+          <tr><td class="hi">Steel W-shape (W10, W12, W14)</td><td class="num">15 to 40 ft</td><td>Lighter, longer spans; check serviceability (deflection) along with strength</td></tr>
+          <tr><td class="hi">Steel HSS (hollow structural section)</td><td class="num">10 to 30 ft</td><td>Square or rectangular tubes; clean look; common for residential exposed beams</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Span tables in the IRC and CWC manuals are for dimensional lumber under specific load and species combinations. For any non-trivial structural span, run the calculation through engineered software (or a span chart for the specific product) rather than relying on rule-of-thumb tables. Residential floor live load is 30 psf for bedroom areas, 40 psf for living areas; ceiling loads are typically 20 psf live + 10 psf dead. Deflection (typically limited to L/360 for floors, L/240 for ceilings) is often the controlling design criterion, not strength.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Slab on Grade &amp; Retaining Walls</span><span class="fig">TAB. 4K-8</span></div>
+      <table>
+        <thead><tr><th>Element</th><th>Typical Practice</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Subgrade prep</td><td>Compacted soil to 95% standard Proctor; remove organic material; even bearing</td></tr>
+          <tr><td class="hi">Base course</td><td>4-6 in compacted #57 stone over fabric; provides capillary break and drainage</td></tr>
+          <tr><td class="hi">Vapor barrier</td><td>10-15 mil polyethylene; class A (Stego, Perminator) for any habitable space; lapped 6 in and taped</td></tr>
+          <tr><td class="hi">Slab thickness (residential)</td><td>4 in standard; 5 in for garage, 6 in for heavy equipment or RV pads</td></tr>
+          <tr><td class="hi">Reinforcement (slab)</td><td>#3 or #4 rebar at 16-24 in OC each way; OR welded wire mesh; OR fiber-reinforced mix</td></tr>
+          <tr><td class="hi">Control joint spacing</td><td>24 to 36 × slab thickness in feet (so 4" slab: every 8-12 ft); cut within 24 hours of pour</td></tr>
+          <tr><td class="hi">Expansion joint spacing</td><td>Every 60 ft; isolate slab from columns, walls, footings with 1/2" expansion material</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Retaining Wall Type</th><th>Typical Height</th><th>Construction</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Gravity wall (mass)</td><td>Up to 4 ft</td><td>Stone, mortar, or mass concrete; resists by weight</td></tr>
+          <tr><td class="hi">Cantilever wall (T-shape)</td><td>4 to 25 ft</td><td>Reinforced concrete with footing extending into backfill; the workhorse residential retaining wall</td></tr>
+          <tr><td class="hi">Cantilever wall (L-shape)</td><td>4 to 12 ft</td><td>Similar to T-wall with footing on one side only; tighter property line clearance</td></tr>
+          <tr><td class="hi">Counterfort wall</td><td>15 to 40 ft</td><td>Cantilever wall with vertical buttresses; for taller walls</td></tr>
+          <tr><td class="hi">Soldier pile + lagging</td><td>10 to 30 ft</td><td>Steel piles driven, wood or steel lagging between; common in tight urban sites</td></tr>
+          <tr><td class="hi">Segmental block (Versa-Lok, Allan)</td><td>2 to 15 ft (with engineering)</td><td>Modular dry-stack; geogrid reinforcement in backfill for taller walls</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Drainage behind any retaining wall is critical: water pressure adds dramatically to lateral earth pressure. Standard drainage includes 12 in of clean gravel against the wall back face, a 4 in perforated pipe at the base wrapped in filter fabric, and weep holes (3-inch diameter) every 8 ft for walls without a drainage system. The active earth pressure coefficient for typical granular backfill is roughly 0.30 (Ka = (1 - sin φ) / (1 + sin φ), with friction angle φ around 30°). Walls over 4 ft tall typically require engineering and permits; some jurisdictions require permits for any retaining wall regardless of height.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Concrete Volume Calculator</span><span class="fig">TOOL 4K-1</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Length (ft)</label><input type="number" id="cncv-l" step="0.1" value="10"></div>
+          <div class="field"><label>Width (ft)</label><input type="number" id="cncv-w" step="0.1" value="10"></div>
+          <div class="field"><label>Thickness (in)</label><input type="number" id="cncv-t" step="0.25" value="4"></div>
+          <div class="field"><label>Waste Factor (%)</label><input type="number" id="cncv-waste" step="1" value="10"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Cubic Feet</span><span class="val" id="cncv-cf">—</span></div>
+            <div class="calc-row"><span class="lbl">Cubic Yards (ready-mix order)</span><span class="val" id="cncv-cy">—</span></div>
+            <div class="calc-row"><span class="lbl">Cubic Meters</span><span class="val" id="cncv-cm">—</span></div>
+            <div class="calc-row"><span class="lbl">60-lb Bags (Quikrete, 0.45 cf/bag)</span><span class="val" id="cncv-60lb">—</span></div>
+            <div class="calc-row"><span class="lbl">80-lb Bags (Quikrete, 0.60 cf/bag)</span><span class="val" id="cncv-80lb">—</span></div>
+            <div class="calc-row"><span class="lbl">Approx. Dry Mix Weight</span><span class="val" id="cncv-wt">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Pre-bagged mix is economical for small pours (under 1 cubic yard or so). Above that volume, ready-mix delivery is more economical and produces more consistent concrete. Order ready-mix in 1/4 yard increments; the truck minimum is typically 1 yard with a short-load fee for smaller deliveries. A typical 60-lb Quikrete bag makes 0.45 cubic feet of cured concrete; 80-lb bags make 0.60 cubic feet. A cubic yard is 27 cubic feet; a 4-in slab covering 81 square feet uses exactly one cubic yard before waste factor.</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Cut/Fill Volume Calculator (Average End Areas)</span><span class="fig">TOOL 4K-2</span></div>
+      <div class="row">
+        <div class="col" style="flex:0 1 260px;">
+          <div class="field"><label>Area at Station 1 (ft²)</label><input type="number" id="cufl-a1" step="0.1" value="20"></div>
+          <div class="field"><label>Area at Station 2 (ft²)</label><input type="number" id="cufl-a2" step="0.1" value="35"></div>
+          <div class="field"><label>Distance Between Stations (ft)</label><input type="number" id="cufl-l" step="0.1" value="50"></div>
+          <div class="field"><label>Shrink/Swell Factor<br><small>1.00 = bank, 1.20 = loose (haul), 0.90 = compacted fill</small></label><input type="number" id="cufl-factor" step="0.01" value="1.00"></div>
+        </div>
+        <div class="col">
+          <div class="calc-output">
+            <div class="calc-row"><span class="lbl">Avg Cross-Section Area</span><span class="val" id="cufl-avg">—</span></div>
+            <div class="calc-row"><span class="lbl">Bank Volume (cubic feet)</span><span class="val" id="cufl-cf">—</span></div>
+            <div class="calc-row"><span class="lbl">Bank Volume (cubic yards)</span><span class="val" id="cufl-cy">—</span></div>
+            <div class="calc-row"><span class="lbl">Adjusted Volume (cubic yards)</span><span class="val" id="cufl-adj">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">The average end areas method: V = L × (A₁ + A₂) / 2. Adequate for most field estimating where the cross-section varies roughly linearly between stations. For more accurate volumes (especially when one cross-section is much larger than the other, or where the section varies non-linearly), use the prismoidal formula: V = L × (A₁ + 4Aₘ + A₂) / 6, where Aₘ is the mid-station cross-section area. For full earthwork on a site, set up multiple stations along the cut/fill axis and sum the segment volumes.</div>
     </div>
   </section>
 
@@ -15889,6 +17329,244 @@ function nearestE12Ohms(value) {
   if (el) { el.addEventListener('input', calcPullup); el.addEventListener('change', calcPullup); }
 });
 
+// ====================== 1V · COMPLIANCE dBµV/m CONVERTER ======================
+function calcCompliance() {
+  const dBuVm = parseFloat(document.getElementById('cmpl-dbuvm').value);
+  const distFrom = parseFloat(document.getElementById('cmpl-dist-from').value);
+  const distTo = parseFloat(document.getElementById('cmpl-dist-to').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(dBuVm) || !isFinite(distFrom) || !isFinite(distTo) || distFrom <= 0 || distTo <= 0) {
+    ['cmpl-uvm','cmpl-vm','cmpl-mvm','cmpl-distcorr','cmpl-norm'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Linear field strength: dBµV/m = 20 × log10(µV/m / 1)
+  // → µV/m = 10^(dBµV/m / 20)
+  const uVm = Math.pow(10, dBuVm / 20);
+  const Vm = uVm * 1e-6;
+  const mVm = uVm * 1e-3;
+  // Distance correction (far field, inverse-square): going from distFrom to distTo
+  // ΔdB = 20 × log10(distFrom / distTo)  (positive = louder at distTo, which only happens if distTo < distFrom)
+  const distCorrDb = 20 * Math.log10(distFrom / distTo);
+  const normDbuvm = dBuVm + distCorrDb;
+  set('cmpl-uvm', uVm.toPrecision(4) + ' µV/m');
+  set('cmpl-vm', Vm.toExponential(3) + ' V/m');
+  set('cmpl-mvm', mVm.toPrecision(4) + ' mV/m');
+  set('cmpl-distcorr', distCorrDb.toFixed(2) + ' dB (at ' + distTo + ' m)');
+  set('cmpl-norm', normDbuvm.toFixed(2) + ' dBµV/m at ' + distTo + ' m');
+}
+['cmpl-dbuvm','cmpl-dist-from','cmpl-dist-to'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcCompliance); el.addEventListener('change', calcCompliance); }
+});
+
+// ====================== 2AA · CURE TIME CALCULATOR ======================
+function calcCureTime() {
+  const sel = document.getElementById('cure-finish');
+  const tempF = parseFloat(document.getElementById('cure-temp').value);
+  const rh = parseFloat(document.getElementById('cure-rh').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!sel || !isFinite(tempF) || !isFinite(rh)) {
+    ['cure-type','cure-tf','cure-rhf','cure-touch','cure-recoat','cure-full','cure-assess'].forEach(id => set(id, '—'));
+    return;
+  }
+  const parts = sel.value.split(',');
+  if (parts.length < 5) { set('cure-assess', 'Invalid finish data'); return; }
+  const touchBase = parseFloat(parts[1]);
+  const recoatBase = parseFloat(parts[2]);
+  const fullBase = parseFloat(parts[3]);
+  const curetype = parts[4];
+  // Temperature factor: reference 70°F. Cold slows; warm speeds up (less aggressively).
+  // Roughly 2× slower per 18°F below 70°F; 1.5× faster per 18°F above.
+  let tempFactor;
+  if (tempF < 50) tempFactor = Infinity;
+  else {
+    const dT = (tempF - 70) / 18;
+    if (dT < 0) tempFactor = Math.pow(2, -dT);
+    else tempFactor = Math.pow(1.5, -dT);
+  }
+  // Humidity factor: depends on cure type.
+  // Oxidation: high RH (>60%) slows cure; very low (<30%) slightly faster
+  // Solvent (shellac, lacquer): high RH dramatically slows evaporation
+  // Water-based: high RH most dramatic effect
+  let rhFactor;
+  if (curetype === 'oxidation') {
+    if (rh < 30) rhFactor = 0.95;
+    else if (rh <= 60) rhFactor = 1.0;
+    else rhFactor = 1.0 + (rh - 60) * 0.02;
+  } else if (curetype === 'solvent') {
+    if (rh <= 50) rhFactor = 1.0;
+    else rhFactor = 1.0 + (rh - 50) * 0.025;
+  } else if (curetype === 'water') {
+    if (rh <= 40) rhFactor = 1.0;
+    else rhFactor = 1.0 + (rh - 40) * 0.04;
+  } else {
+    rhFactor = 1.0;
+  }
+  // Combined factor
+  const totalFactor = tempFactor * rhFactor;
+  // Adjusted times
+  const touchH = touchBase * totalFactor;
+  const recoatH = recoatBase * totalFactor;
+  const fullH = fullBase * totalFactor;
+  // Format hours nicely
+  const fmtHours = (h) => {
+    if (!isFinite(h)) return '—';
+    if (h < 1) return (h * 60).toFixed(0) + ' min';
+    if (h < 24) return h.toFixed(1) + ' h';
+    if (h < 168) return (h / 24).toFixed(1) + ' days';
+    if (h < 720) return (h / 168).toFixed(1) + ' weeks';
+    return (h / 720).toFixed(1) + ' months';
+  };
+  // Assessment
+  const typeLabel = { oxidation: 'Oxidative (crosslinks with O2)', solvent: 'Solvent (evaporation cure)', water: 'Water (coalescence cure)' }[curetype] || curetype;
+  let assess;
+  if (tempF < 50) assess = 'Too cold; most finishes won\'t cure properly below 50°F';
+  else if (tempF > 95) assess = 'Too hot; risk of bubbling, brush drag, surface defects';
+  else if (curetype !== 'oxidation' && rh > 80) assess = 'Humidity too high; expect blushing or clouding on solvent/water finishes';
+  else if (totalFactor > 2.5) assess = 'Cure significantly delayed; consider better conditions';
+  else if (totalFactor > 1.5) assess = 'Cure moderately delayed; extend recoat windows';
+  else if (totalFactor < 0.7) assess = 'Cure accelerated; watch for surface defects from too-fast skinning';
+  else assess = 'Conditions in normal cure range';
+  set('cure-type', typeLabel);
+  set('cure-tf', isFinite(tempFactor) ? tempFactor.toFixed(2) + '×' : '∞');
+  set('cure-rhf', rhFactor.toFixed(2) + '×');
+  set('cure-touch', fmtHours(touchH));
+  set('cure-recoat', fmtHours(recoatH));
+  set('cure-full', fmtHours(fullH));
+  set('cure-assess', assess);
+}
+['cure-finish','cure-temp','cure-rh'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcCureTime); el.addEventListener('change', calcCureTime); }
+});
+
+// ====================== 4K · CONCRETE VOLUME CALCULATOR ======================
+function calcConcVolume() {
+  const L = parseFloat(document.getElementById('cncv-l').value);
+  const W = parseFloat(document.getElementById('cncv-w').value);
+  const t_in = parseFloat(document.getElementById('cncv-t').value);
+  const waste = parseFloat(document.getElementById('cncv-waste').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(L) || !isFinite(W) || !isFinite(t_in) || !isFinite(waste) || L <= 0 || W <= 0 || t_in <= 0) {
+    ['cncv-cf','cncv-cy','cncv-cm','cncv-60lb','cncv-80lb','cncv-wt'].forEach(id => set(id, '—'));
+    return;
+  }
+  const tFt = t_in / 12;
+  const baseCF = L * W * tFt;
+  const wasteMult = 1 + waste / 100;
+  const cf = baseCF * wasteMult;
+  const cy = cf / 27;
+  const cm = cf * 0.02832; // 1 cubic foot = 0.02831685 cubic meters
+  // Quikrete: 60-lb bag yields 0.45 cf cured concrete; 80-lb yields 0.60 cf
+  const bags60 = Math.ceil(cf / 0.45);
+  const bags80 = Math.ceil(cf / 0.60);
+  // Dry concrete weighs ~150 lb/cf in place (cured); pre-mix dry weighs slightly more accounting for water added
+  const drymixWt = cf * 133; // lb of bagged mix to produce cf of cured concrete
+  set('cncv-cf', cf.toFixed(2) + ' ft³');
+  set('cncv-cy', cy.toFixed(3) + ' yd³');
+  set('cncv-cm', cm.toFixed(3) + ' m³');
+  set('cncv-60lb', bags60 + ' bags');
+  set('cncv-80lb', bags80 + ' bags');
+  set('cncv-wt', drymixWt.toFixed(0) + ' lb dry mix');
+}
+['cncv-l','cncv-w','cncv-t','cncv-waste'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcConcVolume); el.addEventListener('change', calcConcVolume); }
+});
+
+// ====================== 4K · CUT/FILL VOLUME CALCULATOR ======================
+function calcCutFill() {
+  const A1 = parseFloat(document.getElementById('cufl-a1').value);
+  const A2 = parseFloat(document.getElementById('cufl-a2').value);
+  const L = parseFloat(document.getElementById('cufl-l').value);
+  const factor = parseFloat(document.getElementById('cufl-factor').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(A1) || !isFinite(A2) || !isFinite(L) || !isFinite(factor) || L <= 0) {
+    ['cufl-avg','cufl-cf','cufl-cy','cufl-adj'].forEach(id => set(id, '—'));
+    return;
+  }
+  // Average end areas: V = L * (A1 + A2) / 2
+  const avgArea = (A1 + A2) / 2;
+  const bankCF = L * avgArea;
+  const bankCY = bankCF / 27;
+  const adjCY = bankCY * factor;
+  set('cufl-avg', avgArea.toFixed(2) + ' ft²');
+  set('cufl-cf', bankCF.toFixed(1) + ' ft³');
+  set('cufl-cy', bankCY.toFixed(2) + ' yd³');
+  set('cufl-adj', adjCY.toFixed(2) + ' yd³ (factor ' + factor.toFixed(2) + '×)');
+}
+['cufl-a1','cufl-a2','cufl-l','cufl-factor'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcCutFill); el.addEventListener('change', calcCutFill); }
+});
+
+// ====================== 2CC · WORKING LOAD LIMIT CALCULATOR ======================
+function calcWLL() {
+  const sel = document.getElementById('wll-type');
+  const dia = parseFloat(document.getElementById('wll-dia').value);
+  const cond = parseFloat(document.getElementById('wll-cond').value);
+  const sf = parseFloat(document.getElementById('wll-sf').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!sel || !isFinite(dia) || !isFinite(cond) || !isFinite(sf) || dia <= 0) {
+    ['wll-area','wll-mbs','wll-mbsadj','wll-wll','wll-bowline','wll-fig8'].forEach(id => set(id, '—'));
+    return;
+  }
+  const parts = sel.value.split(',');
+  const tensileFactor = parseFloat(parts[0]); // psi-equivalent breaking strength per in² of rope cross-section
+  // Cross-section area of rope (circular): A = π × (d/2)²
+  const area = Math.PI * Math.pow(dia / 2, 2);
+  const mbs = area * tensileFactor;
+  const mbsAdj = mbs * cond;
+  const wll = mbsAdj / sf;
+  const wllBow = wll * 0.65;
+  const wllFig8 = wll * 0.80;
+  const fmtLb = (v) => {
+    if (v >= 100000) return (v / 1000).toFixed(1) + ' k lb';
+    if (v >= 10000) return Math.round(v).toLocaleString() + ' lb';
+    return v.toFixed(0) + ' lb';
+  };
+  set('wll-area', area.toFixed(3) + ' in²');
+  set('wll-mbs', fmtLb(mbs));
+  set('wll-mbsadj', fmtLb(mbsAdj));
+  set('wll-wll', fmtLb(wll) + ' at ' + sf + ':1');
+  set('wll-bowline', fmtLb(wllBow));
+  set('wll-fig8', fmtLb(wllFig8));
+}
+['wll-type','wll-dia','wll-cond','wll-sf'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcWLL); el.addEventListener('change', calcWLL); }
+});
+
+// ====================== 2CC · MECHANICAL ADVANTAGE CALCULATOR ======================
+function calcMA() {
+  const load = parseFloat(document.getElementById('ma-load').value);
+  const parts = parseFloat(document.getElementById('ma-parts').value);
+  const friction = parseFloat(document.getElementById('ma-friction').value) / 100;
+  const sheaves = parseFloat(document.getElementById('ma-sheaves').value);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (!isFinite(load) || !isFinite(parts) || !isFinite(friction) || !isFinite(sheaves) || parts < 1 || load <= 0) {
+    ['ma-tma','ma-eff','ma-ama','ma-thaul','ma-ahaul','ma-dist'].forEach(id => set(id, '—'));
+    return;
+  }
+  const tma = parts;
+  // Efficiency factor: (1 - friction) per sheave, but only sheaves doing work count.
+  // For a system with N sheaves, the haul force passes through them all; efficiency = (1-f)^N
+  const efficiency = Math.pow(1 - friction, sheaves);
+  const ama = tma * efficiency;
+  const theoreticalHaul = load / tma;
+  const actualHaul = load / ama;
+  set('ma-tma', tma.toFixed(0) + ' : 1');
+  set('ma-eff', (efficiency * 100).toFixed(1) + '%');
+  set('ma-ama', ama.toFixed(2) + ' : 1');
+  set('ma-thaul', theoreticalHaul.toFixed(0) + ' lb');
+  set('ma-ahaul', actualHaul.toFixed(0) + ' lb');
+  set('ma-dist', tma.toFixed(0) + ' ft haul per 1 ft lift');
+}
+['ma-load','ma-parts','ma-friction','ma-sheaves'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { el.addEventListener('input', calcMA); el.addEventListener('change', calcMA); }
+});
+
 // ====================== 2D · SNAP FIT CALCULATOR ======================
 function calcSnapFit() {
   const L = parseFloat(document.getElementById('snap-l').value);
@@ -19125,6 +20803,12 @@ calcLdoThermal();
 calcLedResistor();
 calcCrosstalk();
 calcPullup();
+calcCompliance();
+calcCureTime();
+calcConcVolume();
+calcCutFill();
+calcWLL();
+calcMA();
 calcSnapFit();
 calcPressFit();
 calcDpiPrint();
