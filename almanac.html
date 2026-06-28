@@ -7059,6 +7059,62 @@ output = "dist/"</div>
       </table>
       <div class="note">Engineering plastics fall into three tiers by cost and performance: commodity (PP, PE, ABS, PMMA) at $2-5/lb; engineering (POM/Delrin, Nylon, PC, PETG) at $5-15/lb; high-performance (PEEK, PEI, PTFE) at $30-100+/lb. For machined parts, Delrin is the workhorse: rigid, dimensionally stable, easy to cut and tap. For sliding wear, UHMW or Nylon for cost or Delrin/PEEK for strength. Nylon absorbs moisture (up to 8% by weight), which changes dimensions and softens it; not for precision parts in humid environments. PTFE is the lowest-friction plastic but flows under load (creep); don't use it in compression-loaded fits.</div>
     </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="card-title"><span>Galvanic Series (Seawater Reference)</span><span class="fig">TAB. 2I-4</span></div>
+      <table>
+        <thead><tr><th>Material</th><th>Potential vs SCE (V)</th><th>End</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Magnesium and Mg alloys</td><td class="num">-1.65 to -1.60</td><td>Most anodic (sacrificial)</td></tr>
+          <tr><td class="hi">Zinc</td><td class="num">-1.05 to -1.00</td><td>Anodic</td></tr>
+          <tr><td class="hi">Galvanized steel</td><td class="num">-1.05 to -0.95</td><td>Anodic</td></tr>
+          <tr><td class="hi">Aluminum alloys (5052, 6061)</td><td class="num">-0.90 to -0.80</td><td>Anodic</td></tr>
+          <tr><td class="hi">Aluminum alloys (2024, 7075)</td><td class="num">-0.75 to -0.65</td><td>Anodic</td></tr>
+          <tr><td class="hi">Cadmium plating</td><td class="num">-0.70</td><td>Anodic</td></tr>
+          <tr><td class="hi">Mild / carbon steel</td><td class="num">-0.65 to -0.60</td><td>Anodic</td></tr>
+          <tr><td class="hi">Cast iron</td><td class="num">-0.60 to -0.55</td><td>Anodic</td></tr>
+          <tr><td class="hi">Stainless 304 / 316 (active)</td><td class="num">-0.55 to -0.50</td><td>Anodic when active</td></tr>
+          <tr><td class="hi">Lead-tin solder</td><td class="num">-0.50 to -0.45</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Lead</td><td class="num">-0.50</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Tin</td><td class="num">-0.45</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Yellow brass (C260, C360)</td><td class="num">-0.30 to -0.25</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Red brass / gunmetal</td><td class="num">-0.30 to -0.25</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Copper</td><td class="num">-0.30 to -0.25</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Bronze (manganese, naval, silicon)</td><td class="num">-0.30 to -0.20</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Nickel (active)</td><td class="num">-0.20 to -0.15</td><td>Mid-range</td></tr>
+          <tr><td class="hi">Inconel 600, Monel 400</td><td class="num">-0.20 to -0.10</td><td>Cathodic</td></tr>
+          <tr><td class="hi">Silver solder (Ag-Cu-Zn)</td><td class="num">-0.15 to -0.10</td><td>Cathodic</td></tr>
+          <tr><td class="hi">Stainless 304 / 316 (passive)</td><td class="num">-0.10 to -0.05</td><td>Cathodic when passive</td></tr>
+          <tr><td class="hi">Silver</td><td class="num">-0.05</td><td>Cathodic</td></tr>
+          <tr><td class="hi">Titanium (Grade 2, Grade 5)</td><td class="num">-0.05 to +0.05</td><td>Cathodic</td></tr>
+          <tr><td class="hi">Graphite / carbon fiber composite</td><td class="num">+0.20 to +0.30</td><td>Strongly cathodic</td></tr>
+          <tr><td class="hi">Gold</td><td class="num">+0.15 to +0.25</td><td>Most cathodic (most noble)</td></tr>
+          <tr><td class="hi">Platinum</td><td class="num">+0.20 to +0.30</td><td>Most cathodic (most noble)</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Potential Difference</th><th>Corrosion Risk</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="hi" style="font-family:monospace;">&lt; 50 mV</td><td>Negligible</td><td>Safe to combine for most applications</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">50 to 150 mV</td><td>Mild; slow corrosion</td><td>Safe in dry environments; coat or isolate if exposed to moisture or salt</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">150 to 250 mV</td><td>Moderate</td><td>Isolate with non-conductive washer / bushing or coat both faying surfaces</td></tr>
+          <tr><td class="hi" style="font-family:monospace;">&gt; 250 mV</td><td>Severe</td><td>Avoid the combination; if unavoidable, full isolation + sealant + monitor for failure</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Mitigation</th><th>How / When</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Insulating washer / bushing</td><td>Nylon, Teflon, fiber washer between dissimilar metals; full electrical break</td></tr>
+          <tr><td class="hi">Insulating coating both surfaces</td><td>Paint or plate both faying surfaces with a compatible barrier; e.g., zinc-rich primer</td></tr>
+          <tr><td class="hi">Sacrificial anode</td><td>Attach a more anodic metal (zinc on steel boat hulls, magnesium on water heaters) that corrodes preferentially</td></tr>
+          <tr><td class="hi">Sealant at joint</td><td>Butyl, silicone, polysulfide; keeps moisture out of the bimetal interface</td></tr>
+          <tr><td class="hi">Cathodic protection</td><td>Impressed-current systems; used on pipelines, ships, marine structures</td></tr>
+          <tr><td class="hi">Compatible fastener selection</td><td>Match fastener material to parent: stainless fasteners on stainless, aluminum fasteners on aluminum, etc.</td></tr>
+          <tr><td class="hi">Avoid bad area ratios</td><td>Small anode + large cathode = fast corrosion (aluminum rivet in steel plate fails quickly); large anode + small cathode = slow corrosion of the large piece (acceptable in many designs)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Galvanic corrosion requires three things at the same time: two dissimilar metals in electrical contact, an electrolyte (water with any dissolved salt), and time. Remove any one and corrosion stops. Indoor dry assemblies of dissimilar metals are typically fine; outdoor or marine assemblies need real attention. The potentials shown are nominal in seawater at room temperature (the standard worst-case reference environment); fresh water shifts everything cathodic, alkaline environments shift it further, and acid environments shift it anodic. Stainless steel has the unusual property of switching from anodic (active) to cathodic (passive) depending on whether its protective chromium oxide film is intact; crevice corrosion happens when oxygen is excluded and the film cannot reform, putting that area in the active state while the rest of the part is passive. Graphite and carbon fiber composites are strongly cathodic, which is why bare aluminum fasteners in carbon-fiber bicycle frames fail quickly; titanium or anodized fasteners are required.</div>
+    </div>
   </section>
 
   <section id="sheetmetal" class="page">
